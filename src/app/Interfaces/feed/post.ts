@@ -1,6 +1,6 @@
 import { MediaItem } from "./media-item";
-import { Privacy } from "./enums";
 import { AuthorProfile } from "./author";
+import { Privacy } from "./enums";
 
 export interface Post {
     postId: string;

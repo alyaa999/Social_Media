@@ -1,2 +1,12 @@
-export type MediaType = 'Picture' | 'Video';
-export type Privacy = 'public' | 'private' | 'onlyMe';
+export enum MediaType {
+    UNKNOWN,
+    IMAGE,
+    VIDEO,
+    AUDIO,
+    DOCUMENT
+}
+export enum Privacy {
+    PUBLIC,
+    PRIVATE,
+    ONLYME
+}

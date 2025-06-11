@@ -1,6 +1,8 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../enviroment/enviroment';
+import { Post } from '../Interfaces/feed/post';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -17,8 +19,8 @@ export class FeedService {
     return this.headers.set("userId", userId);
   }
 
-  GetTimeline(userId: string) {
-    return this._http.get(`${this.baseUrl}timeline/${userId}`, {
+  GetTimeline(userId: string): Observable<Post> {
+    return this._http.get<Post>(`${this.baseUrl}timeline/${userId}`, {
       headers: this.createHeader(userId)
     });
 
