@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../enviroment/enviroment';
-import { INotificationsDTO } from '../Interfaces/notification';
+import { INotificationsDTO } from '../Interfaces/notification/notification';
 import { Observable } from 'rxjs';
 
 @Injectable({

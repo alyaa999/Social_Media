@@ -1,4 +1,4 @@
-import { NotificationEntity } from './notificationEnumType';
+import { NotificationEntity } from './notification-enum-type';
 
 export interface INotificationsDTO {
     SourceUserImageUrl: string;
