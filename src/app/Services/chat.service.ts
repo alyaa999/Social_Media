@@ -35,7 +35,7 @@ export class ChatService {
     );
   }
 
-  sendMessage(p0: string, message: NewMessageDTO): Observable<MessageDTO> {
+  sendMessage(message: NewMessageDTO): Observable<MessageDTO> {
   
     return this._http.post<MessageDTO>(`${this.baseUrlCommand}/message`, message);
   }
@@ -58,20 +58,30 @@ export class ChatService {
     const formData = new FormData();
     formData.append('isGroup', String(data.isGroup));
     data.participants.forEach(p => formData.append('participants', p));
+    if (data.userId) formData.append('userId', data.userId);
     if (data.groupName) formData.append('groupName', data.groupName);
-    if (data.groupImage) formData.append('groupImage', data.groupImage);
-  
-    return this._http.post<ConversationDTO>(`${this.baseUrlCommand}/conversation`, formData);
+    formData.append('groupImage',  data.groupImage);
+    // Log actual contents
+    for (const [key, value] of formData.entries()) {
+      console.log(`${key}:`, value);
+    }
+    return this._http.post<ConversationDTO>(
+      `${this.baseUrlCommand}/conversation`,
+      formData
+    );
   }
-  
   editConversation(data: EditConversationDTO): Observable<ConversationDTO> {
     const formData = new FormData();
     formData.append('id', data.id);
     formData.append('isGroup', String(data.isGroup));
     data.participants.forEach(p => formData.append('participants', p));
     if (data.groupName) formData.append('groupName', data.groupName);
-    if (data.groupImage) formData.append('groupImage', data.groupImage);
   
+  // Log actual contents
+  for (const [key, value] of formData.entries()) {
+    console.log(`${key}:`, value);
+  }
+
     return this._http.patch<ConversationDTO>(`${this.baseUrlCommand}/conversation`, formData);
   }
     

@@ -3,6 +3,6 @@ export interface NewConversationDTO {
     isGroup: boolean;
     userId: string |null;
     groupName: string |null;
-    groupImage: File |null; // IFormFile maps to File in browser/TypeScript
+    groupImage: File |undefined ; // IFormFile maps to File in browser/TypeScript
   }
   
