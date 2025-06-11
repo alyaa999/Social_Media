@@ -6,8 +6,8 @@ export interface MessageDTO {
   conversationId: string;
   senderId: string;
   senderProfile: ProfileDTO;
-  content?: string;
+  content: string |null;
   hasAttachment: boolean;
-  attachment?: Attachment;
+  attachment: Attachment|null;
   read: boolean;
 }

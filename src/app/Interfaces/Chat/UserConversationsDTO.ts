@@ -2,5 +2,5 @@ import { ConversationDTO } from "./ConversationDTO";
 
 export interface UserConversationsDTO {
   conversations: ConversationDTO[];
-  next?: string;
+  next: string |null;
 }

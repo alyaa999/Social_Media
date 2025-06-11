@@ -35,7 +35,7 @@ export class ChatService {
     );
   }
 
-  sendMessage(message: NewMessageDTO): Observable<MessageDTO> {
+  sendMessage(p0: string, message: NewMessageDTO): Observable<MessageDTO> {
   
     return this._http.post<MessageDTO>(`${this.baseUrlCommand}/message`, message);
   }

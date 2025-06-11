@@ -1,5 +1,5 @@
 export interface ConversationsPageRequestDTO {
-    next?: string;
+    next: string | null;
     pageSize: number;
   }
   

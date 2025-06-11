@@ -1,6 +1,6 @@
 export interface MessagesPageRequestDTO {
     conversationId: string;
-    next?: string;        // pagination token
+    next: string |null;        // pagination token
     pageSize: number;
   }
   
