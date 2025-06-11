@@ -60,7 +60,7 @@ export class ChatService {
     data.participants.forEach(p => formData.append('participants', p));
     if (data.userId) formData.append('userId', data.userId);
     if (data.groupName) formData.append('groupName', data.groupName);
-    formData.append('groupImage',  data.groupImage);
+    if (data.groupImage)formData.append('groupImage', data.groupImage );
     // Log actual contents
     for (const [key, value] of formData.entries()) {
       console.log(`${key}:`, value);
