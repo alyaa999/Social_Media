@@ -1,6 +1,6 @@
 export const environment = {
     production: false,
-    apiBaseUrl: 'https://your-api-domain.com/api',
+    apiBaseUrl: 'http://localhost:5350/',
     token:"Bearer your-auth-token",
   };
   
