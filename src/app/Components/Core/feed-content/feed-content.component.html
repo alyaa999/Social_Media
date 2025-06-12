@@ -1,67 +1,69 @@
-<div class="h-full w-full overflow-y-auto no-scrollbar">
+<div class="h-full w-full overflow-y-auto no-scrollbar bg-bg-default">
   <!-- New Post Component -->
-  <div class="mb-4 border border-gray-200 rounded-xl p-4 bg-white shadow-sm">
+  <div class="mb-2 border border-border rounded-lg p-3 bg-bg-subtle">
     <app-new-post (postCreated)="loadFeedData()"></app-new-post>
   </div>
   
   <!-- Loading State -->
-  <div *ngIf="isLoading" class="flex justify-center p-8">
-    <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+  <div *ngIf="isLoading" class="flex justify-center p-4">
+    <div class="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-redis-red"></div>
   </div>
 
   <!-- Error State -->
-  <div *ngIf="error && !isLoading" class="p-4 mb-4 bg-red-50 border-l-4 border-red-500 text-red-700">
+  <div *ngIf="error && !isLoading" class="p-3 mb-2 bg-bg-subtle border-l-4 border-hyper-05 text-fg-default">
     <p>{{ error }}</p>
     <button 
       (click)="loadFeedData()"
-      class="mt-2 px-4 py-2 bg-red-100 text-red-700 rounded hover:bg-red-200 transition-colors"
+      class="mt-2 px-3 py-1.5 bg-bg-muted text-fg-default rounded hover:bg-dusk transition-colors"
     >
       Retry
     </button>
   </div>
   
   <!-- Feed content -->
-  <div *ngFor="let post of posts" class="p-4 mb-4 bg-white rounded-lg shadow">
+  <div *ngFor="let post of posts" class="p-2 mb-2 bg-bg-subtle rounded-lg border border-border">
     <!-- Post Header -->
-    <div class="flex items-center mb-3">
+    <div class="flex items-center mb-2 px-1">
       <img 
         [src]="post.authorProfile.profilePictureUrl || 'assets/default-avatar.png'" 
         alt="Profile"
-        class="w-10 h-10 rounded-full mr-3 object-cover"
+        class="w-10 h-10 rounded-full mr-3 object-cover border border-border"
       >
       <div>
-        <h3 class="font-semibold">{{ post.authorProfile.displayName }}</h3>
-        <p class="text-xs text-gray-500">{{ formatDate(post.createdAt) }}</p>
+        <h3 class="text-base font-semibold text-fg-default">{{ post.authorProfile.displayName }}</h3>
+        <p class="text-sm text-fg-muted">{{ formatDate(post.createdAt) }}</p>
       </div>
     </div>
     
     <!-- Post Content -->
-    <p class="text-gray-800 mb-3">{{ post.content }}</p>
+    <p class="text-base text-fg-body mb-2 px-1">{{ post.content }}</p>
     
     <!-- Post Media -->
-    <div *ngIf="post.mediaList?.length" class="mb-3">
-      <img 
-        *ngFor="let media of post.mediaList"
-        [src]="media.url" 
-        [alt]="'Post media'"
-        class="max-w-full h-auto rounded-lg mb-2"
-      >
+    <div *ngIf="post.mediaList?.length" class="mb-2 px-1">
+      <div class="grid grid-cols-1 gap-2 max-h-[300px] overflow-hidden">
+        <img 
+          *ngFor="let media of post.mediaList"
+          [src]="media.url" 
+          [alt]="'Post media'"
+          class="w-full object-cover rounded-md"
+        >
+      </div>
     </div>
     
     <!-- Post Actions -->
-    <div class="flex items-center justify-between text-gray-500 text-sm border-t border-gray-100 pt-3 mt-3">
-      <button class="flex items-center hover:text-blue-500">
-        <span class="mr-1">👍</span>
-        <span>{{ post.reactsCount || 0 }}</span>
+    <div class="flex items-center gap-6 text-sm text-fg-muted border-t border-border pt-2 mt-1 px-1">
+      <button class="flex items-center hover:text-redis-red transition-colors">
+        <span class="mr-2">👍</span>
+        <span>{{ post.reactsCount || 0 }} Likes</span>
       </button>
-      <button class="hover:text-blue-500">
+      <button class="hover:text-redis-red transition-colors">
         {{ post.commentsCount || 0 }} Comments
       </button>
     </div>
   </div>
   
   <!-- Empty State -->
-  <div *ngIf="!isLoading && !error && posts.length === 0" class="text-center py-8 text-gray-500">
+  <div *ngIf="!isLoading && !error && posts.length === 0" class="text-center py-4 text-fg-muted">
     <p>No posts to show. Follow more users to see their posts!</p>
   </div>
 </div>
