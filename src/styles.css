@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Set background color for html and body */
+html, body {
+  @apply bg-midnight m-0 p-0 w-full h-full;
+  font-family: "Space Grotesk", sans-serif;
+  font-optical-sizing: auto;
+}
 /* Hide scrollbar for Chrome, Safari and Opera */
 .no-scrollbar::-webkit-scrollbar {
   display: none;

@@ -1,10 +1,7 @@
 <div class="flex w-full h-[calc(100vh-8rem)] overflow-hidden">
   <!-- Left side-actions: visible on md+, hidden on <md -->
   <div class="w-1/5 p-2 hidden md:block">
-    <div class="border border-black rounded-2xl h-full flex flex-col overflow-hidden">
-      <div class="sticky top-0 bg-white z-10 p-4 border-b border-gray-200">
-        <h2 class="font-bold text-lg">Actions</h2>
-      </div>
+    <div class=" rounded-2xl h-full flex flex-col overflow-hidden">
       <div class="flex-1 overflow-y-auto no-scrollbar">
         <app-side-actions></app-side-actions>
       </div>
@@ -14,20 +11,24 @@
   <!-- Toggle button for side-actions on small screens -->
   <button
     *ngIf="!showSideActions"
-    class="md:hidden fixed top-4 left-4 z-30 bg-base-black text-base-white rounded-full p-2 shadow-lg focus:outline-none"
+    class="md:hidden fixed top-5 left-3 z-20 bg-hyper-05 text-white rounded-full p-2 shadow focus:outline-none border border-hyper-07 hover:bg-hyper-07 transition-colors"
     (click)="toggleSideActions()"
     aria-label="Toggle side menu"
   >
-    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
     </svg>
   </button>
   <!-- Side-actions drawer for small screens (slide from left) -->
   <div *ngIf="showSideActions" class="fixed inset-0 z-40 flex md:hidden">
     <div class="bg-black bg-opacity-40 w-full h-full" (click)="toggleSideActions()"></div>
-    <div class="fixed left-0 top-0 h-full w-3/4 max-w-xs bg-white border-r border-black rounded-r-2xl shadow-lg p-4 flex flex-col">
-      <button class="absolute top-2 right-2 text-black" (click)="toggleSideActions()" aria-label="Close">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <div class="fixed left-0 top-0 h-full w-3/4 max-w-xs border-r border-dusk-90 rounded-r-2xl shadow-lg p-0 flex flex-col bg-dusk-09">
+      <button 
+        class="absolute top-4 right-4 z-50 bg-hyper-05 hover:bg-hyper-07 text-white rounded-full p-2 shadow-lg border-2 border-hyper-07 transition-colors focus:outline-none"
+        (click)="toggleSideActions()" 
+        aria-label="Close"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
         </svg>
       </button>
@@ -42,10 +43,7 @@
 
   <!-- Right side-following: hidden on <md -->
   <div class="w-1/5 p-2 hidden md:block">
-    <div class="border border-black rounded-2xl h-full flex flex-col overflow-hidden">
-      <div class="sticky top-0 bg-white z-10 p-4 border-b border-gray-200">
-        <h2 class="font-bold text-lg">Following</h2>
-      </div>
+    <div class="rounded-2xl h-full flex flex-col overflow-hidden">
       <div class="flex-1 overflow-y-auto no-scrollbar">
         <app-side-following></app-side-following>
       </div>

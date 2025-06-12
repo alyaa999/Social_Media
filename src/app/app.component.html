@@ -1,6 +1,12 @@
-<div class="w-full min-h-screen py-4 px-4">
-  <div class="border border-black rounded-2xl mx-2 my-4 overflow-hidden">
-    <app-navbar></app-navbar>
+<div class="w-full min-h-screen bg-midnight">
+  <div class="max-w-[1920px] mx-auto px-4 py-2 flex flex-col gap-4">
+    <!-- Navbar Container -->
+    <div class="w-full backdrop-blur-sm bg-dusk-09/80 rounded-2xl">
+      <app-navbar></app-navbar>
+    </div>
+    <!-- Main Content Container -->
+    <div class="flex-1 rounded-2xl bg-dusk-09/80 backdrop-blur-sm shadow-lg shadow-black/10 overflow-hidden">
+      <router-outlet></router-outlet>
+    </div>
   </div>
-  <router-outlet></router-outlet>
 </div>

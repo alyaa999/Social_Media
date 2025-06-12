@@ -1,4 +1,43 @@
-<div class="rounded-2xl ml-2 h-full bg-white shadow p-2">
-  <p>side-actions works!</p>
-
+<div class="flex flex-col gap-3 p-6 bg-dusk-09 h-full w-full rounded-2xl shadow">
+  <!-- Title -->
+  <h2 class="text-2xl font-bold text-hyper-05 px-4 mb-2 tracking-wide">Navigation</h2>
+  <div class="space-y-2 w-full">
+    <a *ngFor="let action of actions; let i = index"
+       [routerLink]="action.route"
+       class="flex items-center gap-4 px-4 py-3.5 rounded-xl transition-all duration-300 hover:bg-dusk-90/60 group w-full">
+      <!-- Icon Container -->
+      <div class="w-11 h-11 flex items-center justify-center rounded-xl bg-dusk-90  transition-colors duration-300">
+        <svg xmlns="http://www.w3.org/2000/svg" 
+             viewBox="0 0 24 24" 
+             fill="none"
+             stroke-width="1.75"
+             stroke="currentColor" 
+             class="w-7 h-7 text-grey-50 group-hover:text-redis-red transition-colors duration-300">
+          <path stroke-linecap="round" 
+                stroke-linejoin="round" 
+                [attr.d]="action.icon" />
+        </svg>
+      </div>
+      <!-- Text -->
+      <span
+        class="text-dusk-30 group-hover:text-hyper-05 font-semibold transition-colors duration-300 truncate"
+        [ngClass]="{'max-w-[7.5rem] text-base': action.name === 'Recommendations', 'text-lg': action.name !== 'Recommendations'}"
+        >
+        {{action.name}}
+      </span>
+      <!-- Arrow indicator -->
+      <div class="ml-auto transform translate-x-2 opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
+        <svg xmlns="http://www.w3.org/2000/svg" 
+             viewBox="0 0 24 24" 
+             fill="none"
+             stroke-width="2.5"
+             stroke="currentColor" 
+             class="w-5 h-5 text-redis-red">
+          <path stroke-linecap="round" 
+                stroke-linejoin="round" 
+                d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+        </svg>
+      </div>
+    </a>
+  </div>
 </div>

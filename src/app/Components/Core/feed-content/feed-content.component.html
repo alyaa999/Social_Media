@@ -1,6 +1,6 @@
-<div class="h-full w-full overflow-y-auto no-scrollbar bg-bg-default">
+<div class="h-full w-full overflow-y-auto no-scrollbar rounded-2xl">
   <!-- New Post Component -->
-  <div class="mb-2 border border-border rounded-lg p-3 bg-bg-subtle">
+  <div class="mb-2 rounded-lg p-3 bg-dusk-09">
     <app-new-post (postCreated)="loadFeedData()"></app-new-post>
   </div>
   
@@ -21,13 +21,13 @@
   </div>
   
   <!-- Feed content -->
-  <div *ngFor="let post of posts" class="p-2 mb-2 bg-bg-subtle rounded-lg border border-border">
+  <div *ngFor="let post of posts" class="p-2 mb-2 bg-dusk-09 rounded-lg">
     <!-- Post Header -->
     <div class="flex items-center mb-2 px-1">
       <img 
         [src]="post.authorProfile.profilePictureUrl || 'assets/default-avatar.png'" 
         alt="Profile"
-        class="w-10 h-10 rounded-full mr-3 object-cover border border-border"
+        class="w-10 h-10 rounded-full mr-3 object-cover"
       >
       <div>
         <h3 class="text-base font-semibold text-fg-default">{{ post.authorProfile.displayName }}</h3>
@@ -51,7 +51,7 @@
     </div>
     
     <!-- Post Actions -->
-    <div class="flex items-center gap-6 text-sm text-fg-muted border-t border-border pt-2 mt-1 px-1">
+    <div class="flex items-center gap-6 text-sm text-fg-muted pt-2 mt-1 px-1">
       <button class="flex items-center hover:text-redis-red transition-colors">
         <span class="mr-2">👍</span>
         <span>{{ post.reactsCount || 0 }} Likes</span>

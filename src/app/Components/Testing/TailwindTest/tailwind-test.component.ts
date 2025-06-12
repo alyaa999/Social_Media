@@ -18,24 +18,18 @@ export class TailwindTestComponent {
     'violet', 'violet-90', 'violet-50', 'violet-10',
     'sky-blue', 'sky-blue-50', 'sky-blue-10', 'light-blue',
     'yellow', 'yellow-06', 'yellow-08', 'yellow-50', 'yellow-10',
-    // Semantic keys
+    'bg-default-hover', 'bg-default', 'bg-muted', 'bg-subtle',
+    'fg-tagline', 'fg-default', 'fg-body', 'fg-brand', 'fg-muted',
+    'border', 'stroke-divider', 'marketo-form-border', 'toggle-bg', 'toggle-fg',
+    'form-input-bg', 'form-input-placeholder', 'form-input-fg', 'form-input-border', 'form-input-focused-border',
     'primary-button-bg', 'primary-button-bg-hover', 'primary-button-border', 'primary-button-border-hover',
     'primary-button-fg', 'primary-button-fg-hover', 'primary-button-border-active', 'primary-button-bg-active', 'primary-button-fg-active',
     'secondary-button-bg', 'secondary-button-bg-hover', 'secondary-button-border', 'secondary-button-border-hover',
     'secondary-button-fg', 'secondary-button-fg-hover', 'secondary-button-border-active', 'secondary-button-bg-active', 'secondary-button-fg-active',
-    'tertiary-button-bg', 'tertiary-button-bg-hover', 'tertiary-button-fg', 'tertiary-button-fg-hover', 'tertiary-button-bg-active', 'tertiary-button-fg-active',
-    'bg-default-hover', 'bg-default', 'bg-muted', 'bg-subtle',
-    'fg-tagline', 'fg-default', 'fg-body', 'fg-brand', 'fg-muted',
-    'border', 'stroke-divider', 'marketo-form-border', 'toggle-bg', 'toggle-fg',
-    'form-input-bg', 'form-input-placeholder', 'form-input-fg', 'form-input-border', 'form-input-focused-border'
+    'tertiary-button-bg', 'tertiary-button-bg-hover', 'tertiary-button-fg', 'tertiary-button-fg-hover', 'tertiary-button-bg-active', 'tertiary-button-fg-active'
   ];
 
-  getBgClass(color: string): string[] {
-    if (color === 'transparent' || color.includes('transparent')) {
-      return ['bg-white', 'border', 'border-dashed', 'border-black-30'];
-    }
-    return ['bg-' + color];
-  }
+  // getBgClass removed
 }
 
 

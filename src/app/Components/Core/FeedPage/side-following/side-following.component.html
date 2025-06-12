@@ -1,3 +1,22 @@
-<div class="rounded-2xl mr-2 h-full bg-white shadow p-2">
-  <p>side-following works!</p>
+<div class="rounded-2xl h-full bg-dusk-09 shadow p-4 overflow-hidden">
+  <h2 class="text-2xl font-bold text-hyper-05 pl-4 pt-2 mb-4 tracking-wide">Following</h2>
+  
+  <div class="space-y-3 max-h-[calc(100%-4rem)] overflow-y-auto pr-2">
+    <ng-container *ngFor="let user of followingList">
+      <div class="flex items-center p-2 rounded-lg hover:bg-dusk-08 transition-colors cursor-pointer">
+        <img 
+          [src]="user.profilePictureUrl || 'assets/default-avatar.png'" 
+          [alt]="user.displayName || 'User'"
+          class="w-10 h-10 rounded-full object-cover mr-3"
+        />
+        <div class="flex-1 min-w-0">
+          <p class="font-bold text-white text-base truncate">{{ user.displayName || 'User' }}</p>
+          <div class="flex items-center gap-1 max-w-full">
+            <span class="text-xs text-hyper-05 font-semibold font-mono truncate max-w-[8.5rem]">{{ '@' + (user.userName || 'user') }}</span>
+            <span *ngIf="user.isFollower" class="ml-1 px-1 py-0.5 rounded bg-dusk-90 text-[10px] text-hyper-05 font-semibold whitespace-nowrap">follows you</span>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
 </div>
