@@ -2,28 +2,32 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../enviroment/enviroment';
 import { Post } from '../Interfaces/feed/post';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FeedService {
-  private headers = new HttpHeaders()
+  private readonly USER_ID = '12';
+  private readonly headers = new HttpHeaders()
     .set("Authorization", environment.token)
-    .set("Accept", "application/json");
+    .set("Accept", "application/json")
+    .set("userId", this.USER_ID);
 
   private baseUrl = `${environment.apiBaseUrl}api/public/feeds/`;
 
   constructor(private _http: HttpClient) { }
-  private createHeader(userId: string) {
-    return this.headers.set("userId", userId);
+
+  getTimeline(): Observable<Post[]> {
+    console.log('Making request to:', `${this.baseUrl}timeline/12`);
+    console.log('With headers:', this.headers);
+    
+    return this._http.get<Post[]>(`${this.baseUrl}timeline/12`, {
+      headers: this.headers
+    }).pipe(
+      tap(response => {
+        console.log('Raw API Response:', response);
+      })
+    );
   }
-
-  GetTimeline(userId: string): Observable<Post> {
-    return this._http.get<Post>(`${this.baseUrl}timeline/${userId}`, {
-      headers: this.createHeader(userId)
-    });
-
-  }
-
 }
