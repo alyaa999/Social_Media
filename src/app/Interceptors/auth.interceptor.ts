@@ -5,7 +5,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
   const modifiedReq = req.clone({
     setHeaders: {
-      userId: '12345',
+    
       'Content-Type': 'application/json'
     }
   });

@@ -1,0 +1,75 @@
+<div class="w-full max-w-4xl mx-auto p-4">
+    <!-- Header with Mark All as Read button -->
+    <div class="flex justify-between items-center mb-4">
+        <h2 class="text-2xl font-bold text-fg-default">Notifications</h2>
+        <button (click)="markAllAsRead()"
+            class="px-4 py-2 bg-primary-button-bg text-primary-button-fg rounded-lg hover:bg-primary-button-bg-hover transition-colors">
+            Mark All as Read
+        </button>
+    </div>
+
+    <!-- Tabs -->
+    <div class="flex space-x-2 mb-4 overflow-x-auto">
+        <button *ngFor="let tab of ['all', 'reactions', 'comments', 'follows', 'messages']" (click)="changeTab(tab)"
+            [class.bg-primary-button-bg]="activeTab === tab" [class.text-primary-button-fg]="activeTab === tab"
+            [class.bg-secondary-button-bg]="activeTab !== tab" [class.text-secondary-button-fg]="activeTab !== tab"
+            class="px-4 py-2 rounded-lg transition-colors whitespace-nowrap">
+            {{ tab | titlecase }}
+        </button>
+    </div>
+
+    <!-- Unread Toggle -->
+    <div class="flex items-center mb-4">
+        <label class="flex items-center space-x-2 cursor-pointer">
+            <input type="checkbox" [checked]="showUnreadOnly" (change)="toggleUnreadOnly()"
+                class="form-checkbox h-5 w-5 text-primary-button-bg">
+            <span class="text-fg-default">Show unread only</span>
+        </label>
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="loading" class="flex justify-center items-center py-8">
+        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-button-bg"></div>
+    </div>
+
+    <!-- Notifications List -->
+    <div *ngIf="!loading" class="space-y-4">
+        <div *ngFor="let notification of notifications" class="p-4 rounded-lg border border-border bg-bg-subtle"
+            [class.bg-bg-default]="!notification.isRead">
+            <div class="flex items-start space-x-4">
+                <!-- Notification Icon -->
+                <div class="flex-shrink-0">
+                    <div class="w-10 h-10 rounded-full bg-primary-button-bg flex items-center justify-center">
+                        <span class="text-primary-button-fg text-lg">
+                            {{ notification.type | slice:0:1 | uppercase }}
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Notification Content -->
+                <div class="flex-1">
+                    <p class="text-fg-default">{{ notification.message }}</p>
+                    <p class="text-sm text-fg-muted mt-1">
+                        {{ notification.createdAt | date:'medium' }}
+                    </p>
+                </div>
+
+                <!-- Unread Indicator -->
+                <div *ngIf="!notification.isRead" class="w-2 h-2 rounded-full bg-primary-button-bg"></div>
+            </div>
+        </div>
+
+        <!-- Load More Button -->
+        <div *ngIf="nextPage" class="text-center mt-4">
+            <button (click)="loadMore()"
+                class="px-4 py-2 bg-secondary-button-bg text-secondary-button-fg border border-secondary-button-border rounded-lg hover:bg-secondary-button-bg-hover hover:text-secondary-button-fg-hover transition-colors">
+                Load More
+            </button>
+        </div>
+
+        <!-- No Notifications Message -->
+        <div *ngIf="notifications.length === 0" class="text-center py-8 text-fg-muted">
+            No notifications found
+        </div>
+    </div>
+</div>
