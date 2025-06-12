@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { NewMessageDTO } from '../Interfaces/Chat/NewMessageDTO';
 import { MessageDTO } from '../Interfaces/Chat/MessageDTO';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { environment } from '../../enviroment/enviroment';
 import { Observable } from 'rxjs';
 import { MarkReadRequestDTO } from '../Interfaces/Chat/MarkReadRequestDTO';
@@ -89,8 +89,4 @@ export class ChatService {
   deleteConversation(id: string): Observable<void> {
     return this._http.delete<void>(`${this.baseUrlCommand}/conversation/${id}`);
   }
-  
- 
-  
-  
 }

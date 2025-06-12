@@ -4,7 +4,7 @@ import { TestChatApiComponent } from "./Components/test-chat-api/test-chat-api.c
 
 @Component({
   selector: 'app-root',
-  imports: [NotificationsComponent],
+  imports: [NotificationsComponent, TestChatApiComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })

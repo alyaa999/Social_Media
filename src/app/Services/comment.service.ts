@@ -5,7 +5,6 @@ import { ResponseWrapper } from '../Interfaces/response-wrapper/response-wrapper
 import { CommentResponse } from '../Interfaces/Comment/comment-response';
 import { CreateCommentRequest } from '../Interfaces/Comment/create-comment-request';
 import { EditCommentRequest } from '../Interfaces/Comment/edit-comment-request';
-import { formatDate } from '@angular/common';
 import { GetPagedCommentRequest } from '../Interfaces/Comment/get-paged-comment-request';
 import { PaginationResponseWrapper } from '../Interfaces/response-wrapper/PaginationResponseWrapper';
 import { AggregatedComment } from '../Interfaces/Comment/aggregated-comment';
