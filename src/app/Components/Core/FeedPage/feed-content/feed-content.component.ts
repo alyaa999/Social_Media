@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
-import { NewPostComponent } from '../../Shared/new-post/new-post.component';
-import { FeedService } from '../../../Services/feed.service';
+import { NewPostComponent } from '../../../Shared/new-post/new-post.component';
+import { FeedService } from '../../../../Services/feed.service';
 import { HttpClientModule } from '@angular/common/http';
-import { Post } from '../../../Interfaces/feed/post';
+import { Post } from '../../../../Interfaces/feed/post';
 import { catchError, finalize, of } from 'rxjs';
 
 @Component({

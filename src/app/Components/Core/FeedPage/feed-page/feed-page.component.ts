@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { SideActionsComponent } from '../side-actions/side-actions.component';
 import { SideFollowingComponent } from '../side-following/side-following.component';
 import { CommonModule } from '@angular/common';
-import { FeedContentComponent } from '../../feed-content/feed-content.component';
+import { FeedContentComponent } from '../feed-content/feed-content.component';
 import { RouterModule } from '@angular/router';
 
 @Component({
