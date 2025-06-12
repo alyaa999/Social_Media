@@ -10,7 +10,7 @@ export interface Post {
     commentsCount: number;
     isEdited: boolean;
     isLiked: boolean;
-    createdAt: Date;
+    createdAt: string;
     authorProfile: AuthorProfile;
     privacy: Privacy;
 }

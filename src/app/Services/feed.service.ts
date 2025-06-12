@@ -12,7 +12,7 @@ export class FeedService {
     .set("Authorization", environment.token)
     .set("Accept", "application/json");
 
-  private baseUrl = `${environment.apiBaseUrl}api/public/feeds/`;
+  private baseUrl = `${environment.apiBaseUrl}/api/public/feeds/`;
 
   constructor(private _http: HttpClient) { }
   private createHeader(userId: string) {
