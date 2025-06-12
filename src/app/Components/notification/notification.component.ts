@@ -1,57 +1,29 @@
-import { Component, Output, EventEmitter, Input, HostListener, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { NotificationService } from '../../../Services/notification.service';
-import { INotificationsDTO } from '../../../Interfaces/notification/notification';
-import { PaginationResponseWrapper } from '../../../Interfaces/response-wrapper/PaginationResponseWrapper';
+import { Component, OnInit } from '@angular/core';
+import { NotificationService } from '../../Services/notification.service';
+import { INotificationsDTO } from '../../Interfaces/notification/notification';
+import { PaginationResponseWrapper } from '../../Interfaces/response-wrapper/PaginationResponseWrapper';
 import { Observable } from 'rxjs';
-import { NotificationEntity } from '../../../Interfaces/notification/notification-enum-type';
 
 @Component({
-  selector: 'app-notification-modal',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './notification-modal.component.html',
-  styleUrls: ['./notification-modal.component.scss']
+  selector: 'app-notification',
+  templateUrl: './notification.component.html',
+  styleUrls: ['./notification.component.css']
 })
-export class NotificationModalComponent implements OnInit {
-  @Input() isOpen = false;
-  @Input() userId: string = '';
-  @Output() closed = new EventEmitter<void>();
-
-  activeTab: 'all' | 'reactions' | 'comments' | 'follows' = 'all';
+export class NotificationComponent implements OnInit {
+  activeTab: 'all' | 'reactions' | 'comments' | 'follows' | 'messages' = 'all';
   showUnreadOnly: boolean = false;
   notifications: INotificationsDTO[] = [];
   loading: boolean = false;
   nextPage: string | undefined;
+  userId: string = 'your-user-id'; // Replace with actual user ID from your auth service
 
   constructor(private notificationService: NotificationService) {}
 
-  get unreadCount(): number {
-    return this.notifications.filter(n => !n.IsRead).length;
-  }
-
-  get hasUnreadNotifications(): boolean {
-    return this.unreadCount > 0;
-  }
-
   ngOnInit() {
-    if (this.isOpen) {
-      this.loadNotifications();
-    }
-  }
-
-  @HostListener('document:keydown.escape', ['$event'])
-  onKeydownHandler(event: KeyboardEvent) {
-    this.closeModal();
-  }
-
-  closeModal() {
-    this.closed.emit();
+    this.loadNotifications();
   }
 
   loadNotifications() {
-    if (!this.userId) return;
-    
     this.loading = true;
     let request: Observable<PaginationResponseWrapper<INotificationsDTO[]>>;
 
@@ -84,6 +56,8 @@ export class NotificationModalComponent implements OnInit {
         return this.notificationService.GetCommentsNotification(this.userId, this.nextPage);
       case 'follows':
         return this.notificationService.GetFollowNotification(this.userId, this.nextPage);
+      case 'messages':
+        return this.notificationService.GetMessagesNotification(this.userId, this.nextPage);
       default:
         return this.notificationService.GetAllNotifications(this.userId, this.nextPage);
     }
@@ -99,12 +73,14 @@ export class NotificationModalComponent implements OnInit {
         return this.notificationService.GetUnreadCommentNotifications(this.userId, this.nextPage);
       case 'follows':
         return this.notificationService.GetUnreadFollowedNotifications(this.userId, this.nextPage);
+      case 'messages':
+        return this.notificationService.GetUnreadMessageNotifications(this.userId, this.nextPage);
       default:
         return this.notificationService.GetAllUnreadNotifications(this.userId, this.nextPage);
     }
   }
 
-  changeTab(tab: 'all' | 'reactions' | 'comments' | 'follows') {
+  changeTab(tab: 'all' | 'reactions' | 'comments' | 'follows' | 'messages') {
     this.activeTab = tab;
     this.nextPage = undefined;
     this.loadNotifications();
@@ -132,18 +108,4 @@ export class NotificationModalComponent implements OnInit {
       }
     });
   }
-
-  markNotificationAsRead(notification: INotificationsDTO) {
-    switch (notification.EntityName) {
-      case NotificationEntity.Follow:
-        this.notificationService.MarkNotificationsFollowAsRead(this.userId, notification.EntityId).subscribe();
-        break;
-      case NotificationEntity.Comment:
-        this.notificationService.MarkNotificationsReactionCommentAsRead(this.userId, notification.EntityId).subscribe();
-        break;
-      case NotificationEntity.React:
-        this.notificationService.MarkNotificationsReactionPostAsRead(this.userId, notification.EntityId).subscribe();
-        break;
-    }
-  }
-}
+} 

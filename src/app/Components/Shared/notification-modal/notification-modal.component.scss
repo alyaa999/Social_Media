@@ -1,0 +1,41 @@
+:host {
+  display: block;
+}
+
+.notification-item {
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+  }
+
+  &.unread {
+    background-color: rgba(99, 102, 241, 0.1);
+  }
+}
+
+.tab-button {
+  position: relative;
+  
+  &.active {
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background-color: #6366f1;
+    }
+  }
+}
+
+.loading-spinner {
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-top-color: #6366f1;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
