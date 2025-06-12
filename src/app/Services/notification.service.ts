@@ -14,7 +14,10 @@ export class NotificationService {
     .set("Authorization", environment.token)
     .set("Accept", "application/json");
 
-  private baseUrl = `${environment.apiBaseUrl}api/public/Notification/`;
+  private baseUrl = `${environment.apiBaseUrl}/api/public/Notification/`;
+  
+
+
 
   constructor(private _http: HttpClient) { }
 
@@ -94,7 +97,13 @@ export class NotificationService {
       params
     });
   }
-
+  MarkNotificationsCommentAsRead(userId: string, commentId: string): Observable<ResponseWrapper<boolean>> {
+    const params = new HttpParams().set("commentId", commentId);
+    return this._http.post<ResponseWrapper<boolean>>(`${this.baseUrl}mark-notifications-comment-as-read`, null, {
+      headers: this.createHeader(userId),
+      params
+    });
+  }
   MarkAllNotificationsAsRead(userId: string): Observable<ResponseWrapper<boolean>> {
     return this._http.post<ResponseWrapper<boolean>>(`${this.baseUrl}mark-all-notifications-as-read`, null, {
       headers: this.createHeader(userId)
@@ -103,7 +112,7 @@ export class NotificationService {
 
   MarkNotificationsReactionCommentAsRead(userId: string, reactionId: string): Observable<ResponseWrapper<boolean>> {
     const params = new HttpParams().set("reactionId", reactionId);
-    return this._http.post<ResponseWrapper<boolean>>(`${this.baseUrl}mark-notifications-reaction-comment-as-read`, null, {
+    return this._http.post<ResponseWrapper<boolean>>(`${this.baseUrl}mark-notifications-comment-as-read`, null, {
       headers: this.createHeader(userId),
       params
     });

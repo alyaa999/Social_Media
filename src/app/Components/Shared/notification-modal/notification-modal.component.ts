@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter, Input, HostListener, OnInit } from '@angular/core';
+import { Component, Output, EventEmitter, Input, HostListener, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NotificationService } from '../../../Services/notification.service';
 import { INotificationsDTO } from '../../../Interfaces/notification/notification';
@@ -13,9 +13,10 @@ import { NotificationEntity } from '../../../Interfaces/notification/notificatio
   templateUrl: './notification-modal.component.html',
   styleUrls: ['./notification-modal.component.scss']
 })
-export class NotificationModalComponent implements OnInit {
+export class NotificationModalComponent implements OnInit, OnChanges {
   @Input() isOpen = false;
-  @Input() userId: string = '';
+  @Input() userId: string = 'user1';
+  
   @Output() closed = new EventEmitter<void>();
 
   activeTab: 'all' | 'reactions' | 'comments' | 'follows' = 'all';
@@ -27,7 +28,7 @@ export class NotificationModalComponent implements OnInit {
   constructor(private notificationService: NotificationService) {}
 
   get unreadCount(): number {
-    return this.notifications.filter(n => !n.IsRead).length;
+    return this.notifications.filter(n => !n.isRead).length;
   }
 
   get hasUnreadNotifications(): boolean {
@@ -35,8 +36,14 @@ export class NotificationModalComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (this.isOpen) {
+    console.log('NotificationModal initialized');
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['isOpen'] && changes['isOpen'].currentValue === true) {
+      console.log('Modal opened, loading notifications...');
       this.loadNotifications();
+    
     }
   }
 
@@ -50,8 +57,12 @@ export class NotificationModalComponent implements OnInit {
   }
 
   loadNotifications() {
-    if (!this.userId) return;
+    if (!this.userId) {
+      console.error('No userId provided');
+      return;
+    }
     
+    console.log('Loading notifications for user:', this.userId);
     this.loading = true;
     let request: Observable<PaginationResponseWrapper<INotificationsDTO[]>>;
 
@@ -63,9 +74,16 @@ export class NotificationModalComponent implements OnInit {
 
     request.subscribe({
       next: (response) => {
+        console.log('Raw response:', response);
+        console.log('Response data:', response.data);
+        console.log('Number of notifications:', response.data.length);
         this.notifications = response.data;
         this.nextPage = response.next;
         this.loading = false;
+        console.log('Updated notifications array:', this.notifications);
+        if (this.notifications.length > 0) {
+          console.log('First notification properties:', Object.keys(this.notifications[0]));
+        }
       },
       error: (error) => {
         console.error('Error loading notifications:', error);
@@ -75,42 +93,46 @@ export class NotificationModalComponent implements OnInit {
   }
 
   private getAllNotifications(): Observable<PaginationResponseWrapper<INotificationsDTO[]>> {
+    console.log('Getting all notifications for tab:', this.activeTab);
     switch (this.activeTab) {
       case 'all':
-        return this.notificationService.GetAllNotifications(this.userId, this.nextPage);
+        return this.notificationService.GetAllNotifications(this.userId, '1');
       case 'reactions':
-        return this.notificationService.GetReactionsNotification(this.userId, this.nextPage);
+        return this.notificationService.GetReactionsNotification(this.userId, '1');
       case 'comments':
-        return this.notificationService.GetCommentsNotification(this.userId, this.nextPage);
+        return this.notificationService.GetCommentsNotification(this.userId, '1');
       case 'follows':
-        return this.notificationService.GetFollowNotification(this.userId, this.nextPage);
+        return this.notificationService.GetFollowNotification(this.userId, '1');
       default:
-        return this.notificationService.GetAllNotifications(this.userId, this.nextPage);
+        return this.notificationService.GetAllNotifications(this.userId, '1');
     }
   }
 
   private getUnreadNotifications(): Observable<PaginationResponseWrapper<INotificationsDTO[]>> {
+    console.log('Getting unread notifications for tab:', this.activeTab);
     switch (this.activeTab) {
       case 'all':
-        return this.notificationService.GetAllUnreadNotifications(this.userId, this.nextPage);
+        return this.notificationService.GetAllUnreadNotifications(this.userId, '1');
       case 'reactions':
-        return this.notificationService.GetUnreadReactionsNotifications(this.userId, this.nextPage);
+        return this.notificationService.GetUnreadReactionsNotifications(this.userId, '1');
       case 'comments':
-        return this.notificationService.GetUnreadCommentNotifications(this.userId, this.nextPage);
+        return this.notificationService.GetUnreadCommentNotifications(this.userId, '1');
       case 'follows':
-        return this.notificationService.GetUnreadFollowedNotifications(this.userId, this.nextPage);
+        return this.notificationService.GetUnreadFollowedNotifications(this.userId, '1');
       default:
-        return this.notificationService.GetAllUnreadNotifications(this.userId, this.nextPage);
+        return this.notificationService.GetAllUnreadNotifications(this.userId, '1');
     }
   }
 
   changeTab(tab: 'all' | 'reactions' | 'comments' | 'follows') {
+    console.log('Changing tab to:', tab);
     this.activeTab = tab;
     this.nextPage = undefined;
     this.loadNotifications();
   }
 
   toggleUnreadOnly() {
+    console.log('Toggling unread only:', !this.showUnreadOnly);
     this.showUnreadOnly = !this.showUnreadOnly;
     this.nextPage = undefined;
     this.loadNotifications();
@@ -118,13 +140,16 @@ export class NotificationModalComponent implements OnInit {
 
   loadMore() {
     if (this.nextPage) {
+      console.log('Loading more notifications...');
       this.loadNotifications();
     }
   }
 
   markAllAsRead() {
+    console.log('Marking all notifications as read');
     this.notificationService.MarkAllNotificationsAsRead(this.userId).subscribe({
       next: () => {
+        console.log('All notifications marked as read');
         this.loadNotifications();
       },
       error: (error) => {
@@ -134,16 +159,32 @@ export class NotificationModalComponent implements OnInit {
   }
 
   markNotificationAsRead(notification: INotificationsDTO) {
-    switch (notification.EntityName) {
+    console.log('Marking notification as read:', notification);
+    switch (notification.entityName) {
       case NotificationEntity.Follow:
-        this.notificationService.MarkNotificationsFollowAsRead(this.userId, notification.EntityId).subscribe();
+        this.notificationService.MarkNotificationsFollowAsRead(this.userId, notification.entityId).subscribe();
         break;
       case NotificationEntity.Comment:
-        this.notificationService.MarkNotificationsReactionCommentAsRead(this.userId, notification.EntityId).subscribe();
+        this.notificationService.MarkNotificationsCommentAsRead(this.userId, notification.entityId).subscribe();
         break;
       case NotificationEntity.React:
-        this.notificationService.MarkNotificationsReactionPostAsRead(this.userId, notification.EntityId).subscribe();
+        if (
+          notification.notificatoinPreview &&
+          notification.notificatoinPreview.toLowerCase().includes('comment')
+        ) {
+          this.notificationService.MarkNotificationsReactionCommentAsRead(this.userId, notification.entityId).subscribe();
+        } else {
+          this.notificationService.MarkNotificationsReactionPostAsRead(this.userId, notification.entityId).subscribe();
+        }
         break;
+      default:
+        console.warn('Unknown notification type:', notification.entityName);
     }
+  }
+
+  onImageError(event: Event): void {
+    const imgElement = event.target as HTMLImageElement;
+    // This is a simple gray circle as a data URL
+    imgElement.src = 'https://t3.ftcdn.net/jpg/06/99/46/60/360_F_699466075_DaPTBNlNQTOwwjkOiFEoOvzDV0ByXR9E.jpg';
   }
 }

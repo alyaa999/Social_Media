@@ -65,20 +65,19 @@
     <div *ngIf="!loading" class="divide-y divide-dusk-90">
       <div *ngFor="let notification of notifications"
         class="notification-item p-4 hover:bg-dusk-08 transition-colors cursor-pointer"
-        [class.unread]="!notification.IsRead" (click)="markNotificationAsRead(notification)">
+        [class.unread]="!notification.isRead" (click)="markNotificationAsRead(notification)">
         <div class="flex items-start space-x-3">
-          <img [src]="notification.SourceUserImageUrl" [alt]="notification.SourceUsername"
-            class="h-10 w-10 rounded-full">
+          <img [src]="notification.sourceUserImageUrl" [alt]="notification.sourceUsername"
+            (error)="onImageError($event)" class="h-10 w-10 rounded-full object-cover">
           <div class="flex-1 min-w-0">
-            <p class="text-sm text-dusk-01">
-              <span class="font-medium">{{notification.SourceUsername}}</span>
-              {{notification.NotificatoinPreview}}
+            <p class="text-sm text-white">
+              <span class="text-gray-300">{{notification.notificatoinPreview}}</span>
             </p>
-            <p class="text-xs text-dusk-03 mt-1">
-              {{notification.CreatedTime | date:'short'}}
+            <p class="text-xs text-gray-400 mt-1">
+              {{notification.createdTime | date:'short'}}
             </p>
           </div>
-          <div *ngIf="!notification.IsRead" class="h-2 w-2 bg-hyper-05 rounded-full"></div>
+          <div *ngIf="!notification.isRead" class="h-2 w-2 bg-hyper-05 rounded-full"></div>
         </div>
       </div>
 
@@ -94,5 +93,7 @@
         <p class="text-dusk-03">No notifications found</p>
       </div>
     </div>
+
+
   </div>
 </div>
