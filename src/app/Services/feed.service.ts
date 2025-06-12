@@ -12,15 +12,15 @@ export class FeedService {
     .set("Authorization", environment.token)
     .set("Accept", "application/json");
 
-  private baseUrl = `${environment.apiBaseUrl}api/public/feeds/`;
+  private baseUrl = `${environment.apiBaseUrl}/api/public/feeds/`;
 
   constructor(private _http: HttpClient) { }
   private createHeader(userId: string) {
     return this.headers.set("userId", userId);
   }
 
-  GetTimeline(userId: string): Observable<Post> {
-    return this._http.get<Post>(`${this.baseUrl}timeline/${userId}`, {
+  GetTimeline(userId: string): Observable<Post[]> {
+    return this._http.get<Post[]>(`${this.baseUrl}timeline/${userId}`, {
       headers: this.createHeader(userId)
     });
 
