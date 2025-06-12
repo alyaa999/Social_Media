@@ -1,0 +1,25 @@
+<!-- Hidden block to force Tailwind to generate all bg-* classes -->
+<div class="hidden">
+  <div class="bg-base-black bg-base-white bg-redis-red bg-hyper-04 bg-hyper-05 bg-hyper-07 bg-hyper-09 bg-hyper-10 bg-black-90 bg-black-70 bg-black-60 bg-black-50 bg-black-30 bg-black-10 bg-grey-50 bg-grey-20 bg-grey-10 bg-light-gray bg-midnight bg-dusk bg-dusk-01 bg-dusk-09 bg-dusk-90 bg-dusk-70 bg-dusk-50 bg-dusk-30 bg-dusk-10 bg-violet bg-violet-90 bg-violet-50 bg-violet-10 bg-sky-blue bg-sky-blue-50 bg-sky-blue-10 bg-light-blue bg-yellow bg-yellow-06 bg-yellow-08 bg-yellow-50 bg-yellow-10 bg-primary-button-bg bg-primary-button-bg-hover bg-primary-button-border bg-primary-button-border-hover bg-primary-button-fg bg-primary-button-fg-hover bg-primary-button-border-active bg-primary-button-bg-active bg-primary-button-fg-active bg-secondary-button-bg bg-secondary-button-bg-hover bg-secondary-button-border bg-secondary-button-border-hover bg-secondary-button-fg bg-secondary-button-fg-hover bg-secondary-button-border-active bg-secondary-button-bg-active bg-secondary-button-fg-active bg-tertiary-button-bg bg-tertiary-button-bg-hover bg-tertiary-button-fg bg-tertiary-button-fg-hover bg-tertiary-button-bg-active bg-tertiary-button-fg-active bg-default-hover bg-default bg-muted bg-subtle fg-tagline fg-default fg-body fg-brand fg-muted border stroke-divider marketo-form-border toggle-bg toggle-fg form-input-bg form-input-placeholder form-input-fg form-input-border form-input-focused-border"></div>
+</div>
+
+<div class="flex flex-col items-center justify-center min-h-screen bg-base-black">
+  <h1 class="text-4xl font-bold text-base-white mb-8">Tailwind Custom Color Palette</h1>
+  <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 w-full max-w-5xl">
+    <div *ngFor="let color of colorPalette" class="flex flex-col items-center">
+      <!-- Use ngClass for bg, handle transparent by adding a border and fallback bg -->
+      <div
+        class="w-24 h-16 rounded shadow border mb-2 flex items-center justify-center"
+        [ngClass]="getBgClass(color)"
+        [style.backgroundColor]="color.includes('transparent') ? 'transparent' : ''"
+      >
+        <span
+          class="text-xs font-bold"
+          [ngClass]="color === 'base-black' || color === 'hyper-07' || color === 'hyper-09' || color === 'midnight' || color.includes('bg') ? 'text-base-white' : 'text-base-black'"
+        >
+          {{ color }}
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
