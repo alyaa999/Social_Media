@@ -1,0 +1,84 @@
+<div
+    class="min-h-screen bg-slate-900 overflow-hidden text-white flex items-center justify-center font-['Space_Grotesk']">
+    <!-- Animated Background -->
+    <div class="bg-animation fixed top-0 left-0 w-full h-full -z-10 opacity-30 pointer-events-none">
+        <div class="floating-shape shape-1 absolute w-20 h-20 top-[20%] left-[10%] rounded-full"></div>
+        <div class="floating-shape shape-2 absolute w-32 h-32 top-[60%] left-[80%] rounded-full"></div>
+        <div class="floating-shape shape-3 absolute w-16 h-16 top-[80%] left-[20%] rounded-full"></div>
+        <div class="floating-shape shape-4 absolute w-24 h-24 top-[30%] left-[70%] rounded-full"></div>
+        <div class="floating-shape shape-5 absolute w-24 h-24 top-[10%] right-[15%] rounded-full"></div>
+    </div>
+
+    <div class="login-container w-full max-w-md mx-5 relative z-10 mt-12">
+        <div
+            class="login-card bg-slate-800/80 backdrop-blur-lg rounded-3xl p-12 border border-slate-600 shadow-2xl relative overflow-hidden animate-slideInUp">
+            <!-- Top shimmer border -->
+            <div
+                class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-red-600 via-lime-400 to-red-600 animate-shimmer">
+            </div>
+
+            <div class="login-header text-center mb-10">
+                <h1
+                    class="login-title text-4xl font-extrabold mb-3 bg-gradient-to-r from-red-600 to-red-500 bg-clip-text text-transparent">
+                    Welcome Back
+                </h1>
+                <p class="login-subtitle text-slate-300 text-lg">Ready to thryve together?</p>
+            </div>
+
+            <form class="login-form flex flex-col gap-6" (submit)="onSubmit($event)">
+                <div class="form-group relative transition-transform duration-300">
+                    <input type="email"
+                        class="form-input w-full py-4 px-5 bg-slate-900/60 border-2 border-slate-600 rounded-2xl text-white text-base font-inherit transition-all duration-300 outline-none placeholder-transparent peer focus:border-red-600 focus:shadow-red-600/20 focus:shadow-lg focus:bg-slate-900/80"
+                        id="email" name="email" placeholder=" " required (focus)="onInputFocus($event)"
+                        (blur)="onInputBlur($event)">
+                    <label
+                        class="form-label absolute left-5 top-1/2 -translate-y-1/2 text-slate-500 text-base pointer-events-none transition-all duration-300 bg-transparent px-1 peer-focus:top-0 peer-focus:text-sm peer-focus:text-red-600 peer-focus:bg-slate-800/90 peer-[:not(:placeholder-shown)]:top-0 peer-[:not(:placeholder-shown)]:text-sm peer-[:not(:placeholder-shown)]:text-red-600 peer-[:not(:placeholder-shown)]:bg-slate-800/90"
+                        for="email">
+                        Email Address
+                    </label>
+                </div>
+
+                <div class="form-group relative transition-transform duration-300">
+                    <input [type]="showPassword ? 'text' : 'password'"
+                        class="form-input w-full py-4 px-5 bg-slate-900/60 border-2 border-slate-600 rounded-2xl text-white text-base font-inherit transition-all duration-300 outline-none placeholder-transparent peer focus:border-red-600 focus:shadow-red-600/20 focus:shadow-lg focus:bg-slate-900/80"
+                        id="password" name="password" placeholder=" " required (focus)="onInputFocus($event)"
+                        (blur)="onInputBlur($event)">
+                    <label
+                        class="form-label absolute left-5 top-1/2 -translate-y-1/2 text-slate-500 text-base pointer-events-none transition-all duration-300 bg-transparent px-1 peer-focus:top-0 peer-focus:text-sm peer-focus:text-red-600 peer-focus:bg-slate-800/90 peer-[:not(:placeholder-shown)]:top-0 peer-[:not(:placeholder-shown)]:text-sm peer-[:not(:placeholder-shown)]:text-red-600 peer-[:not(:placeholder-shown)]:bg-slate-800/90"
+                        for="password">
+                        Password
+                    </label>
+                    <button type="button"
+                        class="password-toggle absolute right-5 top-1/2 -translate-y-1/2 bg-none border-none text-slate-500 cursor-pointer text-xl transition-all duration-300 hover:text-red-600"
+                        (click)="togglePassword()">
+                        {{ showPassword ? '🙈' : '👁' }}
+                    </button>
+                </div>
+
+                <div class="forgot-password text-right -mt-2">
+                    <a href="#"
+                        class="text-slate-300 no-underline text-sm transition-all duration-300 hover:text-lime-400">
+                        Forgot your password?
+                    </a>
+                </div>
+
+                <button type="submit"
+                    class="login-btn w-full py-4 bg-gradient-to-r from-red-600 to-red-500 border-none rounded-2xl text-white text-lg font-semibold font-inherit cursor-pointer transition-all duration-300 relative overflow-hidden mt-2 hover:-translate-y-1 hover:shadow-red-600/40 hover:shadow-xl active:translate-y-0 disabled:opacity-50 disabled:cursor-not-allowed"
+                    [class.loading]="isLoading" [disabled]="isLoading">
+                    <span [class.opacity-0]="isLoading">Sign In to Thryve</span>
+                    <div *ngIf="isLoading"
+                        class="absolute top-1/2 left-1/2 w-5 h-5 border-2 border-transparent border-t-white rounded-full animate-spin -translate-x-1/2 -translate-y-1/2">
+                    </div>
+                </button>
+            </form>
+
+            <div class="signup-link text-center mt-8 pt-8 border-t border-slate-600">
+                <p class="text-slate-300 mb-4">New to Thryve?</p>
+                <a href="#"
+                    class="signup-btn text-red-600 no-underline font-semibold py-3 px-8 border-2 border-red-600 rounded-full transition-all duration-300 inline-block hover:bg-red-600 hover:text-white hover:-translate-y-1">
+                    Create Account
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
