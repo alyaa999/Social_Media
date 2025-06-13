@@ -15,7 +15,7 @@ export class ProfileService {
     .set("Authorization", environment.token)
     .set("Accept", "application/json");
 
-  private baseUrl = `${environment.apiBaseUrl}api/public/profile/`;  
+  private baseUrl = `${environment.apiBaseUrl}/api/public/profile/`;  
 
   constructor(private _http: HttpClient) {}
 
