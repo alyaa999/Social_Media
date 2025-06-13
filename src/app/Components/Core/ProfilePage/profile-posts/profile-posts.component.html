@@ -1,1 +1,56 @@
-<p>profile-posts works!</p>
+<div class="rounded-3xl shadow-lg overflow-hidden bg-dusk-09 max-w-5xl mx-auto mt-6">
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="flex justify-center p-4">
+        <div class="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-redis-red"></div>
+    </div>
+
+    <!-- Error State -->
+    <div *ngIf="error && !isLoading" class="p-3 mb-2 bg-bg-subtle border-l-4 border-hyper-05 text-fg-default">
+        <p>{{ error }}</p>
+        <button (click)="loadProfilePosts()"
+            class="mt-2 px-3 py-1.5 bg-bg-muted text-fg-default rounded hover:bg-dusk transition-colors">
+            Retry
+        </button>
+    </div>
+
+    <!-- Profile Posts content -->
+    <div *ngFor="let post of posts" class="p-2 mb-2 ">
+        <!-- Post Header -->
+        <div class="flex items-center mb-2 px-14">
+            <img [src]="post.authorProfile.profilePictureUrl || 'assets/default-avatar.png'" alt="Profile"
+                class="w-10 h-10 rounded-full mr-3 object-cover">
+            <div>
+                <h3 class="text-base font-semibold text-fg-default">{{ post.authorProfile.displayName }}</h3>
+                <p class="text-sm text-fg-muted">{{ formatDate(post.createdAt) }}</p>
+            </div>
+        </div>
+
+        <!-- Post Content -->
+        <p class="text-base text-fg-body mb-2 px-14">{{ post.content }}</p>
+
+        <!-- Post Media -->
+        <div *ngIf="post.mediaList?.length" class="mb-2 px-14">
+            <div class="grid grid-cols-1 gap-2 max-h-[300px] overflow-hidden">
+                <img *ngFor="let media of post.mediaList" [src]="media.url" [alt]="'Post media'"
+                    class="w-full object-cover rounded-md">
+            </div>
+        </div>
+
+        <!-- Post Actions -->
+        <div class="flex items-center gap-6 text-sm text-fg-muted pt-2 mt-1 px-14">
+            <button class="flex items-center hover:text-redis-red transition-colors"
+                (click)="openReactionsModal(post.postId)">
+                <span class="mr-2">👍</span>
+                <span>{{ post.reactsCount || 0 }} Likes</span>
+            </button>
+            <button class="hover:text-redis-red transition-colors" (click)="openCommentsModal(post.postId)">
+                {{ post.commentsCount || 0 }} Comments
+            </button>
+        </div>
+    </div>
+
+    <!-- Empty State -->
+    <div *ngIf="!isLoading && !error && posts.length === 0" class="text-center py-4 text-fg-muted">
+        <p>No posts to show yet.</p>
+    </div>
+</div>

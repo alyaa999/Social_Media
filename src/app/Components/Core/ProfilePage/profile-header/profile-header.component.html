@@ -1,1 +1,41 @@
-<p>profile-header works!</p>
+<div class="rounded-3xl shadow-lg overflow-hidden bg-dusk-09 max-w-5xl mx-auto">
+    <!-- Cover Photo -->
+    <div class="relative w-full h-64 bg-dusk-09">
+        <img [src]="profile?.CoverUrl || 'https://lh3.googleusercontent.com/proxy/KcMiQR2cJXxxlSMa5CTNzHfJFn9OAD9d3IGjAC7776Fl-9G5J68SqddKCE70Id8I2Otk5PH9PXFdEAEtEYbsicSnrDEDeNDU3GBKNLhOeVX8_0x2LP-7LioBu-4XML6tgQCCL5Qp'"
+            alt="Cover" class="w-full h-full object-cover rounded-t-3xl">
+        <!-- Profile Image -->
+        <div class="absolute left-10 -bottom-20">
+            <img [src]="profile?.ProfileUrl || 'https://media.istockphoto.com/id/1437816897/photo/business-woman-manager-or-human-resources-portrait-for-career-success-company-we-are-hiring.jpg?s=612x612&w=0&k=20&c=tyLvtzutRh22j9GqSGI33Z4HpIwv9vL_MZw_xOE19NQ='"
+                alt="Profile"
+                class="w-40 h-40 rounded-full border-4 border-gray-400 object-cover bg-gray-100 shadow-lg">
+        </div>
+    </div>
+    <!-- Header Actions -->
+    <div class="flex justify-end items-center mt-4 px-6">
+        <!-- Example icons (replace with your own as needed) -->
+        <button *ngIf="isCurrentUser"
+            class="ml-4 px-6 py-2 rounded-full border border-dusk-50 bg-dusk-09 text-dusk-01 font-semibold hover:bg-dusk-01/10 transition">Edit
+            profile</button>
+        <button *ngIf="!isCurrentUser"
+            class="ml-4 pl-6 pr-6 py-2 rounded-full font-semibold bg-white hover:bg-[rgb(120_135_142)] text-white transition"
+            style="color: rgba(255, 68, 56, 1)">Follow</button>
+    </div>
+    <!-- Profile Info -->
+    <div class="pt-10 px-14 mb-10">
+        <h2 class="text-2xl font-bold text-dusk-01">{{ profile?.FirstName }} {{ profile?.LastName }}</h2>
+        <div class="text-dusk-50 text-lg font-mono">&#64;{{ profile?.UserName }}</div>
+        <div class="mt-2 text-base text-dusk-01">{{ profile?.Bio }}</div>
+        <div class="flex items-center text-dusk-50 mt-2 space-x-4">
+            <div class="flex items-center">
+                <i class="fa fa-calendar mr-1"></i>
+                <span>Joined {{ profile?.BirthDate | date:'MMMM yyyy' }}</span>
+            </div>
+        </div>
+        <div class="flex space-x-6 mt-2">
+            <span><span class="font-bold text-dusk-01">{{ profile?.NoFollowing }}</span> <span
+                    class="text-dusk-50">Following</span></span>
+            <span><span class="font-bold text-dusk-01">{{ profile?.NoFollowers }}</span> <span
+                    class="text-dusk-50">Followers</span></span>
+        </div>
+    </div>
+</div>
