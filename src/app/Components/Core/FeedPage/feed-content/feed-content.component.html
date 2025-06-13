@@ -52,11 +52,11 @@
     
     <!-- Post Actions -->
     <div class="flex items-center gap-6 text-sm text-fg-muted pt-2 mt-1 px-1">
-      <button class="flex items-center hover:text-redis-red transition-colors">
+      <button class="flex items-center hover:text-redis-red transition-colors" (click)="openReactionsModal(post.postId)">
         <span class="mr-2">👍</span>
         <span>{{ post.reactsCount || 0 }} Likes</span>
       </button>
-      <button class="hover:text-redis-red transition-colors">
+      <button class="hover:text-redis-red transition-colors" (click)="openCommentsModal(post.postId)">
         {{ post.commentsCount || 0 }} Comments
       </button>
     </div>
@@ -66,4 +66,14 @@
   <div *ngIf="!isLoading && !error && posts.length === 0" class="text-center py-4 text-fg-muted">
     <p>No posts to show. Follow more users to see their posts!</p>
   </div>
+
+  <!-- Comment Modal -->
+  <app-comment-modal
+    [comments]="selectedComments"
+    [reactions]="selectedReactions"
+    [visible]="showModal"
+    [mode]="modalMode"
+    (close)="closeModal()"
+    (commentSubmitted)="handleCommentSubmission($event)"
+  ></app-comment-modal>
 </div>

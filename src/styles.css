@@ -8,6 +8,27 @@ html, body {
   font-family: "Space Grotesk", sans-serif;
   font-optical-sizing: auto;
 }
+/* Global thin scrollbar styling */
+
+/* For Chrome, Safari, and Opera */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-thumb {
+  background: #a259ff; /* fallback hyper color */
+  border-radius: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* For Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #a259ff transparent; /* fallback hyper color */
+}
+
 /* Hide scrollbar for Chrome, Safari and Opera */
 .no-scrollbar::-webkit-scrollbar {
   display: none;

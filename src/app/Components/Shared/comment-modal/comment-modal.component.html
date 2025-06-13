@@ -1,0 +1,68 @@
+<div *ngIf="visible" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50" (mousedown)="onBackdropClick($event)">
+  <!-- Main modal container: flex column, increased height -->
+  <div class="bg-dusk-09 rounded-lg w-full max-w-md max-h-[90vh] flex flex-col shadow-lg border border-dusk-70" (mousedown)="$event.stopPropagation()">
+    
+    <!-- Modal Header -->
+    <div class="flex-shrink-0 p-6 pb-4 relative">
+      <button class="absolute top-4 right-6 text-3xl text-dusk-50 hover:text-redis-red focus:outline-none z-10" (click)="onClose()">&times;</button>
+      <h2 class="text-lg font-bold text-fg-default">{{ mode === 'comments' ? 'Comments' : 'Likes' }}</h2>
+    </div>
+
+    <!-- Scrollable Content Area -->
+    <div class="flex-grow overflow-y-auto px-6 scroll-smooth scrollbar-thin scrollbar-thumb-dusk-70 scrollbar-track-dusk-01">
+      <ng-container *ngIf="mode === 'comments'">
+        <div *ngIf="comments.length === 0" class="text-center text-dusk-50 my-8">No comments yet.</div>
+        <div *ngFor="let comment of comments" class="border-b border-dusk-70 py-4 last:border-b-0">
+          <div class="flex items-center mb-1">
+            <img [src]="comment.CommentAuthor.ProfilePictureUrl || 'assets/default-avatar.png'" alt="Profile" class="w-9 h-9 rounded-full mr-3 object-cover">
+            <div class="flex flex-col">
+              <span class="font-semibold text-fg-default">{{ comment.CommentAuthor.DisplayName || comment.CommentAuthor.UserName }}</span>
+              <span class="text-xs text-dusk-30">{{ comment.CreatedAt | date:'medium' }}</span>
+            </div>
+          </div>
+          <div class="mt-2 text-fg-body">
+            <p>{{ comment.CommentContent }}</p>
+            <img *ngIf="comment.MediaUrl" [src]="comment.MediaUrl" alt="Comment media" class="mt-2 rounded-md max-w-full">
+          </div>
+          <div class="text-xs text-dusk-50 mt-2 flex gap-2 items-center">
+            <span>{{ comment.ReactionsCount }} Likes</span>
+            <span *ngIf="comment.IsEdited" class="italic text-redis-red">(edited)</span>
+          </div>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="mode === 'reactions'">
+        <div *ngIf="reactions.length === 0" class="text-center text-dusk-50 my-8">No likes yet.</div>
+        <div *ngFor="let user of reactions" class="flex items-center gap-3 border-b border-dusk-70 py-4 last:border-b-0">
+          <img [src]="user.profilePictureUrl || 'assets/default-avatar.png'" alt="Profile" class="w-9 h-9 rounded-full object-cover">
+          <div class="flex flex-col">
+            <span class="font-semibold text-fg-default">{{ user.displayName || user.userName }}</span>
+            <span class="text-xs text-dusk-30">{{ user.userName }}</span>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+
+    <!-- Fixed Footer: Add Comment Section -->
+    <div *ngIf="mode === 'comments'" class="flex-shrink-0 p-6 pt-4 border-t border-dusk-70">
+      <textarea
+          [(ngModel)]="newCommentText"
+          class="w-full bg-dusk-08 bg-gray-900 border border-dusk-70 rounded-md p-2 text-fg-default placeholder-dusk-50 focus:ring-2 focus:ring-hyper-light-blue focus:outline-none resize-none shadow-inner"
+          placeholder="Write a comment..."
+          rows="3"
+          maxlength="400"
+      ></textarea>
+      <div class="flex items-center justify-between mt-1">
+        <span class="text-xs text-dusk-50">{{ newCommentText.length }}/400</span>
+        <button
+            (click)="onPostComment()"
+            [disabled]="!newCommentText.trim()"
+            class="px-4 py-2 bg-hyper-light-blue text-white font-semibold rounded-md hover:bg-hyper-blue disabled:bg-dusk-30 disabled:cursor-not-allowed shadow"
+        >
+            Post
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>

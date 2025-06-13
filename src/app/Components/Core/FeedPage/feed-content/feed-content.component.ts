@@ -1,15 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule, DatePipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { NewPostComponent } from '../../../Shared/new-post/new-post.component';
-import { FeedService } from '../../../../Services/feed.service';
-import { HttpClientModule } from '@angular/common/http';
-import { Post } from '../../../../Interfaces/feed/post';
-import { catchError, finalize, of } from 'rxjs';
+import { Post, STATIC_POSTS } from '../../../../Interfaces/feed/post';
+import { SimpleUserProfile, STATIC_REACTIONS } from '../../../../Interfaces/post/simple-user-profile';
+import { CommentModalComponent } from '../../../Shared/comment-modal/comment-modal.component';
+import { AggregatedComment, STATIC_COMMENTS } from '../../../../Interfaces/Comment/aggregated-comment';
+import { v4 as uuidv4 } from 'uuid';
 
 @Component({
   selector: 'app-feed-content',
   standalone: true,
-  imports: [CommonModule, NewPostComponent, HttpClientModule],
+  imports: [CommonModule, NewPostComponent, CommentModalComponent],
   templateUrl: './feed-content.component.html',
   styleUrls: ['./feed-content.component.scss']
 })
@@ -18,33 +19,82 @@ export class FeedContentComponent implements OnInit {
   isLoading = true;
   error: string | null = null;
 
-  constructor(private feedService: FeedService) {}
+  showModal: boolean = false;
+  modalMode: 'comments' | 'reactions' = 'comments';
+  selectedComments: AggregatedComment[] = [];
+  selectedReactions: SimpleUserProfile[] = [];
+  selectedPostId: string | null = null;
+
+  openCommentsModal(postId: string) {
+    this.selectedReactions = []; // Clear reactions before opening comments
+    this.selectedComments = STATIC_COMMENTS.filter((c: AggregatedComment) => c.PostId === postId);
+    this.modalMode = 'comments';
+    this.showModal = true;
+    this.selectedPostId = postId;
+  }
+
+  openReactionsModal(postId: string) {
+    this.selectedComments = []; // Clear comments before opening reactions
+    // For demo, use STATIC_REACTIONS for all posts
+    // In real app, filter by postId
+    this.selectedReactions = STATIC_REACTIONS;
+    this.modalMode = 'reactions';
+    this.showModal = true;
+    this.selectedPostId = postId;
+  }
+
+  closeModal() {
+    this.showModal = false;
+    this.selectedComments = [];
+    this.selectedReactions = [];
+    this.selectedPostId = null;
+  }
+
+  handleCommentSubmission(commentText: string) {
+    if (!this.selectedPostId) return;
+
+    const newComment: AggregatedComment = {
+      CommentId: uuidv4(),
+      PostId: this.selectedPostId,
+      AuthorId: 'current-user-id', // Static placeholder
+      CommentContent: commentText,
+      CreatedAt: new Date(),
+      IsEdited: false,
+      ReactionsCount: 0,
+      IsLiked: false,
+      CommentAuthor: { // Static placeholder for current user
+        UserId: 'current-user-id', // Corrected property name to match interface
+        UserName: 'current_user',
+        DisplayName: 'Current User',
+        ProfilePictureUrl: 'assets/default-avatar.png',
+      },
+    };
+
+    // Add to the master static array
+    STATIC_COMMENTS.unshift(newComment);
+
+    // Add to the currently displayed comments in the modal
+    this.selectedComments.unshift(newComment);
+
+    // Update the post's comment count
+    const post = this.posts.find(p => p.postId === this.selectedPostId);
+    if (post) {
+      post.commentsCount = (post.commentsCount || 0) + 1;
+    }
+  }
+
+  constructor() {}
 
   ngOnInit() {
     this.loadFeedData();
   }
 
   loadFeedData() {
-    const userId = 'u02'; // TODO: Get this from auth service
     this.isLoading = true;
     this.error = null;
-    
-    this.feedService.GetTimeline(userId)
-      .pipe(
-        catchError(error => {
-          console.error('Error fetching feed:', error);
-          this.error = 'Failed to load posts. Please try again later.';
-          return of([]); // Return empty array on error
-        }),
-        finalize(() => {
-          this.isLoading = false;
-        })
-      )
-      .subscribe({
-        next: (data: Post[]) => {
-          this.posts = data || [];
-        }
-      });
+    // Using static data instead of service
+    this.posts = STATIC_POSTS;
+    this.isLoading = false;
   }
 
   formatDate(dateString: string | Date): string {
