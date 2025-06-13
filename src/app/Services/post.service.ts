@@ -6,6 +6,7 @@ import { PostResponseDTO } from '../Interfaces/post/post-response-dto';
 import { PostInputDto } from '../Interfaces/post/post-input-dto';
 import { PostAggregationResponse } from '../Interfaces/post/post-aggrigation-response';
 import { Observable } from 'rxjs';
+import { PaginationResponseWrapper } from '../Interfaces/response-wrapper/PaginationResponseWrapper';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,7 @@ export class PostService {
     .set("Authorization", environment.token)
     .set("Accept", "application/json");
 
-  private baseUrl = `${environment.apiBaseUrl}api/public/PublicPost/`;
+  private baseUrl = `${environment.apiBaseUrl}/api/public/PublicPost/`;
   private createHeader(userId: string) {
     return this.headers.set("userId", userId);
   }
@@ -43,16 +44,16 @@ export class PostService {
     });
   }
 
-  // ---------------- Fetch Posts Aggrigation ----------------
+  // ---------------- Fetch Posts Aggregation ----------------
 
-  private AggregationBaseUrl = `${environment.apiBaseUrl}api/public/Post/`;
+  private AggregationBaseUrl = `${environment.apiBaseUrl}/api/public/Posts/`;
 
-  GetProfilePosts(OtherId: string, userId: string, next?: string): Observable<ResponseWrapper<PostAggregationResponse[]>> {
+  GetProfilePosts(OtherId: string, userId: string, next?: string): Observable< PaginationResponseWrapper<PostAggregationResponse[]>> {
     let params: string = '';
     if (next !== undefined) {
       params += `&next=${next}`;
     }
-    return this._http.get<ResponseWrapper<PostAggregationResponse[]>>(`${this.AggregationBaseUrl}user/${OtherId}/${userId}?${params}`, {
+    return this._http.get< PaginationResponseWrapper<PostAggregationResponse[]>>(`${this.AggregationBaseUrl}user/${OtherId}?${params}`, {
       headers: this.createHeader(userId)
     });
   }
