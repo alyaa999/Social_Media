@@ -1,18 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-interface Post {
-  postId: string;
-  content: string;
-  createdAt: string;
-  authorProfile: {
-    displayName: string;
-    profilePictureUrl: string;
-  };
-  mediaList?: { url: string }[];
-  reactsCount: number;
-  commentsCount: number;
-}
+import { PostService } from '../../../../Services/post.service';
+import { PostAggregationResponse } from '../../../../Interfaces/post/post-aggrigation-response';
 
 @Component({
   selector: 'app-profile-posts',
@@ -22,57 +11,18 @@ interface Post {
   imports: [CommonModule]
 })
 export class ProfilePostsComponent implements OnInit {
+  @Input() userId: string = 'user-123'; // Default value, should be passed from parent
+  
   isLoading: boolean = false;
   error: string | null = null;
-  posts: Post[] = [];
+  posts: PostAggregationResponse[] = [];
   selectedComments: any[] = [];
   selectedReactions: any[] = [];
   showModal: boolean = false;
   modalMode: 'comments' | 'reactions' = 'comments';
+  nextPage: string  = '1';
 
-  private mockPosts: Post[] = [
-    {
-      postId: '1',
-      content: 'Just finished a great workout! 💪 #fitness #health',
-      createdAt: '2024-03-15T10:30:00',
-      authorProfile: {
-        displayName: 'John Doe',
-        profilePictureUrl: 'https://i.pravatar.cc/150?img=1'
-      },
-      mediaList: [
-        { url: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438' }
-      ],
-      reactsCount: 42,
-      commentsCount: 5
-    },
-    {
-      postId: '2',
-      content: 'Beautiful sunset at the beach today! 🌅',
-      createdAt: '2024-03-14T18:45:00',
-      authorProfile: {
-        displayName: 'John Doe',
-        profilePictureUrl: 'https://i.pravatar.cc/150?img=1'
-      },
-      mediaList: [
-        { url: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e' }
-      ],
-      reactsCount: 89,
-      commentsCount: 12
-    },
-    {
-      postId: '3',
-      content: 'Working on some exciting new projects! #coding #development',
-      createdAt: '2024-03-13T15:20:00',
-      authorProfile: {
-        displayName: 'John Doe',
-        profilePictureUrl: 'https://i.pravatar.cc/150?img=1'
-      },
-      reactsCount: 27,
-      commentsCount: 3
-    }
-  ];
-
-  constructor() {}
+  constructor(private postService: PostService) {}
 
   ngOnInit(): void {
     this.loadProfilePosts();
@@ -82,14 +32,32 @@ export class ProfilePostsComponent implements OnInit {
     this.isLoading = true;
     this.error = null;
     
-    // Simulate API call with timeout
-    setTimeout(() => {
-      this.posts = this.mockPosts;
-      this.isLoading = false;
-    }, 1000);
+    this.postService.GetProfilePosts(this.userId, this.userId, this.nextPage)
+      .subscribe({
+        next: (response) => {
+          if (response.success) {
+            this.posts = response.data;
+            this.nextPage = response.next;
+          } else {
+            this.error = response.message || 'Failed to load posts';
+          }
+          this.isLoading = false;
+        },
+        error: (error) => {
+          console.error('Error loading posts:', error);
+          this.error = 'Failed to load posts. Please try again.';
+          this.isLoading = false;
+        }
+      });
   }
 
-  formatDate(date: string): string {
+  loadMore(): void {
+    if (this.nextPage) {
+      this.loadProfilePosts();
+    }
+  }
+
+  formatDate(date: Date): string {
     return new Date(date).toLocaleDateString();
   }
 
