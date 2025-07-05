@@ -1,0 +1,155 @@
+<!-- Animated Background -->
+<div class="fixed top-0 left-0 w-full h-full -z-10 opacity-5 pointer-events-none">
+    <div class="absolute w-20 h-20 rounded-full bg-red-600/10 top-[20%] left-[10%] animate-float"></div>
+    <div class="absolute w-30 h-30 rounded-full bg-red-600/10 top-[60%] left-[80%] animate-float-delay-2"></div>
+    <div class="absolute w-15 h-15 rounded-full bg-red-600/10 top-[80%] left-[20%] animate-float-delay-4"></div>
+    <div class="absolute w-25 h-25 rounded-full bg-red-600/10 top-[30%] left-[70%] animate-float-delay-1"></div>
+</div>
+
+<!-- Header -->
+<header class="sticky top-0 z-50 p-5 backdrop-blur-md bg-slate-800/90 border-b border-slate-700">
+    <div class="max-w-6xl mx-auto px-5">
+        <nav class="flex justify-between items-center">
+            <div class="text-3xl font-bold text-red-600 font-norican drop-shadow-glow">
+                Thryve
+            </div>
+            <ul class="hidden md:flex gap-8">
+                <li><a href="#about" class="nav-link">Sign Up</a></li>
+                <li><a href="#contact" class="nav-link">Log In</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<!-- Animated Tagline Section -->
+<section
+    class="min-h-[50vh] flex items-center justify-center relative bg-gradient-to-br from-slate-900 to-slate-800 overflow-hidden">
+    <div class="text-center relative z-10">
+        <div class="text-6xl md:text-8xl font-black h-[1.2em] flex items-center justify-center gap-8 relative">
+            <div class="text-white min-w-[350px] text-right relative overflow-visible inline-block h-[1.2em] -translate-x-5"
+                #changingWord>
+                <span class="word-span animate-word-rotate-1">Build</span>
+                <span class="word-span animate-word-rotate-2">Bond</span>
+                <span class="word-span animate-word-rotate-3">Create</span>
+                <span class="word-span animate-word-rotate-4">Grow</span>
+                <span class="word-span-final animate-word-rotate-final">Thryve</span>
+            </div>
+            <div class="text-white relative z-10">Together</div>
+        </div>
+        <div class="absolute top-1/2 left-0 right-0 h-0.5 pointer-events-none">
+            <div class="line-right animate-line-slide-right"></div>
+            <div class="line-left animate-line-slide-left"></div>
+        </div>
+        <div class="pulse-circle animate-pulse-effect"></div>
+    </div>
+</section>
+
+<!-- Hero Section -->
+<section class="min-h-[80vh] flex items-center py-16 relative bg-slate-900">
+    <div class="max-w-6xl mx-auto px-5">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <div class="animate-slide-in-left">
+                <h1 class="text-4xl lg:text-6xl font-extrabold mb-5 text-white leading-tight">Your World.<br>Your
+                    Voice.<br><span class="text-red-600">Thryving.</span></h1>
+                <p class="text-xl mb-8 text-slate-300 animate-slide-in-left-delay-1">Thryve is where real voices grow.
+                    Connect with purpose, share what matters, and build a thriving community—one genuine moment at a
+                    time.</p>
+                <div class="flex flex-col sm:flex-row gap-5 animate-slide-in-left-delay-2">
+                    <a href="#" class="cta-button-primary">Join Thryve</a>
+                    <a href="#features" class="cta-button-secondary">Learn More</a>
+                </div>
+            </div>
+            <div class="relative animate-slide-in-right">
+                <div class="phone-mockup">
+                    <div class="phone-screen">
+                        <div class="post-card animate-fade-in-up">
+                            <div class="flex items-center mb-3">
+                                <div class="avatar"></div>
+                                <span class="username">sarah_builds</span>
+                            </div>
+                            <div class="post-text">Just launched my startup! The support from this community has been
+                                incredible 🚀</div>
+                        </div>
+                        <div class="post-card animate-fade-in-up-delay-1">
+                            <div class="flex items-center mb-3">
+                                <div class="avatar"></div>
+                                <span class="username">tech_together</span>
+                            </div>
+                            <div class="post-text">Love how we can actually collaborate here. Found my co-founder
+                                through Thryve!</div>
+                        </div>
+                        <div class="post-card animate-fade-in-up-delay-2">
+                            <div class="flex items-center mb-3">
+                                <div class="avatar"></div>
+                                <span class="username">creative_minds</span>
+                            </div>
+                            <div class="post-text">This platform brings out the best in everyone. Together we create
+                                amazing things!</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-24 bg-slate-800" id="features">
+    <div class="max-w-6xl mx-auto px-5">
+        <h2 class="text-center text-5xl mb-16 text-red-600 drop-shadow-glow">Why Thryve Together?</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+            <div class="feature-card">
+                <div class="shimmer-effect"></div>
+                <div class="feature-icon">🚀</div>
+                <h3 class="text-2xl mb-4 text-white">Built for Growth</h3>
+                <p class="text-slate-300">Experience lightning-fast performance designed to scale with your community.
+                    Your ideas shared at the speed of innovation.</p>
+            </div>
+            <div class="feature-card">
+                <div class="shimmer-effect"></div>
+                <div class="feature-icon">🔒</div>
+                <h3 class="text-2xl mb-4 text-white">Privacy First</h3>
+                <p class="text-slate-300">Your data, your control. Advanced privacy settings that put you in charge
+                    while fostering genuine connections.</p>
+            </div>
+            <div class="feature-card">
+                <div class="shimmer-effect"></div>
+                <div class="feature-icon">🎯</div>
+                <h3 class="text-2xl mb-4 text-white">Smart Collaboration</h3>
+                <p class="text-slate-300">AI-powered matching that connects you with like-minded creators and
+                    collaborators without the noise.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Section -->
+<section class="py-20 text-center bg-slate-900">
+    <div class="max-w-6xl mx-auto px-5">
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-10">
+            <div class="stat-item animate-count-up">
+                <span class="stat-number">2M+</span>
+                <div class="stat-label">Active Creators</div>
+            </div>
+            <div class="stat-item animate-count-up-delay-1">
+                <span class="stat-number">50M+</span>
+                <div class="stat-label">Collaborations</div>
+            </div>
+            <div class="stat-item animate-count-up-delay-2">
+                <span class="stat-number">150+</span>
+                <div class="stat-label">Countries</div>
+            </div>
+            <div class="stat-item animate-count-up-delay-3">
+                <span class="stat-number">99.9%</span>
+                <div class="stat-label">Uptime</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="bg-slate-800 py-10 text-center border-t border-slate-600">
+    <div class="max-w-6xl mx-auto px-5">
+        <p class="text-slate-300">&copy; 2025 Thryve. All rights reserved. Together we build the future.</p>
+    </div>
+</footer>

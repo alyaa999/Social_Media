@@ -2,6 +2,8 @@ import { FeedPageComponent } from './Components/Core/FeedPage/feed-page/feed-pag
 import { TailwindTestComponent } from './Components/Testing/TailwindTest/tailwind-test.component';
 import { ProfilePageComponent } from './Components/Core/ProfilePage/profile-page/profile-page.component';
 import { HomeComponent } from './Components/home/home.component';
+import { LoginComponent } from './Components/Core/login/login.component';
+import { ThryveLandingComponent } from './Components/Core/thryve-landing/thryve-landing.component';
 import { Routes } from '@angular/router';
 
 export const routes: Routes = [
@@ -10,5 +12,7 @@ export const routes: Routes = [
   { path: 'profile', component: ProfilePageComponent },
   { path: 'tailwindtest', component: TailwindTestComponent },
   { path: 'home', component: HomeComponent },
+  { path: 'login', component: LoginComponent },
+  { path: 'landing', component: ThryveLandingComponent },
   { path: '**', redirectTo: '/feed' } // Redirect any unknown routes to /feed
 ];
