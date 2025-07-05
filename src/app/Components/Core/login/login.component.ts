@@ -1,5 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { AuthService } from '../../../Services/auth.service';
+import { LoginRequest } from '../../../Interfaces/Auth/LoginRequest';
 
 @Component({
   selector: 'app-login',
@@ -10,6 +13,9 @@ import { Component } from '@angular/core';
 export class LoginComponent {
   showPassword = false;
   isLoading = false;
+  errorMessage: string | null = null;
+
+  constructor(private authService: AuthService, private router: Router) {}
 
   togglePassword(): void {
     this.showPassword = !this.showPassword;
@@ -17,22 +23,25 @@ export class LoginComponent {
 
   onSubmit(event: Event): void {
     event.preventDefault();
-    
+    this.errorMessage = null;
     const form = event.target as HTMLFormElement;
     const formData = new FormData(form);
     const email = formData.get('email') as string;
     const password = formData.get('password') as string;
-    
-    // Add loading state
     this.isLoading = true;
-    
-    // Simulate login process
-    setTimeout(() => {
-      this.isLoading = false;
-      
-      // Here you would typically handle the actual login
-      alert('Login functionality would be implemented here!');
-    }, 2000);
+    const loginRequest: LoginRequest = { email, password };
+    this.authService.login(loginRequest).subscribe({
+      next: (response) => {
+        localStorage.setItem('accessToken', response.accessToken);
+        localStorage.setItem('refreshToken', response.refreshToken);
+        this.isLoading = false;
+        this.router.navigate(['/feed']);
+      },
+      error: (err) => {
+        this.isLoading = false;
+        this.errorMessage = 'invalid username or password';
+      }
+    });
   }
 
   onInputFocus(event: Event): void {

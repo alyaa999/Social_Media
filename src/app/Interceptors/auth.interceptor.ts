@@ -4,11 +4,21 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   console.log('✅ Interceptor triggered');
   console.log('Original request headers:', req.headers);
 
-  // Only add Content-Type if it's not already set
+  let token = localStorage.getItem('accessToken');
+  if (!token) {
+    token = localStorage.getItem('refreshToken');
+  }
+
+  const setHeaders: Record<string, string> = {
+    'Content-Type': 'application/json'
+  };
+
+  if (token) {
+    setHeaders['Authorization'] = `Bearer ${token}`;
+  }
+
   const modifiedReq = req.clone({
-    setHeaders: {
-      'Content-Type': 'application/json'
-    }
+    setHeaders
   });
 
   console.log('Modified request headers:', modifiedReq.headers);

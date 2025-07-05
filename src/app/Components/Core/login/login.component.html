@@ -26,6 +26,7 @@
             </div>
 
             <form class="login-form flex flex-col gap-6" (submit)="onSubmit($event)">
+                <div *ngIf="errorMessage" class="text-red-500 text-center mb-4">{{ errorMessage }}</div>
                 <div class="form-group relative transition-transform duration-300">
                     <input type="email"
                         class="form-input w-full py-4 px-5 bg-slate-900/60 border-2 border-slate-600 rounded-2xl text-white text-base font-inherit transition-all duration-300 outline-none placeholder-transparent peer focus:border-red-600 focus:shadow-red-600/20 focus:shadow-lg focus:bg-slate-900/80"

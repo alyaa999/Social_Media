@@ -85,21 +85,4 @@ export class PostService {
     }
     return formData;
   }
-
-  /**
-   * Here, key is inferred as string, but postDto is typed as PostInputDto, 
-   * so postDto[key] gives a type error because TypeScript can't guarantee that key is a valid key of PostInputDto.
-   * Also, formData.append(key, postDto[key]) may give a type error because postDto[key] could be of any type, not just string | Blob.
-   */
-
-  //   private buildFormData(postDto: PostInputDto): FormData {
-  //   const formData = new FormData();
-  //   for (const key in postDto) {
-  //     if (postDto[key] !== undefined && postDto[key] !== null) {
-  //       formData.append(key, postDto[key]);
-  //     }
-  //   }
-  //   return formData;
-  // }
-
 }
