@@ -7,6 +7,8 @@ import { CommentModalComponent } from '../../../Shared/comment-modal/comment-mod
 import { AggregatedComment, STATIC_COMMENTS } from '../../../../Interfaces/Comment/aggregated-comment';
 import { v4 as uuidv4 } from 'uuid';
 import { FeedService } from '../../../../Services/feed.service';
+import { CommentService } from '../../../../Services/comment.service';
+import { GetPagedCommentRequest } from '../../../../Interfaces/Comment/get-paged-comment-request';
 
 @Component({
   selector: 'app-feed-content',
@@ -26,11 +28,26 @@ export class FeedContentComponent implements OnInit {
   selectedReactions: SimpleUserProfile[] = [];
   selectedPostId: string | null = null;
 
-  constructor(private feedService: FeedService) {}
+  constructor(private feedService: FeedService, private commentService: CommentService) {}
 
   openCommentsModal(postId: string) {
     this.selectedReactions = []; // Clear reactions before opening comments
-    this.selectedComments = STATIC_COMMENTS.filter((c: AggregatedComment) => c.PostId === postId);
+
+    const req : GetPagedCommentRequest = {
+      PostId: postId,
+      Next: ""
+    }
+
+    this.commentService.GetCommentList(req).subscribe({
+      next: (data) => {
+        this.selectedComments = data.data;
+        console.log('Comments loaded:', data);
+      },
+      error: (err) => {
+        console.error('Error loading comments:', err);
+      }
+    });
+
     this.modalMode = 'comments';
     this.showModal = true;
     this.selectedPostId = postId;

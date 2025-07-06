@@ -14,20 +14,11 @@ import { AggregatedComment } from '../Interfaces/Comment/aggregated-comment';
 })
 export class CommentService {
 
-  private headers = new HttpHeaders()
-    .set("Authorization", environment.token)
-    .set("Accept", "application/json");
-
-  private baseUrl = `${environment.apiBaseUrl}api/public/comment/`;
+  private baseUrl = `${environment.apiBaseUrl}comment/`;
 
   constructor(private _http: HttpClient) {}
 
-  private createHeader(userId: string){
-    return this.headers.set("userId", userId);
-  }
-
-CreateComment(data: CreateCommentRequest, userId: string){
-  const headers = this.createHeader(userId);
+CreateComment(data: CreateCommentRequest){
   const formData = new FormData();
 
   formData.append("PostId", data.PostId);
@@ -39,11 +30,10 @@ CreateComment(data: CreateCommentRequest, userId: string){
     formData.append("Media", data.Media);
   }
 
-  return this._http.post<ResponseWrapper<CommentResponse>>(this.baseUrl, formData, {headers});
+  return this._http.post<ResponseWrapper<CommentResponse>>(this.baseUrl, formData, {});
 }
 
-EditComment(data: EditCommentRequest, userId: string){
-  const headers = this.createHeader(userId);
+EditComment(data: EditCommentRequest){
   const formData = new FormData();
 
   formData.append("CommentId", data.CommentId);
@@ -56,19 +46,15 @@ EditComment(data: EditCommentRequest, userId: string){
     formData.append("MediaUrl", data.MediaUrl);
   }
 
-  return this._http.put<ResponseWrapper<CommentResponse>>(this.baseUrl, formData, {headers});
+  return this._http.put<ResponseWrapper<CommentResponse>>(this.baseUrl, formData, {});
 }
 
-DeleteComment(id: string, userId: string){
-  const headers = this.createHeader(userId);
-
-  return this._http.delete<ResponseWrapper<boolean>>(`${this.baseUrl}${id}`, {headers});
+DeleteComment(id: string){
+  return this._http.delete<ResponseWrapper<boolean>>(`${this.baseUrl}${id}`, {});
 }
 
-GetCommentList(userId: string, request: GetPagedCommentRequest){
-  const headers = this.createHeader(userId);
-
-  return this._http.post<PaginationResponseWrapper<AggregatedComment[]>>(`${this.baseUrl}list`, request, {headers});
+GetCommentList(request: GetPagedCommentRequest){
+  return this._http.post<PaginationResponseWrapper<AggregatedComment[]>>(`${this.baseUrl}list`, request, {});
 }
 
 }

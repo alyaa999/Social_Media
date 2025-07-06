@@ -1,7 +1,7 @@
 <div *ngIf="visible" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50" (mousedown)="onBackdropClick($event)">
   <!-- Main modal container: flex column, increased height -->
   <div class="bg-dusk-09 rounded-lg w-full max-w-md max-h-[90vh] flex flex-col shadow-lg border border-dusk-70" (mousedown)="$event.stopPropagation()">
-    
+
     <!-- Modal Header -->
     <div class="flex-shrink-0 p-6 pb-4 relative">
       <button class="absolute top-4 right-6 text-3xl text-dusk-50 hover:text-redis-red focus:outline-none z-10" (click)="onClose()">&times;</button>
@@ -11,7 +11,7 @@
     <!-- Scrollable Content Area -->
     <div class="flex-grow overflow-y-auto px-6 scroll-smooth scrollbar-thin scrollbar-thumb-dusk-70 scrollbar-track-dusk-01">
       <ng-container *ngIf="mode === 'comments'">
-        <div *ngIf="comments.length === 0" class="text-center text-dusk-50 my-8">No comments yet.</div>
+        <div *ngIf="comments?.length === 0" class="text-center text-dusk-50 my-8">No comments yet.</div>
         <div *ngFor="let comment of comments" class="border-b border-dusk-70 py-4 last:border-b-0">
           <div class="flex items-center mb-1">
             <img [src]="comment.CommentAuthor.ProfilePictureUrl || 'assets/default-avatar.png'" alt="Profile" class="w-9 h-9 rounded-full mr-3 object-cover">
@@ -32,7 +32,7 @@
       </ng-container>
 
       <ng-container *ngIf="mode === 'reactions'">
-        <div *ngIf="reactions.length === 0" class="text-center text-dusk-50 my-8">No likes yet.</div>
+        <div *ngIf="reactions?.length === 0" class="text-center text-dusk-50 my-8">No likes yet.</div>
         <div *ngFor="let user of reactions" class="flex items-center gap-3 border-b border-dusk-70 py-4 last:border-b-0">
           <img [src]="user.profilePictureUrl || 'assets/default-avatar.png'" alt="Profile" class="w-9 h-9 rounded-full object-cover">
           <div class="flex flex-col">
