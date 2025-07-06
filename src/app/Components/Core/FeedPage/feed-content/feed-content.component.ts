@@ -6,6 +6,7 @@ import { SimpleUserProfile, STATIC_REACTIONS } from '../../../../Interfaces/post
 import { CommentModalComponent } from '../../../Shared/comment-modal/comment-modal.component';
 import { AggregatedComment, STATIC_COMMENTS } from '../../../../Interfaces/Comment/aggregated-comment';
 import { v4 as uuidv4 } from 'uuid';
+import { FeedService } from '../../../../Services/feed.service';
 
 @Component({
   selector: 'app-feed-content',
@@ -24,6 +25,8 @@ export class FeedContentComponent implements OnInit {
   selectedComments: AggregatedComment[] = [];
   selectedReactions: SimpleUserProfile[] = [];
   selectedPostId: string | null = null;
+
+  constructor(private feedService: FeedService) {}
 
   openCommentsModal(postId: string) {
     this.selectedReactions = []; // Clear reactions before opening comments
@@ -83,8 +86,6 @@ export class FeedContentComponent implements OnInit {
     }
   }
 
-  constructor() {}
-
   ngOnInit() {
     this.loadFeedData();
   }
@@ -92,8 +93,12 @@ export class FeedContentComponent implements OnInit {
   loadFeedData() {
     this.isLoading = true;
     this.error = null;
-    // Using static data instead of service
-    this.posts = STATIC_POSTS;
+
+    this.feedService.getTimeline().subscribe({
+      next: (data: Post[]) => {this.posts = data;},
+      error: (err) => {
+        console.error('Error loading feed data:', err);}});
+
     this.isLoading = false;
   }
 
