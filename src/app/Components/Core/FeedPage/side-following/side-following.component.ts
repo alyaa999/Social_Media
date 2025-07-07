@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ProfileAggregation } from '../../../../Interfaces/Profile/profile-aggrigation';
+import { FollowService } from '../../../../Services/follow.service';
+import { FollowingListRequest } from '../../../../Interfaces/Follow/Follow';
 
 @Component({
   selector: 'app-side-following',
@@ -9,46 +11,25 @@ import { ProfileAggregation } from '../../../../Interfaces/Profile/profile-aggri
   styleUrl: './side-following.component.scss'
 })
 export class SideFollowingComponent {
-  followingList: ProfileAggregation[] = [
-    {
-      userId: '1',
-      displayName: 'Alex Johnson',
-      userName: 'alexj',
-      profilePictureUrl: 'https://randomuser.me/api/portraits/men/1.jpg',
-      isFollowing: true,
-      isFollower: true
-    },
-    {
-      userId: '2',
-      displayName: 'Maria Garcia',
-      userName: 'mariag',
-      profilePictureUrl: 'https://randomuser.me/api/portraits/women/2.jpg',
-      isFollowing: true,
-      isFollower: false
-    },
-    {
-      userId: '3',
-      displayName: 'James Wilson',
-      userName: 'jamesw',
-      profilePictureUrl: 'https://randomuser.me/api/portraits/men/3.jpg',
-      isFollowing: true,
-      isFollower: true
-    },
-    {
-      userId: '4',
-      displayName: 'Sarah Lee',
-      userName: 'sarahlee',
-      profilePictureUrl: 'https://randomuser.me/api/portraits/women/4.jpg',
-      isFollowing: true,
-      isFollower: false
-    },
-    {
-      userId: '5',
-      displayName: 'David Kim',
-      userName: 'davidk',
-      profilePictureUrl: 'https://randomuser.me/api/portraits/men/5.jpg',
-      isFollowing: true,
-      isFollower: true
+  followingList: ProfileAggregation[] = [];
+
+  constructor(_followService : FollowService) {
+
+    const request: FollowingListRequest = {
+      OtherId: localStorage.getItem('userId') || '',
+      next: "" 
     }
-  ];
+
+    _followService.getFollowing(request).subscribe({
+      next: (data) => {
+        console.log('Following list response:', data);
+        this.followingList = data.data;
+        console.log('Following list loaded:', this.followingList);
+      },
+      error: (err) => {
+        console.error('Error loading following list:', err);
+      }
+    });
+
+  }
 }

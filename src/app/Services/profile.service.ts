@@ -24,7 +24,6 @@ export class ProfileService {
     {
       return this.headers.set("userId", userId).set("Email", Email);
     }
-
     return this.headers.set("userId", userId);
   }
 

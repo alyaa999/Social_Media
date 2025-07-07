@@ -16,7 +16,7 @@ export class LoginComponent {
   errorMessage: string | null = null;
 
   constructor(private authService: AuthService, private router: Router) {}
-
+  id : string | null = null;
   togglePassword(): void {
     this.showPassword = !this.showPassword;
   }
@@ -34,6 +34,19 @@ export class LoginComponent {
       next: (response) => {
         localStorage.setItem('accessToken', response.accessToken);
         localStorage.setItem('refreshToken', response.refreshToken);
+        this.authService.verify().subscribe({
+          next: (data) => {
+            this.id = data.id;
+            localStorage.setItem('userId', this.id);
+            console.log('User ID:', this.id);
+          },
+          error: (err) => {
+            console.error('Error verifying user:', err);
+            this.errorMessage = 'Failed to verify user';
+          }
+        })
+        
+
         this.isLoading = false;
         this.router.navigate(['/feed']);
       },

@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../enviroment/enviroment';
-import { FollowListRequest } from '../Interfaces/Follow/Follow';
+import { FollowingListRequest, FollowListRequest } from '../Interfaces/Follow/Follow';
 import { PaginationResponseWrapper } from '../Interfaces/response-wrapper/PaginationResponseWrapper';
 import { ProfileAggregation } from '../Interfaces/Profile/profile-aggrigation';
 import { Observable } from 'rxjs';
@@ -11,7 +11,7 @@ import { ResponseWrapper } from '../Interfaces/response-wrapper/response-wrapper
   providedIn: 'root'
 })
 export class FollowService {
-  private baseUrl = `${environment.apiBaseUrl}api/public/follow/`; // adjust path as needed
+  private baseUrl = `${environment.apiBaseUrl}`; // adjust path as needed
 
   constructor(private http: HttpClient) {}
 
@@ -31,11 +31,10 @@ export class FollowService {
     );
   }
 
-  getFollowing(request: FollowListRequest, userId: string): Observable<PaginationResponseWrapper<ProfileAggregation[]>> {
+  getFollowing(request: FollowingListRequest): Observable<PaginationResponseWrapper<ProfileAggregation[]>> {
     return this.http.post<PaginationResponseWrapper<ProfileAggregation[]>>(
-      `${this.baseUrl}following`,
-      request,
-      { headers: this.createHeader(userId) }
+      `${this.baseUrl}follow/following`,
+      request
     );
   }
 

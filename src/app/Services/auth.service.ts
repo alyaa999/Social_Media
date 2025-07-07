@@ -23,4 +23,16 @@ export class AuthService {
       })
     );
   }
+
+  verify(): Observable<{id : string}> {
+    const url = environment.apiBaseUrl + 'auth/verify';
+    return this.http.get<{id : string}>(url).pipe(
+      catchError((error: HttpErrorResponse) => {
+        if (error.status === 401) {
+          return throwError(() => new Error('Unauthorized'));
+        }
+        return throwError(() => error);
+      })
+    );
+  }
 }

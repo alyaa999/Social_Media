@@ -5,3 +5,8 @@ export interface FollowListRequest {
   searchTerm?: string;
   [key: string]: any; // if you have additional filters
 }
+
+export interface FollowingListRequest {
+  OtherId: string;
+  next?: string;
+}
