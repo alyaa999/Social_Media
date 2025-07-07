@@ -15,7 +15,7 @@ export class ProfileService {
     .set("Authorization", environment.token)
     .set("Accept", "application/json");
 
-  private baseUrl = `${environment.apiBaseUrl}/api/public/profile/`;  
+  private baseUrl = environment.apiBaseUrl;  
 
   constructor(private _http: HttpClient) {}
 
@@ -28,7 +28,7 @@ export class ProfileService {
   }
 
   GetProfileByUserId(userId: string){
-    return this._http.get<ResponseWrapper<Profile>>(`${this.baseUrl}id/${userId}`);
+    return this._http.get<ResponseWrapper<Profile>>(`${this.baseUrl}profile/${userId}`);
   }
 
   GetProfileByUserName(userName: string){

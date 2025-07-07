@@ -26,31 +26,26 @@ export class ProfileHeaderComponent implements OnInit {
   loadProfile() {
     this.isLoading = true;
     this.error = null;
-  
-// the UserId sended here 
-    this.profileService.GetProfileByUserId('user-123')
+    const userId = localStorage.getItem('userId');
+    if (!userId) {
+      this.error = 'No user ID found in local storage';
+      this.isLoading = false;
+      return;
+    }
+    this.profileService.GetProfileByUserId(userId)
       .subscribe({
         next: (response) => {
-          if (response) {
+          if (response && response.data) {
             this.profile = response.data;
-            this.isCurrentUser = false;
+            this.isCurrentUser = true;
           } else {
-            
-            this.error =  'Failed to load profile';
+            this.error = 'Failed to load profile';
           }
           this.isLoading = false;
         },
         error: (error: HttpErrorResponse) => {
           console.error('Error loading profile:', error);
-          if (error.status === 302) {
-            // Handle redirect - you might want to navigate to the new URL
-            const redirectUrl = error.headers.get('Location');
-            if (redirectUrl) {
-              window.location.href = redirectUrl;
-            }
-          } else {
-            this.error = 'Failed to load profile. Please try again.';
-          }
+          this.error = 'Failed to load profile. Please try again.';
           this.isLoading = false;
         }
       });
