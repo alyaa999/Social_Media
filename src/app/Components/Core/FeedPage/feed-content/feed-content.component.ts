@@ -9,6 +9,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { FeedService } from '../../../../Services/feed.service';
 import { CommentService } from '../../../../Services/comment.service';
 import { GetPagedCommentRequest } from '../../../../Interfaces/Comment/get-paged-comment-request';
+import { ReactionService } from '../../../../Services/reaction.service';
 
 @Component({
   selector: 'app-feed-content',
@@ -28,7 +29,7 @@ export class FeedContentComponent implements OnInit {
   selectedReactions: SimpleUserProfile[] = [];
   selectedPostId: string | null = null;
 
-  constructor(private feedService: FeedService, private commentService: CommentService) {}
+  constructor(private feedService: FeedService, private commentService: CommentService, private reactionService : ReactionService) {}
 
   openCommentsModal(postId: string) {
     this.selectedReactions = []; // Clear reactions before opening comments
@@ -56,9 +57,17 @@ export class FeedContentComponent implements OnInit {
 
   openReactionsModal(postId: string) {
     this.selectedComments = []; // Clear comments before opening reactions
-    // For demo, use STATIC_REACTIONS for all posts
-    // In real app, filter by postId
-    this.selectedReactions = STATIC_REACTIONS;
+
+    this.reactionService.getUsersReacted({ PostId: postId, Next: "" }).subscribe({
+      next: (data) => {
+        this.selectedReactions = data.data;
+        console.log('Reactions loaded:', data);
+        console.log('Selected reactions:', this.selectedReactions);
+      },
+      error: (err) => {
+        console.error('Error loading reactions:', err);
+      }
+    });
     this.modalMode = 'reactions';
     this.showModal = true;
     this.selectedPostId = postId;

@@ -7,26 +7,23 @@ import { PostInputDto } from '../Interfaces/post/post-input-dto';
 import { PostAggregationResponse } from '../Interfaces/post/post-aggrigation-response';
 import { Observable } from 'rxjs';
 import { PaginationResponseWrapper } from '../Interfaces/response-wrapper/PaginationResponseWrapper';
+import { GetPagedCommentRequest } from '../Interfaces/Comment/get-paged-comment-request';
+import { SimpleUserProfile } from '../Interfaces/post/simple-user-profile';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PostService {
-  private headers = new HttpHeaders()
-    .set("Authorization", environment.token)
-    .set("Accept", "application/json");
 
-  private baseUrl = `${environment.apiBaseUrl}/api/public/PublicPost/`;
-  private createHeader(userId: string) {
-    return this.headers.set("userId", userId);
-  }
+  private baseUrl = environment.apiBaseUrl;
+
+  
   constructor(private _http: HttpClient) { }
 
   AddPost(postDto: PostInputDto, userId: string): Observable<ResponseWrapper<PostResponseDTO>> {
     const formData = this.buildFormData(postDto); // Convert to FormData
 
     return this._http.post<ResponseWrapper<PostResponseDTO>>(`${this.baseUrl}AddPost/${userId}`, formData, {
-      headers: this.createHeader(userId)
     });
   }
 
@@ -34,13 +31,11 @@ export class PostService {
     const formData = this.buildFormData(postDto); // Convert to FormData
 
     return this._http.put<ResponseWrapper<PostResponseDTO>>(`${this.baseUrl}UpdatePost/${userId}`, formData, {
-      headers: this.createHeader(userId)
     });
   }
 
   DeletePost(postId: string, userId: string): Observable<ResponseWrapper<PostResponseDTO>> {
     return this._http.delete<ResponseWrapper<PostResponseDTO>>(`${this.baseUrl}DeletePost/${postId}/${userId}`, {
-      headers: this.createHeader(userId)
     });
   }
 
@@ -54,7 +49,6 @@ export class PostService {
       params += `&next=${next}`;
     }
     return this._http.get< PaginationResponseWrapper<PostAggregationResponse[]>>(`${this.AggregationBaseUrl}user/${OtherId}?${params}`, {
-      headers: this.createHeader(userId)
     });
   }
 
@@ -64,13 +58,11 @@ export class PostService {
       params += `&next=${next}`;
     }
     return this._http.get<ResponseWrapper<PostAggregationResponse[]>>(`${this.AggregationBaseUrl}reacted/${userId}?${params}`, {
-      headers: this.createHeader(userId)
     });
   }
 
   GetSinglePost(postId: string, userId: string): Observable<ResponseWrapper<PostAggregationResponse>> {
     return this._http.get<ResponseWrapper<PostAggregationResponse>>(`${this.AggregationBaseUrl}/${postId}/${userId}`, {
-      headers: this.createHeader(userId)
     });
   }
 
