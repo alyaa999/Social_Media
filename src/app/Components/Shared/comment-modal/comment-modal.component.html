@@ -11,24 +11,26 @@
     <!-- Scrollable Content Area -->
     <div class="flex-grow overflow-y-auto px-6 scroll-smooth scrollbar-thin scrollbar-thumb-dusk-70 scrollbar-track-dusk-01">
       <ng-container *ngIf="mode === 'comments'">
-        <div *ngIf="comments?.length === 0" class="text-center text-dusk-50 my-8">No comments yet.</div>
-        <div *ngFor="let comment of comments" class="border-b border-dusk-70 py-4 last:border-b-0">
-          <div class="flex items-center mb-1">
-            <img [src]="comment.CommentAuthor.ProfilePictureUrl || 'assets/default-avatar.png'" alt="Profile" class="w-9 h-9 rounded-full mr-3 object-cover">
-            <div class="flex flex-col">
-              <span class="font-semibold text-fg-default">{{ comment.CommentAuthor.DisplayName || comment.CommentAuthor.UserName }}</span>
-              <span class="text-xs text-dusk-30">{{ comment.CreatedAt | date:'medium' }}</span>
-            </div>
-          </div>
-          <div class="mt-2 text-fg-body">
-            <p>{{ comment.CommentContent }}</p>
-            <img *ngIf="comment.MediaUrl" [src]="comment.MediaUrl" alt="Comment media" class="mt-2 rounded-md max-w-full">
-          </div>
-          <div class="text-xs text-dusk-50 mt-2 flex gap-2 items-center">
-            <span>{{ comment.ReactionsCount }} Likes</span>
-            <span *ngIf="comment.IsEdited" class="italic text-redis-red">(edited)</span>
-          </div>
+      <div *ngIf="comments?.length === 0" class="text-center text-dusk-50 my-8">No comments yet.</div>
+      <div *ngFor="let comment of comments" class="mb-5 last:mb-0">
+        <div class="flex items-center mb-2">
+        <img [src]="comment.commentAuthor.profilePictureUrl || 'assets/default-avatar.png'" alt="Profile" class="w-9 h-9 rounded-full mr-3 object-cover">
+        <div class="flex flex-col">
+          <span class="font-semibold text-fg-default">{{ comment.commentAuthor.displayName || comment.commentAuthor.userName }}</span>
+          <span class="text-xs text-dusk-30">{{ comment.createdAt | date:'medium' }}</span>
         </div>
+        </div>
+        <div class="border border-dusk-70 border-opacity-40 rounded-lg bg-dusk-08 shadow-sm px-4 ml-12 py-3 mt-3 mb-5">
+        <div class="text-fg-body">
+          <p>{{ comment.commentContent }}</p>
+          <img *ngIf="comment.mediaUrl" [src]="comment.mediaUrl" alt="Comment media" class="mt-2 rounded-md max-w-full h-48 object-cover">
+        </div>
+        <div class="text-xs text-dusk-50 mt-2 flex gap-2 items-center">
+          <span>{{ comment.reactionsCount }} Likes</span>
+          <span *ngIf="comment.isEdited" class="italic text-redis-red">(edited)</span>
+        </div>
+        </div>
+      </div>
       </ng-container>
 
       <ng-container *ngIf="mode === 'reactions'">

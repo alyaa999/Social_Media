@@ -42,6 +42,7 @@ export class FeedContentComponent implements OnInit {
       next: (data) => {
         this.selectedComments = data.data;
         console.log('Comments loaded:', data);
+        console.log('Selected comments:', this.selectedComments);
       },
       error: (err) => {
         console.error('Error loading comments:', err);
@@ -74,19 +75,19 @@ export class FeedContentComponent implements OnInit {
     if (!this.selectedPostId) return;
 
     const newComment: AggregatedComment = {
-      CommentId: uuidv4(),
-      PostId: this.selectedPostId,
-      AuthorId: 'current-user-id', // Static placeholder
-      CommentContent: commentText,
-      CreatedAt: new Date(),
-      IsEdited: false,
-      ReactionsCount: 0,
-      IsLiked: false,
-      CommentAuthor: { // Static placeholder for current user
-        UserId: 'current-user-id', // Corrected property name to match interface
-        UserName: 'current_user',
-        DisplayName: 'Current User',
-        ProfilePictureUrl: 'assets/default-avatar.png',
+      commentId: uuidv4(),
+      postId: this.selectedPostId,
+      authorId: 'current-user-id', // Static placeholder
+      commentContent: commentText,
+      createdAt: new Date(),
+      isEdited: false,
+      reactionsCount: 0,
+      isLiked: false,
+      commentAuthor: { // Static placeholder for current user
+        userId: 'current-user-id', // Corrected property name to match interface
+        userName: 'current_user',
+        displayName: 'Current User',
+        profilePictureUrl: 'assets/default-avatar.png',
       },
     };
 

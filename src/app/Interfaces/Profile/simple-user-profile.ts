@@ -1,6 +1,6 @@
 export interface SimpleUserProfile {
-    UserId: string;
-    DisplayName?: string;
-    UserName?: string;
-    ProfilePictureUrl?:string;
+    userId: string;
+    displayName?: string;
+    userName?: string;
+    profilePictureUrl?:string;
 }
