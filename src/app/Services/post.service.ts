@@ -41,14 +41,14 @@ export class PostService {
 
   // ---------------- Fetch Posts Aggregation ----------------
 
-  private AggregationBaseUrl = `${environment.apiBaseUrl}/api/public/Posts/`;
+  private AggregationBaseUrl = `${environment.apiBaseUrl}`;
 
-  GetProfilePosts(OtherId: string, userId: string, next?: string): Observable< PaginationResponseWrapper<PostAggregationResponse[]>> {
+  GetProfilePosts(userId : string, next?: string): Observable<PaginationResponseWrapper<PostAggregationResponse[]>> {
     let params: string = '';
     if (next !== undefined) {
       params += `&next=${next}`;
     }
-    return this._http.get< PaginationResponseWrapper<PostAggregationResponse[]>>(`${this.AggregationBaseUrl}user/${OtherId}?${params}`, {
+    return this._http.get< PaginationResponseWrapper<PostAggregationResponse[]>>(`${this.AggregationBaseUrl}post/user/${userId}`, {
     });
   }
 

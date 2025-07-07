@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PostService } from '../../../../Services/post.service';
 import { PostAggregationResponse } from '../../../../Interfaces/post/post-aggrigation-response';
@@ -11,8 +11,7 @@ import { PostAggregationResponse } from '../../../../Interfaces/post/post-aggrig
   imports: [CommonModule]
 })
 export class ProfilePostsComponent implements OnInit {
-  @Input() userId: string = 'user-123'; // Default value, should be passed from parent
-  
+  userId: string = localStorage.getItem('userId') || '';
   isLoading: boolean = false;
   error: string | null = null;
   posts: PostAggregationResponse[] = [];
@@ -22,28 +21,44 @@ export class ProfilePostsComponent implements OnInit {
   modalMode: 'comments' | 'reactions' = 'comments';
   nextPage: string  = '1';
 
-  constructor(private postService: PostService) {}
+  constructor(private postService: PostService) {
+    // No fetching here, only in ngOnInit
+  }
 
   ngOnInit(): void {
+    if (!this.userId) {
+      console.error('User ID is required to load profile posts');
+      return;
+    }
     this.loadProfilePosts();
   }
 
   loadProfilePosts(): void {
     this.isLoading = true;
     this.error = null;
-    
-    this.postService.GetProfilePosts(this.userId, this.userId, this.nextPage)
+    this.postService.GetProfilePosts(this.userId, this.nextPage)
       .subscribe({
         next: (response) => {
-          if (response.success) {
-            this.posts = response.data;
-            this.nextPage = response.next;
-          } else {
-            this.error = response.message || 'Failed to load posts';
-          }
+          console.log('Profile posts response:', response); // Log the response
+          // Map media properties to match the interface (ignore TS errors for backend fields)
+          this.posts = (response.data || []).map(post => ({
+            ...post,
+            media: (post.media || []).map(media => {
+              const anyMedia = media as any;
+              return {
+                ...media,
+                Type: media.Type !== undefined ? media.Type : anyMedia.type,
+                Url: media.Url !== undefined ? media.Url : anyMedia.url
+              };
+            })
+          }));
+          this.nextPage = response.next;
+          this.error = null;
           this.isLoading = false;
+          console.log('Loaded posts:', this.posts); // Log posts
         },
         error: (error) => {
+          this.posts = [];
           console.error('Error loading posts:', error);
           this.error = 'Failed to load posts. Please try again.';
           this.isLoading = false;

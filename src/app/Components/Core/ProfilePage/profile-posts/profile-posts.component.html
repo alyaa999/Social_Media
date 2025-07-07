@@ -17,34 +17,39 @@
     <div *ngFor="let post of posts" class="p-2 mb-2 border-b border-dusk-08">
         <!-- Post Header -->
         <div class="flex items-center mb-2 px-14">
-            <img [src]="post.PostAuthorProfile.profilePictureUrl || 'assets/default-avatar.png'" alt="Profile"
+            <img [src]="post.postAuthorProfile.profilePictureUrl || 'assets/default-avatar.png'" alt="Profile"
                 class="w-10 h-10 rounded-full mr-3 object-cover">
             <div>
-                <h3 class="text-base font-semibold text-fg-default">{{ post.PostAuthorProfile.displayName }}</h3>
-                <p class="text-sm text-fg-muted">{{ formatDate(post.CreatedAt) }}</p>
+                <h3 class="text-base font-semibold text-fg-default">{{ post.postAuthorProfile.displayName }}</h3>
+                <p class="text-sm text-fg-muted">{{ formatDate(post.createdAt) }}</p>
             </div>
         </div>
 
         <!-- Post Content -->
-        <p class="text-base text-fg-body mb-2 px-14">{{ post.PostContent }}</p>
+        <p class="text-base text-fg-body mb-2 px-14">{{ post.postContent }}</p>
 
         <!-- Post Media -->
-        <div *ngIf="post.HasMedia && post.Media?.length" class="mb-2 px-14">
+        <div *ngIf="post.hasMedia && post.media?.length" class="mb-2 px-14">
             <div class="grid grid-cols-1 gap-2 max-h-[300px] overflow-hidden">
-                <img *ngFor="let media of post.Media" [src]="media.Url" alt="Post media"
-                    class="w-full object-cover rounded-md">
+                <ng-container *ngFor="let media of post.media">
+                  <img *ngIf="media.Type === 1" [src]="media.Url" alt="Post image"
+                      class="w-full object-cover rounded-md">
+                  <img *ngIf="!media.Type && media.type === 1" [src]="media.url" alt="Post image"
+                      class="w-full object-cover rounded-md">
+                  <!-- You can add support for VIDEO, AUDIO, DOCUMENT here if needed -->
+                </ng-container>
             </div>
         </div>
 
         <!-- Post Actions -->
         <div class="flex items-center gap-6 text-sm text-fg-muted pt-2 mt-1 px-14">
-            <button class="flex items-center" [class.text-redis-red]="post.IsLiked"
-                [class.hover:text-redis-red]="!post.IsLiked" (click)="openReactionsModal(post.PostId)">
+            <button class="flex items-center" [class.text-redis-red]="post.isLiked"
+                [class.hover:text-redis-red]="!post.isLiked" (click)="openReactionsModal(post.postId)">
                 <span class="mr-2">👍</span>
-                <span>{{ post.NumberOfLikes || 0 }} Likes</span>
+                <span>{{ post.numberOfLikes || 0 }} Likes</span>
             </button>
-            <button class="hover:text-redis-red transition-colors" (click)="openCommentsModal(post.PostId)">
-                {{ post.NumberOfComments || 0 }} Comments
+            <button class="hover:text-redis-red transition-colors" (click)="openCommentsModal(post.postId)">
+                {{ post.numberOfComments || 0 }} Comments
             </button>
         </div>
     </div>

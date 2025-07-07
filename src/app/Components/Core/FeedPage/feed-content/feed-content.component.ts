@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NewPostComponent } from '../../../Shared/new-post/new-post.component';
 import { Post, STATIC_POSTS } from '../../../../Interfaces/feed/post';
-import { SimpleUserProfile, STATIC_REACTIONS } from '../../../../Interfaces/post/simple-user-profile';
+import { SimpleUserProfile } from '../../../../Interfaces/post/simple-user-profile';
 import { CommentModalComponent } from '../../../Shared/comment-modal/comment-modal.component';
 import { AggregatedComment, STATIC_COMMENTS } from '../../../../Interfaces/Comment/aggregated-comment';
 import { v4 as uuidv4 } from 'uuid';
