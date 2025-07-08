@@ -6,6 +6,8 @@ import { LoginComponent } from './Components/Core/login/login.component';
 import { ThryveLandingComponent } from './Components/Core/thryve-landing/thryve-landing.component';
 import { Routes } from '@angular/router';
 import { authGuard } from './Guards/auth.guard';
+import { FollowingsComponent } from './Components/Shared/followings/followings/followings.component';
+import { FollowersComponent } from './Components/Shared/followers/followers/followers.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/feed', pathMatch: 'full' },
@@ -13,6 +15,8 @@ export const routes: Routes = [
   { path: 'profile', component: ProfilePageComponent, canActivate: [authGuard] },
   { path: 'tailwindtest', component: TailwindTestComponent, canActivate: [authGuard] },
   { path: 'home', component: HomeComponent, canActivate: [authGuard] },
+  { path: 'followings', component: FollowingsComponent, canActivate: [authGuard]},
+  { path: 'followers', component: FollowersComponent, canActivate: [authGuard]},
   { path: 'login', component: LoginComponent },
   { path: 'landing', component: ThryveLandingComponent },
   { path: '**', redirectTo: '/feed' }
