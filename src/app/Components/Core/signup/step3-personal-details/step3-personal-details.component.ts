@@ -15,11 +15,13 @@ export class Step3PersonalDetailsComponent {
 
   constructor(public signupService: SignupService) {}
 
-  goNext() {
-    this.next.emit();
-  }
-
-  goBack() {
-    this.prev.emit();
+  validateAndProceed(form: any) {
+    if (form.valid) {
+      this.next.emit();
+    } else {
+      Object.keys(form.controls).forEach(key => {
+        form.controls[key].markAsTouched();
+      });
+    }
   }
 }
