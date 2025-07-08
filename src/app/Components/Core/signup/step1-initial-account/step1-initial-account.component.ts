@@ -1,16 +1,18 @@
 import { Component, EventEmitter, Output } from '@angular/core';
-import { SignupService } from '../signup.service';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { SignupService } from '../signup.service';
 
 @Component({
   selector: 'app-step1-initial-account',
+  standalone: true,
   imports: [FormsModule, CommonModule],
   templateUrl: './step1-initial-account.component.html',
   styleUrls: ['./step1-initial-account.component.css']
 })
 export class Step1InitialAccountComponent {
   @Output() next = new EventEmitter<void>();
+
   passwordVisible = false;
   strengthClass = '';
   barWidth = '0%';
@@ -33,14 +35,16 @@ export class Step1InitialAccountComponent {
     if (/[a-z]/.test(password) && /[A-Z]/.test(password)) score++;
     if (/\d/.test(password)) score++;
     if (/[!@#$%^&*()]/.test(password)) score++;
+    
     if (score >= 3) return { width: '100%', color: 'bg-green-400' };
     if (score === 2) return { width: '66%', color: 'bg-yellow-400' };
     if (score === 1) return { width: '33%', color: 'bg-red-400' };
+    
     return { width: '0%', color: '' };
   }
 
   proceed() {
-    console.log("where are you brozer?");
+    console.log("Proceeding to next step...");
     this.next.emit();
   }
 }

@@ -2,39 +2,77 @@
   <div class="signup-header text-center mb-10">
     <h1 class="signup-title text-4xl font-extrabold mb-3">Join Thryve</h1>
     <p class="signup-subtitle text-gray-400 text-lg mb-2">Ready to build something amazing?</p>
-    <p class="signup-tagline italic text-yellow-300 text-sm">Together we create, together we thryve</p>
+    <p class="signup-tagline italic text-[#dcff1e] text-sm">Together we create, together we thryve</p>
   </div>
 
-  <form class="signup-form flex flex-col gap-6">
+  <form #step1Form="ngForm" class="signup-form flex flex-col gap-6" (ngSubmit)="proceed()" novalidate>
     <!-- Email -->
     <div class="form-group relative">
-      <input type="email" class="form-input peer" placeholder=" " required [(ngModel)]="signupService.formData.email" name="email">
+      <input
+        type="email"
+        class="form-input peer"
+        placeholder=" "
+        name="email"
+        required
+        email
+        [(ngModel)]="signupService.formData.email"
+        #emailRef="ngModel"
+      />
       <label class="form-label absolute left-5 top-1/2 transform -translate-y-1/2 peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-base peer-focus:top-0 peer-focus:text-sm text-gray-400">Email Address</label>
+      <div *ngIf="emailRef.invalid && emailRef.touched" class="text-sm text-red-400 mt-1">
+        Please enter a valid email address.
+      </div>
     </div>
 
     <!-- Password -->
     <div class="form-group relative">
-      <input [type]="passwordVisible ? 'text' : 'password'" class="form-input peer" placeholder=" " required
-             [(ngModel)]="signupService.formData.password" name="password"
-             (input)="onPasswordInput(signupService.formData.password)">
+      <input
+        [type]="passwordVisible ? 'text' : 'password'"
+        class="form-input peer"
+        placeholder=" "
+        name="password"
+        required
+        minlength="6"
+        [(ngModel)]="signupService.formData.password"
+        #passwordRef="ngModel"
+        (input)="onPasswordInput(signupService.formData.password)"
+      />
       <label class="form-label absolute left-5 top-1/2 transform -translate-y-1/2 peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-base peer-focus:top-0 peer-focus:text-sm text-gray-400">Create Password</label>
-      <button type="button" class="password-toggle absolute right-5 top-1/2 transform -translate-y-1/2 text-xl text-gray-400 hover:text-red-500" (click)="togglePasswordVisibility()">
+      <button
+        type="button"
+        class="password-toggle absolute right-5 top-1/2 transform -translate-y-1/2 text-xl text-gray-400 hover:text-red-500"
+        (click)="togglePasswordVisibility()"
+      >
         {{ passwordVisible ? '🙈' : '👁' }}
       </button>
-      <div class="password-strength h-1 mt-2 bg-[#2d4754] rounded transition-opacity duration-300" [ngClass]="{ 'opacity-100': barWidth !== '0%' }">
-        <div class="strength-bar h-full transition-all duration-500 rounded" [ngClass]="strengthClass" [style.width]="barWidth"></div>
+      <div
+        class="password-strength h-1 mt-2 bg-[#2d4754] rounded transition-opacity duration-300"
+        [ngClass]="{ 'opacity-100': barWidth !== '0%' }"
+      >
+        <div
+          class="strength-bar h-full transition-all duration-500 rounded"
+          [ngClass]="strengthClass"
+          [style.width]="barWidth"
+        ></div>
+      </div>
+      <div *ngIf="passwordRef.invalid && passwordRef.touched" class="text-sm text-red-400 mt-1">
+        Password must be at least 6 characters.
       </div>
     </div>
 
     <!-- Terms -->
     <div class="terms-text text-center text-sm text-gray-500 leading-snug">
       By creating an account, you agree to our
-      <a href="#" class="text-yellow-300 hover:text-red-500 transition">Terms of Service</a> and
-      <a href="#" class="text-yellow-300 hover:text-red-500 transition">Privacy Policy</a>
+      <a href="#" class="text-[#dcff1e] hover:text-red-500 transition">Terms of Service</a> and
+      <a href="#" class="text-[#dcff1e] hover:text-red-500 transition">Privacy Policy</a>
     </div>
 
     <!-- Submit -->
-    <button type="button" class="signup-btn uppercase tracking-wider font-bold" (click)="proceed()">
+    <button
+      type="submit"
+      class="signup-btn uppercase tracking-wider font-bold"
+      [disabled]="step1Form.invalid"
+    >
       Create My Account
     </button>
   </form>
@@ -42,8 +80,11 @@
   <!-- Login -->
   <div class="login-section text-center mt-10 pt-6 border-t border-[#2d4754]">
     <p class="text-gray-400 mb-4">Already thriving with us?</p>
-    <a href="#" class="login-btn-link border-2 border-red-600 px-8 py-3 rounded-full text-red-600 hover:bg-red-600 hover:text-white transition">
-      Sign In
+    <a
+      href="#"
+      class="login-btn-link border-2 border-red-600 px-8 py-3 rounded-full text-red-600 hover:bg-red-600 hover:text-white transition"
+    >
+      SIGN IN
     </a>
   </div>
 </div>
