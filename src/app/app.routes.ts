@@ -9,6 +9,7 @@ import { authGuard } from './Guards/auth.guard';
 import { FollowingsComponent } from './Components/Shared/followings/followings/followings.component';
 import { FollowersComponent } from './Components/Shared/followers/followers/followers.component';
 import { OtherProfileComponent } from './Components/Shared/OtherProfile/other-profile/other-profile.component';
+import { SignupComponent } from './Components/Core/signup/signup.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/feed', pathMatch: 'full' },
@@ -20,6 +21,7 @@ export const routes: Routes = [
   { path: 'followings', component: FollowingsComponent, canActivate: [authGuard]},
   { path: 'followers', component: FollowersComponent, canActivate: [authGuard]},
   { path: 'login', component: LoginComponent },
+  { path: 'signup', component: SignupComponent},
   { path: 'landing', component: ThryveLandingComponent },
   { path: '**', redirectTo: '/feed' }
 ];
