@@ -34,7 +34,7 @@
                 <ng-container *ngFor="let media of post.media">
                   <img *ngIf="media.Type === 1" [src]="media.Url" alt="Post image"
                       class="w-full object-cover rounded-md">
-                  <img *ngIf="!media.Type && media.type === 1" [src]="media.url" alt="Post image"
+                  <img *ngIf="!media.Type && media.Type" [src]="media.Url" alt="Post image"
                       class="w-full object-cover rounded-md">
                   <!-- You can add support for VIDEO, AUDIO, DOCUMENT here if needed -->
                 </ng-container>
@@ -48,8 +48,10 @@
                 <span class="mr-2">👍</span>
                 <span>{{ post.numberOfLikes || 0 }} Likes</span>
             </button>
-            <button class="hover:text-redis-red transition-colors" (click)="openCommentsModal(post.postId)">
-                {{ post.numberOfComments || 0 }} Comments
+            <button class="flex items-center hover:text-hyper-05 transition-colors" 
+                (click)="openCommentsModal(post.postId)">
+                <span class="mr-2">💬</span>
+                <span>{{ post.numberOfComments || 0 }} Comments</span>
             </button>
         </div>
     </div>
@@ -66,4 +68,15 @@
     <div *ngIf="!isLoading && !error && posts.length === 0" class="text-center py-4 text-fg-muted">
         <p>No posts to show yet.</p>
     </div>
+
+    <!-- Comments Modal -->
+    <app-comment-modal
+        *ngIf="showModal"
+        [comments]="selectedComments"
+        [reactions]="selectedReactions"
+        [visible]="showModal"
+        [mode]="modalMode"
+        (close)="onCloseModal()"
+        (commentSubmitted)="onCommentSubmitted($event)">
+    </app-comment-modal>
 </div>

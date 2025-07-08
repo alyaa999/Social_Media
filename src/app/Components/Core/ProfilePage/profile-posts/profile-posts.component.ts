@@ -2,13 +2,18 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PostService } from '../../../../Services/post.service';
 import { PostAggregationResponse } from '../../../../Interfaces/post/post-aggrigation-response';
+import { CommentModalComponent } from '../../../Shared/comment-modal/comment-modal.component';
+import { CommentService } from '../../../../Services/comment.service';
+import { GetPagedCommentRequest } from '../../../../Interfaces/Comment/get-paged-comment-request';
+import { MediaType } from '../../../../Interfaces/Comment/media-enum-type';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-profile-posts',
   templateUrl: './profile-posts.component.html',
   styleUrls: ['./profile-posts.component.scss'],
   standalone: true,
-  imports: [CommonModule]
+  imports: [CommonModule, CommentModalComponent, FormsModule]
 })
 export class ProfilePostsComponent implements OnInit {
   userId: string = localStorage.getItem('userId') || '';
@@ -20,9 +25,65 @@ export class ProfilePostsComponent implements OnInit {
   showModal: boolean = false;
   modalMode: 'comments' | 'reactions' = 'comments';
   nextPage: string  = '1';
+  selectedPostId: string | null = null;
+  newCommentText: string = '';
 
-  constructor(private postService: PostService) {
-    // No fetching here, only in ngOnInit
+  constructor(
+    private postService: PostService,
+    private commentService: CommentService
+  ) {}
+
+  openCommentsModal(postId: string) {
+    this.selectedReactions = []; // Clear reactions before opening comments
+    this.selectedPostId = postId;
+    this.modalMode = 'comments';
+    this.showModal = true;
+
+    const req: GetPagedCommentRequest = {
+      PostId: postId,
+      Next: ""
+    };
+
+    this.commentService.GetCommentList(req).subscribe({
+      next: (data) => {
+        this.selectedComments = data.data;
+        console.log('Comments loaded:', data);
+      },
+      error: (err) => {
+        console.error('Error loading comments:', err);
+      }
+    });
+  }
+
+  onCloseModal() {
+    this.showModal = false;
+    this.selectedPostId = null;
+    this.selectedComments = [];
+    this.selectedReactions = [];
+  }
+
+  onCommentSubmitted(commentText: string) {
+    if (!this.selectedPostId || !commentText.trim()) return;
+    
+    const commentData = {
+      PostId: this.selectedPostId,
+      Content: commentText,
+      HasMedia: false,
+      MediaType: MediaType.None, // Using the correct enum value for no media
+      UserId: this.userId
+    };
+
+    this.commentService.CreateComment(commentData).subscribe({
+      next: (response) => {
+        // Refresh comments after posting
+        if (this.selectedPostId) {
+          this.openCommentsModal(this.selectedPostId);
+        }
+      },
+      error: (err) => {
+        console.error('Error posting comment:', err);
+      }
+    });
   }
 
   ngOnInit(): void {
@@ -80,21 +141,5 @@ export class ProfilePostsComponent implements OnInit {
     this.modalMode = 'reactions';
     this.showModal = true;
     this.selectedReactions = []; // Placeholder for reactions data
-  }
-
-  openCommentsModal(postId: string): void {
-    this.modalMode = 'comments';
-    this.showModal = true;
-    this.selectedComments = []; // Placeholder for comments data
-  }
-
-  closeModal(): void {
-    this.showModal = false;
-    this.selectedComments = [];
-    this.selectedReactions = [];
-  }
-
-  handleCommentSubmission(comment: any): void {
-    console.log('New comment:', comment);
   }
 }
