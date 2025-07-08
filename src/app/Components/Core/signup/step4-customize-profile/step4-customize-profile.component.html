@@ -1,0 +1,26 @@
+<div class="signup-card animate-slideInUp">
+  <h2 class="signup-title text-3xl mb-8 text-center">Customize Your Profile</h2>
+
+  <form class="flex flex-col gap-6">
+    <!-- Profile Image Upload -->
+    <div class="form-group">
+      <label class="text-white font-semibold mb-1">Profile Picture</label>
+      <input type="file" accept="image/*" (change)="onImageSelected($event)" class="form-input text-white file:bg-red-600 file:text-white file:rounded-lg file:px-4 file:py-2 file:cursor-pointer">
+      <div *ngIf="profilePreview" class="mt-4">
+        <img [src]="profilePreview" alt="Profile Preview" class="w-24 h-24 rounded-full object-cover border-2 border-white mx-auto">
+      </div>
+    </div>
+
+    <!-- Bio -->
+    <div class="form-group relative">
+      <textarea rows="4" class="form-input peer" placeholder=" " [(ngModel)]="signupService.formData.bio" name="bio"></textarea>
+      <label class="form-label absolute left-5 top-1/2 transform -translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-0 peer-focus:text-sm text-gray-400">Short Bio</label>
+    </div>
+
+    <!-- Navigation Buttons -->
+    <div class="flex justify-between mt-8">
+      <button type="button" class="signup-btn px-8 bg-gray-700 hover:bg-gray-600" (click)="goBack()">Back</button>
+      <button type="button" class="signup-btn px-8" (click)="submitForm()">Submit</button>
+    </div>
+  </form>
+</div>
