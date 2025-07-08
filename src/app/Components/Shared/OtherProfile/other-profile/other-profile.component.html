@@ -1,1 +1,130 @@
-<p>other-profile works!</p>
+<div class="rounded-3xl shadow-lg overflow-hidden bg-dusk-09 max-w-5xl mx-auto">
+    <!-- Debug Info -->
+    <div *ngIf="!profile && !isLoadingProfile && !errorProfile" class="p-4 text-center text-yellow-500">
+        Debug: No profile data available
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="isLoadingProfile" class="p-4 flex justify-center items-center min-h-[200px]">
+        <div class="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-redis-red"></div>
+        <span class="ml-2">Loading profile...</span>
+    </div>
+
+    <!-- Error State -->
+    <div *ngIf="errorProfile" class="p-4 text-center text-redis-red">
+        {{ errorProfile }}
+    </div>
+
+    <!-- Profile Content -->
+    <ng-container *ngIf="profile && !isLoadingProfile && !errorProfile">
+        <!-- Cover Photo -->
+        <div class="relative w-full h-64 bg-dusk-09">
+            <img [src]="profile?.data?.coverUrl ? profile.data.coverUrl : 'assets/default-avatar.jpg'" alt="Cover"
+                class="w-full h-full object-cover rounded-t-3xl border-b-4 border-dusk-50" (error)="onImgError($event, 'assets/default-avatar.jpg')">
+            <!-- Profile Image -->
+            <div class="absolute left-10 -bottom-20">
+                <img [src]="profile?.data?.profileUrl ? profile.data.profileUrl : 'assets/default-avatar.jpg'" alt="Profile"
+                    class="w-40 h-40 rounded-full border-4 border-redis-red object-cover bg-base-white shadow-lg" (error)="onImgError($event, 'assets/default-avatar.jpg')">
+            </div>
+        </div>
+        <!-- Header Actions -->
+        <div class="flex justify-end items-center mt-4 px-6">
+            <button *ngIf="isCurrentUser"
+                class="ml-4 px-6 py-2 rounded-full border border-dusk-50 bg-dusk-09 text-dusk-01 font-semibold hover:bg-dusk-01/10 transition">Edit
+                profile</button>
+            <button *ngIf="!isCurrentUser"
+                class="ml-4 pl-6 pr-6 py-2 rounded-full font-semibold bg-redis-red text-white hover:bg-hyper-07 transition-colors"
+            >Follow</button>
+        </div>
+        <!-- Profile Info -->
+        <div class="pt-10 px-14 mb-10">
+            <h2 class="text-2xl font-bold text-dusk-01">{{ profile?.data?.firstName || '' }} {{ profile?.data?.lastName || '' }}</h2>
+            <div class="text-dusk-50 text-lg font-mono" *ngIf="profile?.data?.userName">&#64;{{ profile.data.userName }}</div>
+            <div class="mt-2 text-base text-dusk-01" *ngIf="profile?.data?.bio">{{ profile.data.bio }}</div>
+            <div class="flex items-center text-dusk-50 mt-2 space-x-4">
+                <div class="flex items-center">
+                    <i class="fa fa-calendar mr-1"></i>
+                    <span>Joined {{ profile?.data?.birthDate | date:'MMMM yyyy' }}</span>
+                </div>
+                <div class="flex items-center" *ngIf="profile?.data?.address">
+                    <i class="fa fa-map-marker mr-1"></i>
+                    <span>{{ profile.data.address }}</span>
+                </div>
+            </div>
+            <div class="flex space-x-6 mt-2">
+                <span>
+                  <span class="font-bold text-redis-red">{{ (profile?.data?.noFollowing !== undefined && profile?.data?.noFollowing !== null) ? profile.data.noFollowing : 0 }}</span>
+                  <span class="text-dusk-50"> Following</span>
+                </span>
+                <span>
+                  <span class="font-bold text-redis-red">{{ (profile?.data?.noFollowers !== undefined && profile?.data?.noFollowers !== null) ? profile.data.noFollowers : 0 }}</span>
+                  <span class="text-dusk-50"> Followers</span>
+                </span>
+            </div>
+        </div>
+    </ng-container>
+</div>
+
+<!-- Posts Section -->
+<div class="rounded-3xl shadow-lg overflow-hidden bg-dusk-09 max-w-5xl mx-auto mt-6">
+    <!-- Loading State -->
+    <div *ngIf="isLoadingPosts" class="flex justify-center p-4">
+        <div class="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-redis-red"></div>
+    </div>
+
+    <!-- Error State -->
+    <div *ngIf="errorPosts && !isLoadingPosts" class="p-3 mb-2 bg-bg-subtle border-l-4 border-hyper-05 text-fg-default">
+        <p>{{ errorPosts }}</p>
+        <button (click)="loadPosts(profile?.userId)"
+            class="mt-2 px-3 py-1.5 bg-bg-muted text-fg-default rounded hover:bg-dusk transition-colors">
+            Retry
+        </button>
+    </div>
+
+    <!-- Profile Posts content -->
+    <div *ngFor="let post of posts" class="p-2 mb-2 border-b border-dusk-08">
+        <!-- Post Header -->
+        <div class="flex items-center mb-2 px-14">
+            <img [src]="post.postAuthorProfile?.profilePictureUrl || 'assets/default-avatar.png'" alt="Profile"
+                class="w-10 h-10 rounded-full mr-3 object-cover">
+            <div>
+                <h3 class="text-base font-semibold text-fg-default">{{ post.postAuthorProfile?.displayName }}</h3>
+                <p class="text-sm text-fg-muted">{{ formatDate(post.createdAt) }}</p>
+            </div>
+        </div>
+
+        <!-- Post Content -->
+        <p class="text-base text-fg-body mb-2 px-14">{{ post.postContent }}</p>
+
+        <!-- Post Media -->
+        <div *ngIf="post.hasMedia && post.media?.length" class="mb-2 px-14">
+            <div class="grid grid-cols-1 gap-2 max-h-[300px] overflow-hidden">
+                <ng-container *ngFor="let media of post.media">
+                  <img *ngIf="media.Type === 1" [src]="media.Url" alt="Post image"
+                      class="w-full object-cover rounded-md">
+                  <img *ngIf="!media.Type && media.Type" [src]="media.Url" alt="Post image"
+                      class="w-full object-cover rounded-md">
+                  <!-- You can add support for VIDEO, AUDIO, DOCUMENT here if needed -->
+                </ng-container>
+            </div>
+        </div>
+
+        <!-- Post Actions -->
+        <div class="flex items-center gap-6 text-sm text-fg-muted pt-2 mt-1 px-14">
+            <button class="flex items-center" [class.text-redis-red]="post.isLiked"
+                [class.hover:text-redis-red]="!post.isLiked">
+                <span class="mr-2">👍</span>
+                <span>{{ post.numberOfLikes || 0 }} Likes</span>
+            </button>
+            <button class="flex items-center hover:text-hyper-05 transition-colors">
+                <span class="mr-2">💬</span>
+                <span>{{ post.numberOfComments || 0 }} Comments</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Empty State -->
+    <div *ngIf="!isLoadingPosts && !errorPosts && posts.length === 0" class="text-center py-4 text-fg-muted">
+        <p>No posts to show yet.</p>
+    </div>
+</div>
