@@ -40,6 +40,7 @@ export class Step1InitialAccountComponent {
   }
 
   proceed() {
+    console.log("where are you brozer?");
     this.next.emit();
   }
 }
