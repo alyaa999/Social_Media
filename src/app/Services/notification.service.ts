@@ -11,133 +11,161 @@ import { ResponseWrapper } from '../Interfaces/response-wrapper/response-wrapper
 })
 export class NotificationService {
   private headers = new HttpHeaders()
-    .set("Authorization", environment.token)
     .set("Accept", "application/json");
 
-  private baseUrl = `${environment.apiBaseUrl}/api/public/Notification/`;
-  
-
-
+  private baseUrl = `${environment.apiBaseUrl}Notification/`;
 
   constructor(private _http: HttpClient) { }
 
-  private createHeader(userId: string, next?: string) {
-    let headers = this.headers.set("userId", userId);
-    if (next) headers = headers.set("next", next);
-    return headers;
+  // Helper to create HttpParams with next
+  private createParams(next?: string): HttpParams {
+    let params = new HttpParams();
+    if (next) {
+      params = params.set('next', next);
+    }
+    return params;
   }
 
   // ---------------- Fetch Notifications ----------------
-  GetAllNotifications(userId: string, next?: string): Observable<PaginationResponseWrapper<INotificationsDTO[]>> {
+  GetAllNotifications(next?: string): Observable<PaginationResponseWrapper<INotificationsDTO[]>> {
+    console.log("Fetching all notifications");
     return this._http.get<PaginationResponseWrapper<INotificationsDTO[]>>(`${this.baseUrl}AllNotifications`, {
-      headers: this.createHeader(userId, next)
+      headers: this.headers,
+      params: this.createParams(next)
     });
   }
 
-  GetFollowNotification(userId: string, next?: string): Observable<PaginationResponseWrapper<INotificationsDTO[]>> {
+  GetFollowNotification(next?: string): Observable<PaginationResponseWrapper<INotificationsDTO[]>> {
+    console.log("Fetching follow notifications");
     return this._http.get<PaginationResponseWrapper<INotificationsDTO[]>>(`${this.baseUrl}FollowNotification`, {
-      headers: this.createHeader(userId, next)
+      headers: this.headers,
+      params: this.createParams(next)
     });
   }
 
-  GetCommentsNotification(userId: string, next?: string): Observable<PaginationResponseWrapper<INotificationsDTO[]>> {
+  GetCommentsNotification(next?: string): Observable<PaginationResponseWrapper<INotificationsDTO[]>> {
+    console.log("Fetching comment notifications");
     return this._http.get<PaginationResponseWrapper<INotificationsDTO[]>>(`${this.baseUrl}CommentsNotification`, {
-      headers: this.createHeader(userId, next)
+      headers: this.headers,
+      params: this.createParams(next)
     });
   }
 
-  GetReactionsNotification(userId: string, next?: string): Observable<PaginationResponseWrapper<INotificationsDTO[]>> {
+  GetReactionsNotification(next?: string): Observable<PaginationResponseWrapper<INotificationsDTO[]>> {
+    console.log("Fetching reactions notifications");
     return this._http.get<PaginationResponseWrapper<INotificationsDTO[]>>(`${this.baseUrl}ReactionsNotification`, {
-      headers: this.createHeader(userId, next)
+      headers: this.headers,
+      params: this.createParams(next)
     });
   }
 
-  GetMessagesNotification(userId: string, next?: string): Observable<PaginationResponseWrapper<INotificationsDTO[]>> {
+  GetMessagesNotification(next?: string): Observable<PaginationResponseWrapper<INotificationsDTO[]>> {
+    console.log("Fetching message notifications");
     return this._http.get<PaginationResponseWrapper<INotificationsDTO[]>>(`${this.baseUrl}MessageNotification`, {
-      headers: this.createHeader(userId, next)
+      headers: this.headers,
+      params: this.createParams(next)
     });
   }
 
   // ---------------- Unread Notifications ----------------
-  GetAllUnreadNotifications(userId: string, next?: string): Observable<PaginationResponseWrapper<INotificationsDTO[]>> {
+  GetAllUnreadNotifications(next?: string): Observable<PaginationResponseWrapper<INotificationsDTO[]>> {
+    console.log("Fetching all unread notifications");
     return this._http.get<PaginationResponseWrapper<INotificationsDTO[]>>(`${this.baseUrl}AllUnreadNotifications`, {
-      headers: this.createHeader(userId, next)
+      headers: this.headers,
+      params: this.createParams(next)
     });
   }
 
-  GetUnreadReactionsNotifications(userId: string, next?: string): Observable<PaginationResponseWrapper<INotificationsDTO[]>> {
+  GetUnreadReactionsNotifications(next?: string): Observable<PaginationResponseWrapper<INotificationsDTO[]>> {
+    console.log("Fetching unread reactions notifications");
     return this._http.get<PaginationResponseWrapper<INotificationsDTO[]>>(`${this.baseUrl}UnreadReactionsNotifications`, {
-      headers: this.createHeader(userId, next)
+      headers: this.headers,
+      params: this.createParams(next)
     });
   }
 
-  GetUnreadCommentNotifications(userId: string, next?: string): Observable<PaginationResponseWrapper<INotificationsDTO[]>> {
+  GetUnreadCommentNotifications(next?: string): Observable<PaginationResponseWrapper<INotificationsDTO[]>> {
+    console.log("Fetching unread comment notifications");
     return this._http.get<PaginationResponseWrapper<INotificationsDTO[]>>(`${this.baseUrl}UnreadCommentNotifications`, {
-      headers: this.createHeader(userId, next)
+      headers: this.headers,
+      params: this.createParams(next)
     });
   }
 
-  GetUnreadFollowedNotifications(userId: string, next?: string): Observable<PaginationResponseWrapper<INotificationsDTO[]>> {
+  GetUnreadFollowedNotifications(next?: string): Observable<PaginationResponseWrapper<INotificationsDTO[]>> {
+    console.log("Fetching unread followed notifications");
     return this._http.get<PaginationResponseWrapper<INotificationsDTO[]>>(`${this.baseUrl}UnreadFollowedNotifications`, {
-      headers: this.createHeader(userId, next)
+      headers: this.headers,
+      params: this.createParams(next)
     });
   }
 
-  GetUnreadMessageNotifications(userId: string, next?: string): Observable<PaginationResponseWrapper<INotificationsDTO[]>> {
+  GetUnreadMessageNotifications(next?: string): Observable<PaginationResponseWrapper<INotificationsDTO[]>> {
+    console.log("Fetching unread message notifications");
     return this._http.get<PaginationResponseWrapper<INotificationsDTO[]>>(`${this.baseUrl}UnreadMessageNotifications`, {
-      headers: this.createHeader(userId, next)
+      headers: this.headers,
+      params: this.createParams(next)
     });
   }
 
   // ---------------- Mark As Read ----------------
-  MarkNotificationsFollowAsRead(userId: string, followerId: string): Observable<ResponseWrapper<boolean>> {
-    const params = new HttpParams().set("followerId", followerId);
+  MarkNotificationsFollowAsRead(followerId: string, next?: string): Observable<ResponseWrapper<boolean>> {
+    const params = this.createParams(next).set("followerId", followerId);
+    console.log("Marking follow notifications as read for followerId:", followerId);
     return this._http.post<ResponseWrapper<boolean>>(`${this.baseUrl}mark-notifications-follow-as-read`, null, {
-      headers: this.createHeader(userId),
+      headers: this.headers,
       params
     });
   }
-  MarkNotificationsCommentAsRead(userId: string, commentId: string): Observable<ResponseWrapper<boolean>> {
-    const params = new HttpParams().set("commentId", commentId);
+  MarkNotificationsCommentAsRead(commentId: string, next?: string): Observable<ResponseWrapper<boolean>> {
+    const params = this.createParams(next).set("commentId", commentId);
+    console.log("Marking comment notifications as read for commentId:", commentId);
     return this._http.post<ResponseWrapper<boolean>>(`${this.baseUrl}mark-notifications-comment-as-read`, null, {
-      headers: this.createHeader(userId),
+      headers: this.headers,
       params
     });
   }
-  MarkAllNotificationsAsRead(userId: string): Observable<ResponseWrapper<boolean>> {
+  MarkAllNotificationsAsRead(next?: string): Observable<ResponseWrapper<boolean>> {
+    console.log("Marking all notifications as read");
     return this._http.post<ResponseWrapper<boolean>>(`${this.baseUrl}mark-all-notifications-as-read`, null, {
-      headers: this.createHeader(userId)
+      headers: this.headers,
+      params: this.createParams(next)
     });
   }
 
-  MarkNotificationsReactionCommentAsRead(userId: string, reactionId: string): Observable<ResponseWrapper<boolean>> {
-    const params = new HttpParams().set("reactionId", reactionId);
+  MarkNotificationsReactionCommentAsRead(reactionId: string, next?: string): Observable<ResponseWrapper<boolean>> {
+    const params = this.createParams(next).set("reactionId", reactionId);
+    console.log("Marking reaction notifications as read for reactionId:", reactionId);
     return this._http.post<ResponseWrapper<boolean>>(`${this.baseUrl}mark-notifications-comment-as-read`, null, {
-      headers: this.createHeader(userId),
+      headers: this.headers,
       params
     });
   }
 
-  MarkNotificationsReactionPostAsRead(userId: string, reactionId: string): Observable<ResponseWrapper<boolean>> {
-    const params = new HttpParams().set("reactionId", reactionId);
+  MarkNotificationsReactionPostAsRead(userId: string, reactionId: string, next?: string): Observable<ResponseWrapper<boolean>> {
+    const params = this.createParams(next).set("reactionId", reactionId);
+    console.log("Marking reaction post notifications as read for userId:", userId, "and reactionId:", reactionId);
     return this._http.post<ResponseWrapper<boolean>>(`${this.baseUrl}mark-notifications-reaction-post-as-read`, null, {
-      headers: this.createHeader(userId),
+      headers: this.headers,
       params
     });
   }
 
-  MarkNotificationsMessageAsRead(userId: string, messageId: string): Observable<ResponseWrapper<boolean>> {
-    const params = new HttpParams().set("messageId", messageId);
+  MarkNotificationsMessageAsRead(userId: string, messageId: string, next?: string): Observable<ResponseWrapper<boolean>> {
+    const params = this.createParams(next).set("messageId", messageId);
+    console.log("Marking message notifications as read for userId:", userId, "and messageId:", messageId);
     return this._http.post<ResponseWrapper<boolean>>(`${this.baseUrl}mark-notifications-message-as-read`, null, {
-      headers: this.createHeader(userId),
+      headers: this.headers,
       params
     });
   }
 
   // ---------------- Get Types ----------------
-  GetNotificationTypes(userId: string): Observable<ResponseWrapper<INotificationsDTO[]>> {
+  GetNotificationTypes(userId: string, next?: string): Observable<ResponseWrapper<INotificationsDTO[]>> {
+    const params = this.createParams(next ?? userId);
     return this._http.get<ResponseWrapper<INotificationsDTO[]>>(`${this.baseUrl}get-notifications-types`, {
-      headers: this.createHeader(userId)
+      headers: this.headers,
+      params
     });
   }
 }

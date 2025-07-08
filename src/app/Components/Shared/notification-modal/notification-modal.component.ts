@@ -96,15 +96,15 @@ export class NotificationModalComponent implements OnInit, OnChanges {
     console.log('Getting all notifications for tab:', this.activeTab);
     switch (this.activeTab) {
       case 'all':
-        return this.notificationService.GetAllNotifications(this.userId, '1');
+        return this.notificationService.GetAllNotifications();
       case 'reactions':
-        return this.notificationService.GetReactionsNotification(this.userId, '1');
+        return this.notificationService.GetReactionsNotification();
       case 'comments':
-        return this.notificationService.GetCommentsNotification(this.userId, '1');
+        return this.notificationService.GetCommentsNotification();
       case 'follows':
-        return this.notificationService.GetFollowNotification(this.userId, '1');
+        return this.notificationService.GetFollowNotification();
       default:
-        return this.notificationService.GetAllNotifications(this.userId, '1');
+        return this.notificationService.GetAllNotifications();
     }
   }
 
@@ -112,15 +112,15 @@ export class NotificationModalComponent implements OnInit, OnChanges {
     console.log('Getting unread notifications for tab:', this.activeTab);
     switch (this.activeTab) {
       case 'all':
-        return this.notificationService.GetAllUnreadNotifications(this.userId, '1');
+        return this.notificationService.GetAllUnreadNotifications();
       case 'reactions':
-        return this.notificationService.GetUnreadReactionsNotifications(this.userId, '1');
+        return this.notificationService.GetUnreadReactionsNotifications();
       case 'comments':
-        return this.notificationService.GetUnreadCommentNotifications(this.userId, '1');
+        return this.notificationService.GetUnreadCommentNotifications();
       case 'follows':
-        return this.notificationService.GetUnreadFollowedNotifications(this.userId, '1');
+        return this.notificationService.GetUnreadFollowedNotifications();
       default:
-        return this.notificationService.GetAllUnreadNotifications(this.userId, '1');
+        return this.notificationService.GetAllUnreadNotifications();
     }
   }
 
@@ -147,7 +147,7 @@ export class NotificationModalComponent implements OnInit, OnChanges {
 
   markAllAsRead() {
     console.log('Marking all notifications as read');
-    this.notificationService.MarkAllNotificationsAsRead(this.userId).subscribe({
+    this.notificationService.MarkAllNotificationsAsRead().subscribe({
       next: () => {
         console.log('All notifications marked as read');
         this.loadNotifications();
@@ -162,17 +162,17 @@ export class NotificationModalComponent implements OnInit, OnChanges {
     console.log('Marking notification as read:', notification);
     switch (notification.entityName) {
       case NotificationEntity.Follow:
-        this.notificationService.MarkNotificationsFollowAsRead(this.userId, notification.entityId).subscribe();
+        this.notificationService.MarkNotificationsFollowAsRead(this.userId).subscribe();
         break;
       case NotificationEntity.Comment:
-        this.notificationService.MarkNotificationsCommentAsRead(this.userId, notification.entityId).subscribe();
+        this.notificationService.MarkNotificationsCommentAsRead(this.userId).subscribe();
         break;
       case NotificationEntity.React:
         if (
           notification.notificatoinPreview &&
           notification.notificatoinPreview.toLowerCase().includes('comment')
         ) {
-          this.notificationService.MarkNotificationsReactionCommentAsRead(this.userId, notification.entityId).subscribe();
+          this.notificationService.MarkNotificationsReactionCommentAsRead(this.userId).subscribe();
         } else {
           this.notificationService.MarkNotificationsReactionPostAsRead(this.userId, notification.entityId).subscribe();
         }
