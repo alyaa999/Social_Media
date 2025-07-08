@@ -1,25 +1,25 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { SignupService } from '../signup.service';
-import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-step2-profile-info',
-  imports: [FormsModule, CommonModule],
+  standalone: true,
+  imports: [CommonModule, FormsModule],
   templateUrl: './step2-profile-info.component.html',
   styleUrls: ['./step2-profile-info.component.css']
 })
 export class Step2ProfileInfoComponent {
-  @Output() next = new EventEmitter<void>();
   @Output() prev = new EventEmitter<void>();
+  @Output() next = new EventEmitter<void>();
 
   constructor(public signupService: SignupService) {}
 
-  goNext() {
-    this.next.emit();
-  }
-
-  goBack() {
-    this.prev.emit();
+  submitForm() {
+    const { firstName, lastName, username } = this.signupService.formData;
+    if (firstName && lastName && username) {
+      this.next.emit();
+    }
   }
 }

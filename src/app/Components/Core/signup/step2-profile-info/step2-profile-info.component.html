@@ -1,29 +1,78 @@
-<div class="signup-card animate-slideInUp">
-  <h2 class="signup-title text-3xl mb-8 text-center">Tell Us More</h2>
+<form #step2Form="ngForm" (ngSubmit)="submitForm()" class="bg-[#0c1f27] text-white p-10 rounded-2xl shadow-lg w-[90vw] max-w-xl animate-slideInUp">
+  <!-- Top Progress Bar -->
+  <div class="h-1 bg-gradient-to-r from-red-500 via-yellow-400 to-green-400 rounded mb-6">
+    <div class="h-full bg-gray-700 w-[33%] rounded"></div>
+  </div>
 
-  <form class="flex flex-col gap-6">
-    <!-- First Name -->
-    <div class="form-group relative">
-      <input type="text" class="form-input peer" placeholder=" " required [(ngModel)]="signupService.formData.firstName" name="firstName">
-      <label class="form-label absolute left-5 top-1/2 transform -translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-0 peer-focus:text-sm text-gray-400">First Name</label>
-    </div>
+  <!-- Header -->
+  <h2 class="text-3xl font-extrabold text-[#dcff1e] text-center mb-2">Tell Us About You</h2>
+  <p class="text-center text-gray-400 mb-8">Let’s get to know the amazing person behind the account</p>
 
-    <!-- Last Name -->
-    <div class="form-group relative">
-      <input type="text" class="form-input peer" placeholder=" " required [(ngModel)]="signupService.formData.lastName" name="lastName">
-      <label class="form-label absolute left-5 top-1/2 transform -translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-0 peer-focus:text-sm text-gray-400">Last Name</label>
+  <!-- First Name -->
+  <div class="mb-6">
+    <input
+      type="text"
+      name="firstName"
+      [(ngModel)]="signupService.formData.firstName"
+      required
+      #firstName="ngModel"
+      class="w-full px-5 py-3 rounded-xl bg-[#0c1f27] border border-[#2d4754] focus:outline-none focus:ring-2 focus:ring-[#dcff1e] text-white placeholder-gray-500"
+      placeholder="First Name"
+      [ngClass]="{ 'border-red-500': firstName.invalid && firstName.touched }"
+    />
+    <div class="text-red-500 mt-1 text-sm" *ngIf="firstName.invalid && firstName.touched">
+      First name is required
     </div>
+  </div>
 
-    <!-- Username -->
-    <div class="form-group relative">
-      <input type="text" class="form-input peer" placeholder=" " required [(ngModel)]="signupService.formData.username" name="username">
-      <label class="form-label absolute left-5 top-1/2 transform -translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-0 peer-focus:text-sm text-gray-400">Username</label>
+  <!-- Last Name -->
+  <div class="mb-6">
+    <input
+      type="text"
+      name="lastName"
+      [(ngModel)]="signupService.formData.lastName"
+      required
+      #lastName="ngModel"
+      class="w-full px-5 py-3 rounded-xl bg-[#0c1f27] border border-[#2d4754] focus:outline-none focus:ring-2 focus:ring-[#dcff1e] text-white placeholder-gray-500"
+      placeholder="Last Name"
+      [ngClass]="{ 'border-red-500': lastName.invalid && lastName.touched }"
+    />
+    <div class="text-red-500 mt-1 text-sm" *ngIf="lastName.invalid && lastName.touched">
+      Last name is required
     </div>
+  </div>
 
-    <!-- Navigation Buttons -->
-    <div class="flex justify-between mt-8">
-      <button type="button" class="signup-btn px-8 bg-gray-700 hover:bg-gray-600" (click)="goBack()">Back</button>
-      <button type="button" class="signup-btn px-8" (click)="goNext()">Next</button>
+  <!-- Username -->
+  <div class="mb-6">
+    <input
+      type="text"
+      name="username"
+      [(ngModel)]="signupService.formData.username"
+      required
+      #username="ngModel"
+      class="w-full px-5 py-3 rounded-xl bg-[#0c1f27] border border-[#2d4754] focus:outline-none focus:ring-2 focus:ring-[#dcff1e] text-white placeholder-gray-500"
+      placeholder="Choose Username"
+      [ngClass]="{ 'border-red-500': username.invalid && username.touched }"
+    />
+    <div class="text-red-500 mt-1 text-sm" *ngIf="username.invalid && username.touched">
+      Username is required
     </div>
-  </form>
-</div>
+  </div>
+
+  <!-- Buttons -->
+  <div class="flex justify-between mt-8">
+    <button
+      type="button"
+      class="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-full font-bold transition"
+      (click)="prev.emit()"
+    >
+      Back
+    </button>
+    <button
+      type="submit"
+      class="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-full font-bold transition"
+    >
+      Next
+    </button>
+  </div>
+</form>
