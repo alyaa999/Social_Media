@@ -1,0 +1,29 @@
+<div class="signup-card animate-slideInUp">
+  <h2 class="signup-title text-3xl mb-8 text-center">Personal Info</h2>
+
+  <form class="flex flex-col gap-6">
+    <!-- Birthdate -->
+    <div class="form-group relative">
+      <input type="date" class="form-input peer" required [(ngModel)]="signupService.formData.birthdate" name="birthdate">
+      <label class="form-label absolute left-5 top-1/2 transform -translate-y-1/2 peer-focus:top-0 peer-focus:text-sm text-gray-400">Birthdate</label>
+    </div>
+
+    <!-- Address -->
+    <div class="form-group relative">
+      <input type="text" class="form-input peer" placeholder=" " required [(ngModel)]="signupService.formData.address" name="address">
+      <label class="form-label absolute left-5 top-1/2 transform -translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-0 peer-focus:text-sm text-gray-400">Address</label>
+    </div>
+
+    <!-- Mobile No -->
+    <div class="form-group relative">
+      <input type="tel" class="form-input peer" placeholder=" " required [(ngModel)]="signupService.formData.mobileNo" name="mobileNo">
+      <label class="form-label absolute left-5 top-1/2 transform -translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-0 peer-focus:text-sm text-gray-400">Mobile No.</label>
+    </div>
+
+    <!-- Navigation Buttons -->
+    <div class="flex justify-between mt-8">
+      <button type="button" class="signup-btn px-8 bg-gray-700 hover:bg-gray-600" (click)="goBack()">Back</button>
+      <button type="button" class="signup-btn px-8" (click)="goNext()">Next</button>
+    </div>
+  </form>
+</div>
