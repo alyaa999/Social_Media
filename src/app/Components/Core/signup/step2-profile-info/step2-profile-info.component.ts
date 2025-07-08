@@ -5,21 +5,23 @@ import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-step2-profile-info',
-  standalone: true,
-  imports: [CommonModule, FormsModule],
   templateUrl: './step2-profile-info.component.html',
+  imports: [CommonModule, FormsModule],
   styleUrls: ['./step2-profile-info.component.css']
 })
 export class Step2ProfileInfoComponent {
-  @Output() prev = new EventEmitter<void>();
   @Output() next = new EventEmitter<void>();
+  @Output() prev = new EventEmitter<void>();
 
   constructor(public signupService: SignupService) {}
 
-  submitForm() {
-    const { firstName, lastName, username } = this.signupService.formData;
-    if (firstName && lastName && username) {
+  validateAndProceed(form: any) {
+    if (form.valid) {
       this.next.emit();
+    } else {
+      Object.keys(form.controls).forEach(key => {
+        form.controls[key].markAsTouched();
+      });
     }
   }
 }

@@ -1,78 +1,78 @@
-<form #step2Form="ngForm" (ngSubmit)="submitForm()" class="bg-[#0c1f27] text-white p-10 rounded-2xl shadow-lg w-[90vw] max-w-xl animate-slideInUp">
-  <!-- Top Progress Bar -->
-  <div class="h-1 bg-gradient-to-r from-red-500 via-yellow-400 to-green-400 rounded mb-6">
-    <div class="h-full bg-gray-700 w-[33%] rounded"></div>
+<div class="signup-card bg-[#112D3A] text-white p-10 rounded-2xl shadow-xl w-[90vw] max-w-xl animate-slideInUp">
+  <!-- Progress Bar -->
+  <div class="h-1 w-full bg-gray-700 rounded mb-6 overflow-hidden">
+    <div class="h-full bg-gradient-to-l from-green-400 via-yellow-400 to-red-500 w-[33%]"></div>
   </div>
 
   <!-- Header -->
-  <h2 class="text-3xl font-extrabold text-[#dcff1e] text-center mb-2">Tell Us About You</h2>
-  <p class="text-center text-gray-400 mb-8">Let’s get to know the amazing person behind the account</p>
+  <div class="text-center mb-8">
+    <h2 class="text-3xl font-extrabold text-[#dcff1e] mb-2">Tell Us About You</h2>
+    <p class="text-gray-400 text-base">Let’s get to know the amazing person behind the account</p>
+  </div>
 
-  <!-- First Name -->
-  <div class="mb-6">
-    <input
-      type="text"
-      name="firstName"
-      [(ngModel)]="signupService.formData.firstName"
-      required
-      #firstName="ngModel"
-      class="w-full px-5 py-3 rounded-xl bg-[#0c1f27] border border-[#2d4754] focus:outline-none focus:ring-2 focus:ring-[#dcff1e] text-white placeholder-gray-500"
-      placeholder="First Name"
-      [ngClass]="{ 'border-red-500': firstName.invalid && firstName.touched }"
-    />
-    <div class="text-red-500 mt-1 text-sm" *ngIf="firstName.invalid && firstName.touched">
-      First name is required
+  <!-- Form -->
+  <form #form="ngForm" class="flex flex-col gap-6">
+    <!-- First Name -->
+    <div>
+      <input
+        type="text"
+        name="firstName"
+        [(ngModel)]="signupService.formData.firstName"
+        required
+        #firstName="ngModel"
+        placeholder="First Name"
+        [ngClass]="{ 'border-red-500': firstName.invalid && firstName.touched }"
+        class="form-input w-full px-5 py-3 rounded-lg bg-[#0c1f27] text-white border-2 border-[#2d4754] focus:outline-none focus:ring-2 focus:ring-[#dcff1e]"
+      />
+      <p *ngIf="firstName.invalid && firstName.touched" class="text-red-500 text-sm mt-1">First name is required</p>
     </div>
-  </div>
 
-  <!-- Last Name -->
-  <div class="mb-6">
-    <input
-      type="text"
-      name="lastName"
-      [(ngModel)]="signupService.formData.lastName"
-      required
-      #lastName="ngModel"
-      class="w-full px-5 py-3 rounded-xl bg-[#0c1f27] border border-[#2d4754] focus:outline-none focus:ring-2 focus:ring-[#dcff1e] text-white placeholder-gray-500"
-      placeholder="Last Name"
-      [ngClass]="{ 'border-red-500': lastName.invalid && lastName.touched }"
-    />
-    <div class="text-red-500 mt-1 text-sm" *ngIf="lastName.invalid && lastName.touched">
-      Last name is required
+    <!-- Last Name -->
+    <div>
+      <input
+        type="text"
+        name="lastName"
+        [(ngModel)]="signupService.formData.lastName"
+        required
+        #lastName="ngModel"
+        placeholder="Last Name"
+        [ngClass]="{ 'border-red-500': lastName.invalid && lastName.touched }"
+        class="form-input w-full px-5 py-3 rounded-lg bg-[#0c1f27] text-white border-2 border-[#2d4754] focus:outline-none focus:ring-2 focus:ring-[#dcff1e]"
+      />
+      <p *ngIf="lastName.invalid && lastName.touched" class="text-red-500 text-sm mt-1">Last name is required</p>
     </div>
-  </div>
 
-  <!-- Username -->
-  <div class="mb-6">
-    <input
-      type="text"
-      name="username"
-      [(ngModel)]="signupService.formData.username"
-      required
-      #username="ngModel"
-      class="w-full px-5 py-3 rounded-xl bg-[#0c1f27] border border-[#2d4754] focus:outline-none focus:ring-2 focus:ring-[#dcff1e] text-white placeholder-gray-500"
-      placeholder="Choose Username"
-      [ngClass]="{ 'border-red-500': username.invalid && username.touched }"
-    />
-    <div class="text-red-500 mt-1 text-sm" *ngIf="username.invalid && username.touched">
-      Username is required
+    <!-- Username -->
+    <div>
+      <input
+        type="text"
+        name="username"
+        [(ngModel)]="signupService.formData.username"
+        required
+        #username="ngModel"
+        placeholder="Choose Username"
+        [ngClass]="{ 'border-red-500': username.invalid && username.touched }"
+        class="form-input w-full px-5 py-3 rounded-lg bg-[#0c1f27] text-white border-2 border-[#2d4754] focus:outline-none focus:ring-2 focus:ring-[#dcff1e]"
+      />
+      <p *ngIf="username.invalid && username.touched" class="text-red-500 text-sm mt-1">Username is required</p>
     </div>
-  </div>
 
-  <!-- Buttons -->
-  <div class="flex justify-between mt-8">
-    <button
-      type="button"
-      class="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-full font-bold transition"
-      (click)="prev.emit()"
-    >
-      Back
-    </button>
-    <button
-      type="submit"
-      class="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-full font-bold transition"
-    >
-      Next
-    </button>
-  </div>
-</form>
+    <!-- Navigation Buttons -->
+    <div class="flex justify-between mt-6">
+      <button
+        type="button"
+        (click)="prev.emit()"
+        class="bg-red-500 text-white px-6 py-2 rounded-full font-semibold hover:bg-red-600 transition"
+      >
+        Back
+      </button>
+      <button
+        type="button"
+        (click)="validateAndProceed(form)"
+        class="bg-red-500 text-white px-6 py-2 rounded-full font-semibold hover:bg-red-600 transition"
+      >
+        Next
+      </button>
+    </div>
+  </form>
+</div>
