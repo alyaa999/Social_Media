@@ -1,5 +1,4 @@
-import { MediaType } from "express";
-import { Privacy } from "../feed/enums";
+import { MediaType, Privacy } from "../feed/enums";
 import { Media } from "./media";
 
 export interface PostInputDto {
