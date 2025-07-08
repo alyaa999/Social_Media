@@ -8,11 +8,13 @@ import { Routes } from '@angular/router';
 import { authGuard } from './Guards/auth.guard';
 import { FollowingsComponent } from './Components/Shared/followings/followings/followings.component';
 import { FollowersComponent } from './Components/Shared/followers/followers/followers.component';
+import { OtherProfileComponent } from './Components/Shared/OtherProfile/other-profile/other-profile.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/feed', pathMatch: 'full' },
   { path: 'feed', component: FeedPageComponent, canActivate: [authGuard] },
   { path: 'profile', component: ProfilePageComponent, canActivate: [authGuard] },
+  { path: 'other/:otherId', component: OtherProfileComponent, canActivate: [authGuard] },
   { path: 'tailwindtest', component: TailwindTestComponent, canActivate: [authGuard] },
   { path: 'home', component: HomeComponent, canActivate: [authGuard] },
   { path: 'followings', component: FollowingsComponent, canActivate: [authGuard]},

@@ -22,7 +22,7 @@
           <span *ngIf="user.isFollower" class="ml-2 px-2 py-0.5 bg-green-100 text-green-700 rounded text-xs">Follows you</span>
         </div>
       </div>
-      <button class="ml-4 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium transition">View</button>
+      <button class="ml-4 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium transition" (click)="viewProfile(user.userId)">View</button>
     </li>
   </ul>
 </div>

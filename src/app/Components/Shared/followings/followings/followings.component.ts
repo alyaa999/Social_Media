@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FollowService } from '../../../../Services/follow.service';
 import { ProfileAggregation } from '../../../../Interfaces/Profile/profile-aggrigation';
 import { FollowingListRequest } from '../../../../Interfaces/Follow/Follow';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-followings',
@@ -18,7 +19,7 @@ export class FollowingsComponent {
     next: ''
   };
 
-  constructor(private followService: FollowService) {
+  constructor(private followService: FollowService, private router: Router) {
     this.loadFollowings();
   }
 
@@ -35,6 +36,8 @@ export class FollowingsComponent {
       }
     });
   }
+
+  viewProfile(userId: string) {
+    this.router.navigate(['/other', userId]);
+  }
 }
-
-
