@@ -24,9 +24,10 @@ export class ProfilePostsComponent implements OnInit {
   selectedReactions: any[] = [];
   showModal: boolean = false;
   modalMode: 'comments' | 'reactions' = 'comments';
-  nextPage: string  = '1';
+  nextPage: string = '1';
   selectedPostId: string | null = null;
   newCommentText: string = '';
+  modalLoading: boolean = false;
 
   constructor(
     private postService: PostService,
@@ -34,22 +35,22 @@ export class ProfilePostsComponent implements OnInit {
   ) {}
 
   openCommentsModal(postId: string) {
-    this.selectedReactions = []; // Clear reactions before opening comments
     this.selectedPostId = postId;
     this.modalMode = 'comments';
     this.showModal = true;
-
+    this.modalLoading = true;
     const req: GetPagedCommentRequest = {
       PostId: postId,
       Next: ""
     };
-
     this.commentService.GetCommentList(req).subscribe({
       next: (data) => {
         this.selectedComments = data.data;
+        this.modalLoading = false;
         console.log('Comments loaded:', data);
       },
       error: (err) => {
+        this.modalLoading = false;
         console.error('Error loading comments:', err);
       }
     });
@@ -60,22 +61,22 @@ export class ProfilePostsComponent implements OnInit {
     this.selectedPostId = null;
     this.selectedComments = [];
     this.selectedReactions = [];
+    this.modalLoading = false;
   }
 
   onCommentSubmitted(commentText: string) {
     if (!this.selectedPostId || !commentText.trim()) return;
-    
+
     const commentData = {
       PostId: this.selectedPostId,
       Content: commentText,
       HasMedia: false,
-      MediaType: MediaType.None, // Using the correct enum value for no media
+      MediaType: MediaType.None,
       UserId: this.userId
     };
 
     this.commentService.CreateComment(commentData).subscribe({
       next: (response) => {
-        // Refresh comments after posting
         if (this.selectedPostId) {
           this.openCommentsModal(this.selectedPostId);
         }
@@ -93,30 +94,25 @@ export class ProfilePostsComponent implements OnInit {
     }
     this.loadProfilePosts();
   }
-
   loadProfilePosts(): void {
     this.isLoading = true;
     this.error = null;
     this.postService.GetProfilePosts(this.userId, this.nextPage)
       .subscribe({
         next: (response) => {
-          console.log('Profile posts response:', response); // Log the response
-          // Map media properties to match the interface (ignore TS errors for backend fields)
-          this.posts = (response.data || []).map(post => ({
+          console.log('Profile posts response:', response);
+          this.posts = (response.data || []).map((post: any) => ({
             ...post,
-            media: (post.media || []).map(media => {
-              const anyMedia = media as any;
-              return {
-                ...media,
-                Type: media.Type !== undefined ? media.Type : anyMedia.type,
-                Url: media.Url !== undefined ? media.Url : anyMedia.url
-              };
-            })
+            media: (post.media || []).map((media: any) => ({
+              ...media,
+              Type: media.Type !== undefined ? media.Type : media.type,
+              Url: media.Url !== undefined ? media.Url : media.url
+            }))
           }));
           this.nextPage = response.next;
           this.error = null;
           this.isLoading = false;
-          console.log('Loaded posts:', this.posts); // Log posts
+          console.log('Loaded posts:', this.posts);
         },
         error: (error) => {
           this.posts = [];
@@ -143,3 +139,4 @@ export class ProfilePostsComponent implements OnInit {
     this.selectedReactions = []; // Placeholder for reactions data
   }
 }
+

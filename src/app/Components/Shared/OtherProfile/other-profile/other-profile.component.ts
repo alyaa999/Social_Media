@@ -3,10 +3,13 @@ import { CommonModule, DatePipe } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { PostService } from '../../../../Services/post.service';
 import { ProfileService } from '../../../../Services/profile.service';
+import { CommentModalComponent } from '../../../Shared/comment-modal/comment-modal.component';
+import { CommentService } from '../../../../Services/comment.service';
+import { GetPagedCommentRequest } from '../../../../Interfaces/Comment/get-paged-comment-request';
 
 @Component({
   selector: 'app-other-profile',
-  imports: [CommonModule, DatePipe],
+  imports: [CommonModule, DatePipe, CommentModalComponent],
   templateUrl: './other-profile.component.html',
   styleUrl: './other-profile.component.css'
 })
@@ -19,10 +22,19 @@ export class OtherProfileComponent {
   errorPosts: string | null = null;
   isCurrentUser = false; // You can update this logic as needed
 
+  // Modal state
+  showModal: boolean = false;
+  modalMode: 'comments' | 'reactions' = 'comments';
+  selectedComments: any[] = [];
+  selectedReactions: any[] = [];
+  modalLoading: boolean = false;
+  selectedPostId: string | null = null;
+
   constructor(
     private route: ActivatedRoute,
     private postService: PostService,
-    private profileService: ProfileService
+    private profileService: ProfileService,
+    private commentService: CommentService
   ) {
     this.route.params.subscribe(params => {
       const otherId = params['otherId'];
@@ -31,6 +43,36 @@ export class OtherProfileComponent {
         this.loadPosts(otherId);
       }
     });
+  }
+
+  openCommentsModal(postId: string) {
+    this.selectedReactions = [];
+    this.selectedComments = [];
+    this.selectedPostId = postId;
+    this.modalMode = 'comments';
+    this.showModal = true;
+    this.modalLoading = true;
+    const req: GetPagedCommentRequest = {
+      PostId: postId,
+      Next: ""
+    };
+    this.commentService.GetCommentList(req).subscribe({
+      next: (data) => {
+        this.selectedComments = data.data;
+        this.modalLoading = false;
+      },
+      error: (err) => {
+        this.modalLoading = false;
+      }
+    });
+  }
+
+  closeModal() {
+    this.showModal = false;
+    this.selectedComments = [];
+    this.selectedReactions = [];
+    this.selectedPostId = null;
+    this.modalLoading = false;
   }
 
   loadProfile(otherId: string) {

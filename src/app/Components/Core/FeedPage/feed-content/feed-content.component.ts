@@ -28,6 +28,7 @@ export class FeedContentComponent implements OnInit {
   selectedComments: AggregatedComment[] = [];
   selectedReactions: SimpleUserProfile[] = [];
   selectedPostId: string | null = null;
+  modalLoading: boolean = false;
 
   constructor(private feedService: FeedService, private commentService: CommentService, private reactionService : ReactionService) {}
 
@@ -65,6 +66,11 @@ export class FeedContentComponent implements OnInit {
 
   openCommentsModal(postId: string) {
     this.selectedReactions = []; // Clear reactions before opening comments
+    this.modalLoading = true;
+    this.selectedComments = [];
+    this.modalMode = 'comments';
+    this.showModal = true;
+    this.selectedPostId = postId;
 
     const req : GetPagedCommentRequest = {
       PostId: postId,
@@ -74,35 +80,37 @@ export class FeedContentComponent implements OnInit {
     this.commentService.GetCommentList(req).subscribe({
       next: (data) => {
         this.selectedComments = data.data;
+        this.modalLoading = false;
         console.log('Comments loaded:', data);
         console.log('Selected comments:', this.selectedComments);
       },
       error: (err) => {
+        this.modalLoading = false;
         console.error('Error loading comments:', err);
       }
     });
-
-    this.modalMode = 'comments';
-    this.showModal = true;
-    this.selectedPostId = postId;
   }
 
   openReactionsModal(postId: string) {
     this.selectedComments = []; // Clear comments before opening reactions
+    this.modalLoading = true;
+    this.selectedReactions = [];
+    this.modalMode = 'reactions';
+    this.showModal = true;
+    this.selectedPostId = postId;
 
     this.reactionService.getUsersReacted({ PostId: postId, Next: "" }).subscribe({
       next: (data) => {
         this.selectedReactions = data.data;
+        this.modalLoading = false;
         console.log('Reactions loaded:', data);
         console.log('Selected reactions:', this.selectedReactions);
       },
       error: (err) => {
+        this.modalLoading = false;
         console.error('Error loading reactions:', err);
       }
     });
-    this.modalMode = 'reactions';
-    this.showModal = true;
-    this.selectedPostId = postId;
   }
 
   closeModal() {
@@ -110,6 +118,7 @@ export class FeedContentComponent implements OnInit {
     this.selectedComments = [];
     this.selectedReactions = [];
     this.selectedPostId = null;
+    this.modalLoading = false;
   }
 
   handleCommentSubmission(commentText: string) {

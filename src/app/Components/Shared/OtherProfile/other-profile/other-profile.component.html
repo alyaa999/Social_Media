@@ -116,11 +116,20 @@
                 <span class="mr-2">👍</span>
                 <span>{{ post.numberOfLikes || 0 }} Likes</span>
             </button>
-            <button class="flex items-center hover:text-hyper-05 transition-colors">
+            <button class="flex items-center hover:text-hyper-05 transition-colors" (click)="openCommentsModal(post.postId)">
                 <span class="mr-2">💬</span>
                 <span>{{ post.numberOfComments || 0 }} Comments</span>
             </button>
         </div>
+    <!-- Comments Modal -->
+    <app-comment-modal
+      [comments]="selectedComments"
+      [reactions]="selectedReactions"
+      [visible]="showModal"
+      [mode]="modalMode"
+      [loading]="modalLoading"
+      (close)="closeModal()"
+    ></app-comment-modal>
     </div>
 
     <!-- Empty State -->

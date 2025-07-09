@@ -16,6 +16,7 @@ export class CommentModalComponent {
   @Input() reactions: SimpleUserProfile[] = [];
   @Input() visible: boolean = false;
   @Input() mode: 'comments' | 'reactions' = 'comments';
+  @Input() loading: boolean = false;
   @Output() close = new EventEmitter<void>();
   @Output() commentSubmitted = new EventEmitter<string>();
 

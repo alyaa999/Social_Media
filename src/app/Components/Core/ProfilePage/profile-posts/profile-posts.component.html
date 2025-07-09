@@ -76,6 +76,7 @@
         [reactions]="selectedReactions"
         [visible]="showModal"
         [mode]="modalMode"
+        [loading]="modalLoading"
         (close)="onCloseModal()"
         (commentSubmitted)="onCommentSubmitted($event)">
     </app-comment-modal>
