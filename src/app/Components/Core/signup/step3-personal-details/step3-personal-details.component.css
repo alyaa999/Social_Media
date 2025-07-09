@@ -60,3 +60,14 @@
   background-color: rgba(22, 51, 65, 0.8);
   padding: 0 0.25rem;
 }
+
+.signup-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #e4291e, #dcff1e, #e4291e);
+  animation: shimmer 3s ease-in-out infinite;
+}
