@@ -1,78 +1,81 @@
-<div class="signup-card bg-[#112D3A] text-white p-10 rounded-2xl shadow-xl w-[90vw] max-w-xl animate-slideInUp">
-  <!-- Progress Bar -->
-  <div class="h-1 w-full bg-gray-700 rounded mb-6 overflow-hidden">
-    <div class="h-full bg-gradient-to-l from-green-400 via-yellow-400 to-red-500 w-[33%]"></div>
+<div class="animate-slideInUp">
+  <div class="signup-card bg-[#112D3A] text-white p-10 rounded-2xl shadow-xl w-[90vw] max-w-xl animate-slideInUp">
+    <!-- Progress Bar -->
+    <div class="h-1 w-full bg-gray-700 rounded mb-6 overflow-hidden">
+      <div class="h-full bg-gradient-to-l from-green-400 via-yellow-400 to-red-500 w-[33%]"></div>
+    </div>
+  
+    <!-- Header -->
+    <div class="text-center mb-8">
+      <h2 class="text-3xl font-extrabold text-[#dcff1e] mb-2">Tell Us About You</h2>
+      <p class="text-gray-400 text-base">Let’s get to know the amazing person behind the account</p>
+    </div>
+  
+    <!-- Form -->
+    <form #form="ngForm" class="flex flex-col gap-6">
+      <!-- First Name -->
+      <div>
+        <input
+          type="text"
+          name="firstName"
+          [(ngModel)]="signupService.formData.firstName"
+          required
+          #firstName="ngModel"
+          placeholder="First Name"
+          [ngClass]="{ 'border-red-500': firstName.invalid && firstName.touched }"
+          class="form-input w-full px-5 py-3 rounded-lg bg-[#0c1f27] text-white border-2 border-[#2d4754] focus:outline-none focus:ring-2 focus:ring-[#dcff1e]"
+        />
+        <p *ngIf="firstName.invalid && firstName.touched" class="text-red-500 text-sm mt-1">First name is required</p>
+      </div>
+  
+      <!-- Last Name -->
+      <div>
+        <input
+          type="text"
+          name="lastName"
+          [(ngModel)]="signupService.formData.lastName"
+          required
+          #lastName="ngModel"
+          placeholder="Last Name"
+          [ngClass]="{ 'border-red-500': lastName.invalid && lastName.touched }"
+          class="form-input w-full px-5 py-3 rounded-lg bg-[#0c1f27] text-white border-2 border-[#2d4754] focus:outline-none focus:ring-2 focus:ring-[#dcff1e]"
+        />
+        <p *ngIf="lastName.invalid && lastName.touched" class="text-red-500 text-sm mt-1">Last name is required</p>
+      </div>
+  
+      <!-- Username -->
+      <div>
+        <input
+          type="text"
+          name="username"
+          [(ngModel)]="signupService.formData.username"
+          required
+          #username="ngModel"
+          placeholder="Choose Username"
+          [ngClass]="{ 'border-red-500': username.invalid && username.touched }"
+          class="form-input w-full px-5 py-3 rounded-lg bg-[#0c1f27] text-white border-2 border-[#2d4754] focus:outline-none focus:ring-2 focus:ring-[#dcff1e]"
+        />
+        <p *ngIf="username.invalid && username.touched" class="text-red-500 text-sm mt-1">Username is required</p>
+      </div>
+  
+      <!-- Navigation Buttons -->
+      <div class="flex justify-between mt-6">
+        <button
+          type="button"
+          (click)="prev.emit()"
+          class="bg-red-500 text-white px-6 py-2 rounded-full font-semibold hover:bg-red-600 transition"
+        >
+          Back
+        </button>
+        <button
+          type="button"
+          (click)="validateAndProceed(form)"
+          class="bg-red-500 text-white px-6 py-2 rounded-full font-semibold hover:bg-red-600 transition"
+        >
+          Next
+        </button>
+      </div>
+    </form>
   </div>
-
-  <!-- Header -->
-  <div class="text-center mb-8">
-    <h2 class="text-3xl font-extrabold text-[#dcff1e] mb-2">Tell Us About You</h2>
-    <p class="text-gray-400 text-base">Let’s get to know the amazing person behind the account</p>
-  </div>
-
-  <!-- Form -->
-  <form #form="ngForm" class="flex flex-col gap-6">
-    <!-- First Name -->
-    <div>
-      <input
-        type="text"
-        name="firstName"
-        [(ngModel)]="signupService.formData.firstName"
-        required
-        #firstName="ngModel"
-        placeholder="First Name"
-        [ngClass]="{ 'border-red-500': firstName.invalid && firstName.touched }"
-        class="form-input w-full px-5 py-3 rounded-lg bg-[#0c1f27] text-white border-2 border-[#2d4754] focus:outline-none focus:ring-2 focus:ring-[#dcff1e]"
-      />
-      <p *ngIf="firstName.invalid && firstName.touched" class="text-red-500 text-sm mt-1">First name is required</p>
-    </div>
-
-    <!-- Last Name -->
-    <div>
-      <input
-        type="text"
-        name="lastName"
-        [(ngModel)]="signupService.formData.lastName"
-        required
-        #lastName="ngModel"
-        placeholder="Last Name"
-        [ngClass]="{ 'border-red-500': lastName.invalid && lastName.touched }"
-        class="form-input w-full px-5 py-3 rounded-lg bg-[#0c1f27] text-white border-2 border-[#2d4754] focus:outline-none focus:ring-2 focus:ring-[#dcff1e]"
-      />
-      <p *ngIf="lastName.invalid && lastName.touched" class="text-red-500 text-sm mt-1">Last name is required</p>
-    </div>
-
-    <!-- Username -->
-    <div>
-      <input
-        type="text"
-        name="username"
-        [(ngModel)]="signupService.formData.username"
-        required
-        #username="ngModel"
-        placeholder="Choose Username"
-        [ngClass]="{ 'border-red-500': username.invalid && username.touched }"
-        class="form-input w-full px-5 py-3 rounded-lg bg-[#0c1f27] text-white border-2 border-[#2d4754] focus:outline-none focus:ring-2 focus:ring-[#dcff1e]"
-      />
-      <p *ngIf="username.invalid && username.touched" class="text-red-500 text-sm mt-1">Username is required</p>
-    </div>
-
-    <!-- Navigation Buttons -->
-    <div class="flex justify-between mt-6">
-      <button
-        type="button"
-        (click)="prev.emit()"
-        class="bg-red-500 text-white px-6 py-2 rounded-full font-semibold hover:bg-red-600 transition"
-      >
-        Back
-      </button>
-      <button
-        type="button"
-        (click)="validateAndProceed(form)"
-        class="bg-red-500 text-white px-6 py-2 rounded-full font-semibold hover:bg-red-600 transition"
-      >
-        Next
-      </button>
-    </div>
-  </form>
 </div>
+
