@@ -17,7 +17,7 @@ export const routes: Routes = [
   { path: 'other/:otherId', component: OtherProfileComponent, canActivate: [authGuard] },
   { path: 'tailwindtest', component: TailwindTestComponent, canActivate: [authGuard] },
   { path: 'home', component: HomeComponent, canActivate: [authGuard] },
-  { path: 'followings', component: FollowingsComponent, canActivate: [authGuard]},
+  { path: 'following', component: FollowingsComponent, canActivate: [authGuard]},
   { path: 'followers', component: FollowersComponent, canActivate: [authGuard]},
   { path: 'login', component: LoginComponent },
   { path: 'landing', component: ThryveLandingComponent },

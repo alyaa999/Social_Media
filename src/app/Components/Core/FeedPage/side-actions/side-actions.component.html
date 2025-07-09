@@ -3,7 +3,7 @@
   <h2 class="text-2xl font-bold text-hyper-05 px-4 mb-2 tracking-wide">Navigation</h2>
   <div class="space-y-2 w-full">
     <a *ngFor="let action of actions; let i = index"
-       [routerLink]="action.route"
+       [routerLink]="action.name === 'Followings' ? '/followings' : action.route"
        class="flex items-center gap-4 px-4 py-3.5 rounded-xl transition-all duration-300 hover:bg-dusk-90/60 group w-full">
       <!-- Icon Container -->
       <div class="w-11 h-11 flex items-center justify-center rounded-xl bg-dusk-90  transition-colors duration-300">

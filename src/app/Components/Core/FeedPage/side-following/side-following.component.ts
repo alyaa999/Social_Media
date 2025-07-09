@@ -1,12 +1,13 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { ProfileAggregation } from '../../../../Interfaces/Profile/profile-aggrigation';
 import { FollowService } from '../../../../Services/follow.service';
 import { FollowingListRequest } from '../../../../Interfaces/Follow/Follow';
 
 @Component({
   selector: 'app-side-following',
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './side-following.component.html',
   styleUrl: './side-following.component.scss'
 })
