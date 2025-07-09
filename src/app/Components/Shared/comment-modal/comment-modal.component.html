@@ -20,11 +20,13 @@
           <div *ngIf="comments?.length === 0" class="text-center text-dusk-50 my-8">No comments yet.</div>
           <div *ngFor="let comment of comments" class="mb-5 last:mb-0">
             <div class="flex items-center mb-2">
-              <img [src]="comment.commentAuthor.profilePictureUrl || 'assets/default-avatar.png'" alt="Profile" class="w-9 h-9 rounded-full mr-3 object-cover">
-              <div class="flex flex-col">
-                <span class="font-semibold text-fg-default">{{ comment.commentAuthor.displayName || comment.commentAuthor.userName }}</span>
-                <span class="text-xs text-dusk-30">{{ comment.createdAt | date:'medium' }}</span>
-              </div>
+              <a [routerLink]="['/other', comment.commentAuthor.userId]" class="flex items-center group" style="text-decoration: none;">
+                <img [src]="comment.commentAuthor.profilePictureUrl || 'assets/default-avatar.png'" alt="Profile" class="w-9 h-9 rounded-full mr-3 object-cover group-hover:ring-2 group-hover:ring-hyper-05 transition">
+                <div class="flex flex-col">
+                  <span class="font-semibold text-fg-default group-hover:underline">{{ comment.commentAuthor.displayName || comment.commentAuthor.userName }}</span>
+                  <span class="text-xs text-dusk-30">{{ comment.createdAt | date:'medium' }}</span>
+                </div>
+              </a>
             </div>
             <div class="border border-dusk-70 border-opacity-40 rounded-lg bg-dusk-08 shadow-sm px-4 ml-12 py-3 mt-3 mb-5">
               <div class="text-fg-body">
@@ -41,11 +43,13 @@
         <ng-container *ngIf="mode === 'reactions'">
           <div *ngIf="reactions?.length === 0" class="text-center text-dusk-50 my-8">No likes yet.</div>
           <div *ngFor="let user of reactions" class="flex items-center gap-3 border-b border-dusk-70 py-4 last:border-b-0">
-            <img [src]="user.profilePictureUrl || 'assets/default-avatar.png'" alt="Profile" class="w-9 h-9 rounded-full object-cover">
-            <div class="flex flex-col">
-              <span class="font-semibold text-fg-default">{{ user.displayName || user.userName }}</span>
-              <span class="text-xs text-dusk-30">{{ user.userName }}</span>
-            </div>
+            <a [routerLink]="['/other', user.userId]" class="flex items-center group" style="text-decoration: none;">
+              <img [src]="user.profilePictureUrl || 'assets/default-avatar.png'" alt="Profile" class="w-9 h-9 rounded-full object-cover group-hover:ring-2 group-hover:ring-hyper-05 transition">
+              <div class="flex flex-col">
+                <span class="font-semibold text-fg-default group-hover:underline">{{ user.displayName || user.userName }}</span>
+                <span class="text-xs text-dusk-30">{{ user.userName }}</span>
+              </div>
+            </a>
           </div>
         </ng-container>
       </ng-container>

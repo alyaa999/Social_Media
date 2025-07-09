@@ -1,5 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { AggregatedComment } from '../../../Interfaces/Comment/aggregated-comment';
 import { SimpleUserProfile } from '../../../Interfaces/post/simple-user-profile';
 import { FormsModule } from '@angular/forms';
@@ -7,7 +8,7 @@ import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-comment-modal',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, RouterModule, FormsModule],
   templateUrl: './comment-modal.component.html',
   styleUrl: './comment-modal.component.scss'
 })

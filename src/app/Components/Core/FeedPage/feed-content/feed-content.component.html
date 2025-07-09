@@ -24,15 +24,17 @@
   <div *ngFor="let post of posts" class="p-2 mb-2 bg-dusk-09 rounded-lg">
     <!-- Post Header -->
     <div class="flex items-center mb-2 px-1">
-      <img 
-        [src]="post.authorProfile.profilePictureUrl || 'assets/default-avatar.png'" 
-        alt="Profile"
-        class="w-10 h-10 rounded-full mr-3 object-cover"
-      >
-      <div>
-        <h3 class="text-base font-semibold text-fg-default">{{ post.authorProfile.displayName }}</h3>
-        <p class="text-sm text-fg-muted">{{ formatDate(post.createdAt) }}</p>
-      </div>
+      <a [routerLink]="['/other', post.authorProfile.id]" class="flex items-center group" style="text-decoration: none;">
+        <img 
+          [src]="post.authorProfile.profilePictureUrl || 'assets/default-avatar.png'" 
+          alt="Profile"
+          class="w-10 h-10 rounded-full mr-3 object-cover group-hover:ring-2 group-hover:ring-hyper-05 transition"
+        >
+        <div>
+          <h3 class="text-base font-semibold text-fg-default group-hover:underline">{{ post.authorProfile.displayName }}</h3>
+          <p class="text-sm text-fg-muted">{{ formatDate(post.createdAt) }}</p>
+        </div>
+      </a>
     </div>
     
     <!-- Post Content -->

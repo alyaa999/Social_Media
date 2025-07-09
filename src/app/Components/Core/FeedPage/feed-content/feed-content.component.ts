@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { NewPostComponent } from '../../../Shared/new-post/new-post.component';
 import { Post, STATIC_POSTS } from '../../../../Interfaces/feed/post';
 import { SimpleUserProfile } from '../../../../Interfaces/post/simple-user-profile';
@@ -14,7 +15,7 @@ import { ReactionService } from '../../../../Services/reaction.service';
 @Component({
   selector: 'app-feed-content',
   standalone: true,
-  imports: [CommonModule, NewPostComponent, CommentModalComponent],
+  imports: [CommonModule, RouterModule, NewPostComponent, CommentModalComponent],
   templateUrl: './feed-content.component.html',
   styleUrls: ['./feed-content.component.scss']
 })
