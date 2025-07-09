@@ -1,26 +1,46 @@
-<div class="signup-card animate-slideInUp">
-  <h2 class="signup-title text-3xl mb-8 text-center">Customize Your Profile</h2>
+<div class="w-full max-w-xl mx-auto bg-[#0f2a36] p-8 rounded-3xl shadow-lg text-white">
+  <div class="w-full h-1 rounded-full mb-6 bg-gray-700 relative">
+    <div class="h-1 rounded-full bg-gradient-to-r from-red-500 via-yellow-400 to-green-400 absolute top-0 left-0 w-full"></div>
+  </div>
 
-  <form class="flex flex-col gap-6">
-    <!-- Profile Image Upload -->
-    <div class="form-group">
-      <label class="text-white font-semibold mb-1">Profile Picture</label>
-      <input type="file" accept="image/*" (change)="onImageSelected($event)" class="form-input text-white file:bg-red-600 file:text-white file:rounded-lg file:px-4 file:py-2 file:cursor-pointer">
-      <div *ngIf="profilePreview" class="mt-4">
-        <img [src]="profilePreview" alt="Profile Preview" class="w-24 h-24 rounded-full object-cover border-2 border-white mx-auto">
+  <h2 class="text-2xl md:text-3xl font-bold text-center text-lime-400 mb-2">Customize Your Profile</h2>
+  <p class="text-center text-gray-300 mb-6">Add a personal touch to your profile (all optional)</p>
+
+  <!-- Profile picture -->
+  <div class="flex justify-center mb-2">
+    <label for="profilePicInput" class="cursor-pointer">
+      <div class="w-24 h-24 rounded-full border-2 border-gray-600 flex items-center justify-center">
+        <img *ngIf="profilePicUrl; else defaultPic" [src]="profilePicUrl" alt="Profile" class="rounded-full w-full h-full object-cover">
+        <ng-template #defaultPic>
+          <img src="assets/icons/user-icon.svg" alt="User" class="w-10 h-10 opacity-70" />
+        </ng-template>
       </div>
-    </div>
+    </label>
+    <input id="profilePicInput" type="file" accept="image/*" class="hidden" (change)="onProfilePicSelected($event)">
+  </div>
+  <p class="text-center text-sm text-gray-400 mb-6">Click to add profile picture</p>
 
-    <!-- Bio -->
-    <div class="form-group relative">
-      <textarea rows="4" class="form-input peer" placeholder=" " [(ngModel)]="signupService.formData.bio" name="bio"></textarea>
-      <label class="form-label absolute left-5 top-1/2 transform -translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-0 peer-focus:text-sm text-gray-400">Short Bio</label>
-    </div>
+  <!-- Cover photo -->
+  <div class="mb-2">
+    <label for="coverPicInput" class="block w-full h-32 bg-[#142a37] border border-gray-600 rounded-lg flex items-center justify-center cursor-pointer">
+      <img *ngIf="coverPicUrl; else coverIcon" [src]="coverPicUrl" alt="Cover" class="w-full h-full object-cover rounded-lg" />
+      <ng-template #coverIcon>
+        <img src="assets/icons/gallery-icon.svg" alt="Gallery" class="w-10 h-10 opacity-70" />
+      </ng-template>
+    </label>
+    <input id="coverPicInput" type="file" accept="image/*" class="hidden" (change)="onCoverPicSelected($event)">
+  </div>
+  <p class="text-center text-sm text-gray-400 mb-6">Click to add cover photo</p>
 
-    <!-- Navigation Buttons -->
-    <div class="flex justify-between mt-8">
-      <button type="button" class="signup-btn px-8 bg-gray-700 hover:bg-gray-600" (click)="goBack()">Back</button>
-      <button type="button" class="signup-btn px-8" (click)="submitForm()">Submit</button>
-    </div>
-  </form>
+  <!-- Bio -->
+  <textarea [(ngModel)]="signupService.formData.Bio" placeholder="Tell us about yourself" rows="3"
+    class="w-full p-3 rounded-lg bg-[#142a37] text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-lime-400 mb-6 resize-none"></textarea>
+
+  <!-- Buttons -->
+  <div class="flex justify-between mt-4">
+    <button type="button" class="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-6 rounded-full"
+      (click)="prev.emit()">Previous</button>
+    <button type="button" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-6 rounded-full"
+      (click)="completeSignup()">Complete Signup</button>
+  </div>
 </div>

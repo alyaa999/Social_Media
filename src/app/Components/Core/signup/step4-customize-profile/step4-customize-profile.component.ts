@@ -1,35 +1,39 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { SignupService } from '../signup.service';
-import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-step4-customize-profile',
+  imports:[FormsModule, CommonModule],
   templateUrl: './step4-customize-profile.component.html',
-  imports:[CommonModule, FormsModule],
   styleUrls: ['./step4-customize-profile.component.css']
 })
 export class Step4CustomizeProfileComponent {
   @Output() prev = new EventEmitter<void>();
-  profilePreview: string | ArrayBuffer | null = null;
+  @Output() complete = new EventEmitter<void>();
+
+  profilePicUrl: string | null = null;
+  coverPicUrl: string | null = null;
 
   constructor(public signupService: SignupService) {}
 
-  goBack() {
-    this.prev.emit();
-  }
-
-  onImageSelected(event: any) {
+  onProfilePicSelected(event: any) {
     const file = event.target.files[0];
-    this.signupService.formData.profileImage = file;
-
-    const reader = new FileReader();
-    reader.onload = e => this.profilePreview = reader.result;
-    reader.readAsDataURL(file);
+    if (file) {
+      this.profilePicUrl = URL.createObjectURL(file);
+    }
   }
 
-  submitForm() {
-    console.log('Final signup data:', this.signupService.formData);
-    alert('🎉 Signup completed!');
+  onCoverPicSelected(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      this.coverPicUrl = URL.createObjectURL(file);
+    }
+  }
+
+  completeSignup() {
+    this.complete.emit();
   }
 }
+
