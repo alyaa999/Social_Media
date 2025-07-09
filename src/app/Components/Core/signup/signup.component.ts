@@ -32,4 +32,8 @@ export class SignupComponent {
     this.step = 1;
     this.signup.resetData();
   }
+
+   completeSignup() {
+    this.step = 5; // move to final step
+  }
 }
