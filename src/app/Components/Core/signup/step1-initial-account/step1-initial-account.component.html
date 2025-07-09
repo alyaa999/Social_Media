@@ -9,33 +9,22 @@
 
     <!-- Email -->
     <div class="form-group relative">
-      <input
-        type="email"
-        class="form-input peer w-full px-4 py-3 rounded-md bg-[#0c1f27] text-white placeholder-transparent border transition-all duration-300 focus:outline-none focus:ring-yellow-400"
+      <input type="email"
+        class="form-input peer w-full px-4 py-3 my-2 rounded-md bg-[#0c1f27] text-white placeholder-transparent border transition-all duration-300 focus:outline-none focus:ring-yellow-400"
         [ngClass]="{
           'border-gray-600': !emailRef.valid && !emailRef.touched,
           'border-red-500': emailRef.invalid && emailRef.touched,
           'border-green-500': emailRef.valid
-        }"
-        placeholder="Email Address"
-        name="email"
-        required
-        email
-        [(ngModel)]="signupService.formData.email"
-        #emailRef="ngModel"
-      />
-      <label
-        for="email"
-        class="form-label absolute left-4 text-sm text-gray-400 transition-all duration-200
+        }" placeholder="Email Address" name="email" required email [(ngModel)]="signupService.formData.email"
+        #emailRef="ngModel" />
+      <label for="email" class="form-label absolute left-4 text-sm text-gray-400 transition-all duration-200
           peer-placeholder-shown:text-base
-          peer-placeholder-shown:top-1/2
-          peer-placeholder-shown:-translate-y-1/2
-          peer-focus:top-[-0.75rem]
+          peer-placeholder-shown:top-1/3
+          peer-placeholder-shown:-translate-y-1/3
+          peer-focus:top-[-0.5rem]
           peer-focus:text-sm
-          peer-focus:text-yellow-300"
-        [class.top-[-0.75rem]]="signupService.formData.email"
-        [class.text-sm]="signupService.formData.email"
-      >
+          peer-focus:text-yellow-300" [class.top-[-0.75rem]]="signupService.formData.email"
+        [class.text-sm]="signupService.formData.email">
         Email Address
       </label>
       <div *ngIf="emailRef.invalid && emailRef.touched" class="text-sm text-red-400 mt-1">
@@ -45,45 +34,32 @@
 
     <!-- Password -->
     <div class="form-group relative">
-      <input
-        [type]="passwordVisible ? 'text' : 'password'"
-        class="form-input peer w-full px-4 py-3 rounded-md bg-[#0c1f27] text-white placeholder-transparent border border-gray-600 focus:outline-none focus:ring-2 focus:ring-yellow-400"
-        placeholder="Create Password"
-        name="password"
-        required
-        minlength="6"
-        [(ngModel)]="signupService.formData.password"
-        #passwordRef="ngModel"
-        (input)="onPasswordInput(signupService.formData.password)"
-      />
-      <label
-        for="password"
-        class="form-label absolute left-4 text-sm text-gray-400 transition-all duration-200
+      <input [type]="passwordVisible ? 'text' : 'password'"
+        class="form-input peer w-full px-4 py-3 my-2 rounded-md bg-[#0c1f27] text-white placeholder-transparent border border-gray-600 focus:outline-none focus:ring-2 focus:ring-yellow-400"
+        placeholder="Create Password" name="password" required minlength="6"
+        [(ngModel)]="signupService.formData.password" #passwordRef="ngModel"
+        (input)="onPasswordInput(signupService.formData.password)" />
+      <label for="password" class="form-label absolute left-4 text-sm text-gray-400 transition-all duration-200
           peer-placeholder-shown:text-base
-          peer-placeholder-shown:top-1/2
-          peer-placeholder-shown:-translate-y-1/2
+          peer-placeholder-shown:top-1/3
+          peer-placeholder-shown:-translate-y-1/3
           peer-focus:top-[-0.75rem]
           peer-focus:text-sm
-          peer-focus:text-yellow-300"
-        [class.top-[-0.75rem]]="signupService.formData.password"
-        [class.text-sm]="signupService.formData.password"
-      >
+          peer-focus:text-yellow-300" [class.top-[-0.75rem]]="signupService.formData.password"
+        [class.text-sm]="signupService.formData.password">
         Create Password
       </label>
 
-      <button
-        type="button"
+      <button type="button"
         class="password-toggle absolute right-5 top-1/2 transform -translate-y-1/2 text-xl text-gray-400 hover:text-red-500"
-        (click)="togglePasswordVisibility()"
-      >
+        (click)="togglePasswordVisibility()">
         {{ passwordVisible ? '🙈' : '👁' }}
       </button>
 
       <div class="password-strength h-1 mt-2 bg-[#2d4754] rounded transition-opacity duration-300"
-           [ngClass]="{ 'opacity-100': barWidth !== '0%' }">
-        <div class="strength-bar h-full transition-all duration-500 rounded"
-             [ngClass]="strengthClass"
-             [style.width]="barWidth"></div>
+        [ngClass]="{ 'opacity-100': barWidth !== '0%' }">
+        <div class="strength-bar h-full transition-all duration-500 rounded" [ngClass]="strengthClass"
+          [style.width]="barWidth"></div>
       </div>
 
       <div *ngIf="passwordRef.invalid && passwordRef.touched" class="text-sm text-red-400 mt-1">
@@ -99,11 +75,7 @@
     </div>
 
     <!-- Submit -->
-    <button
-      type="submit"
-      class="signup-btn uppercase tracking-wider font-bold"
-      [disabled]="step1Form.invalid"
-    >
+    <button type="submit" class="signup-btn uppercase tracking-wider font-bold" [disabled]="step1Form.invalid">
       Create My Account
     </button>
   </form>
@@ -111,10 +83,8 @@
   <!-- Login -->
   <div class="login-section text-center mt-10 pt-6 border-t border-[#2d4754]">
     <p class="text-gray-400 mb-4">Already thriving with us?</p>
-    <a
-      href="#"
-      class="login-btn-link border-2 border-red-600 px-8 py-3 rounded-full text-red-600 hover:bg-red-600 hover:text-white transition"
-    >
+    <a href="#"
+      class="login-btn-link border-2 border-red-600 px-8 py-3 rounded-full text-red-600 hover:bg-red-600 hover:text-white transition">
       SIGN IN
     </a>
   </div>
