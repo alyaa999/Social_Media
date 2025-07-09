@@ -22,7 +22,7 @@
 
   <!-- Cover photo -->
   <div class="mb-2">
-    <label for="coverPicInput" class="block w-full h-32 bg-[#142a37] border border-gray-600 rounded-lg flex items-center justify-center cursor-pointer">
+    <label for="coverPicInput" class="w-full h-32 bg-[#142a37] border border-gray-600 rounded-lg flex items-center justify-center cursor-pointer">
       <ng-container *ngIf="!coverPicUrl; else coverPreview">
         <span class="text-4xl opacity-70">🏞️</span>
       </ng-container>
@@ -40,9 +40,9 @@
 
   <!-- Buttons -->
   <div class="flex justify-between mt-4">
-    <button type="button" class="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-6 rounded-full"
+    <button type="button" class="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-6 rounded-lg"
       (click)="prev.emit()">Previous</button>
-    <button type="button" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-6 rounded-full"
+    <button type="button" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-6 rounded-lg"
       (click)="completeSignup()">Complete Signup</button>
   </div>
 </div>
