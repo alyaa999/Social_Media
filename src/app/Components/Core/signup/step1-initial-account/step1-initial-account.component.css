@@ -26,16 +26,16 @@
   -webkit-text-fill-color: transparent;
   animation: titleGlow 2s ease-in-out infinite alternate;
 }
+@keyframes titleGlow {
+  0% { filter: drop-shadow(0 0 5px rgba(228, 41, 30, 0.3)); }
+  100% { filter: drop-shadow(0 0 15px rgba(220, 255, 30, 0.4)); }
+}
 
 @keyframes shimmer {
   0%, 100% { opacity: 0.5; }
   50% { opacity: 1; }
 }
 
-@keyframes titleGlow {
-  0% { filter: drop-shadow(0 0 5px rgba(228, 41, 30, 0.3)); }
-  100% { filter: drop-shadow(0 0 15px rgba(220, 255, 30, 0.4)); }
-}
 
 .signup-btn {
   width: 100%;

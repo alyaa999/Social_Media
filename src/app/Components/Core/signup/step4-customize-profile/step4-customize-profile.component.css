@@ -76,3 +76,14 @@
   0%, 100% { opacity: 0.5; }
   50% { opacity: 1; }
 }
+
+.signup-title {
+  background: linear-gradient(45deg, #e4291e, #dcff1e);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: titleGlow 2s ease-in-out infinite alternate;
+}
+@keyframes titleGlow {
+  0% { filter: drop-shadow(0 0 5px rgba(228, 41, 30, 0.3)); }
+  100% { filter: drop-shadow(0 0 15px rgba(220, 255, 30, 0.4)); }
+}
