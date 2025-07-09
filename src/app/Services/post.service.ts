@@ -80,7 +80,7 @@ export class PostService {
   UpdatePost(postDto: PostInputDto, userId: string): Observable<ResponseWrapper<PostResponseDTO>> {
     const formData = this.buildUpdateFormData(postDto);
 
-    return this._http.put<ResponseWrapper<PostResponseDTO>>(`${this.baseUrl}UpdatePost/${userId}`, formData, {});
+    return this._http.put<ResponseWrapper<PostResponseDTO>>(`${this.baseUrl}post`, formData, {});
   }
 
   DeletePost(postId: string, userId: string): Observable<ResponseWrapper<PostResponseDTO>> {

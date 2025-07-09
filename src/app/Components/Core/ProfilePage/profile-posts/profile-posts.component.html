@@ -20,9 +20,18 @@
             <img [src]="post.postAuthorProfile.profilePictureUrl || 'assets/default-avatar.png'" alt="Profile"
                 class="w-10 h-10 rounded-full mr-3 object-cover">
             <div>
-                <h3 class="text-base font-semibold text-fg-default">{{ post.postAuthorProfile.displayName }}</h3>
+                <h3 class="text-base font-semibold text-fg-default">
+                    {{ post.postAuthorProfile.displayName || post.postAuthorProfile.userName || 'Anonymous' }}
+                </h3>
                 <p class="text-sm text-fg-muted">{{ formatDate(post.createdAt) }}</p>
             </div>
+        </div>
+
+        <!-- Post Actions Menu -->
+        <div class="flex justify-end px-14 mb-2" *ngIf="isCurrentUserPost(post)">
+            <button class="text-dusk-30 hover:text-hyper-05 transition-colors p-2" (click)="editPost(post)">
+                <i class="fas fa-edit"></i> Edit
+            </button>
         </div>
 
         <!-- Post Content -->
@@ -78,4 +87,13 @@
         (close)="onCloseModal()"
         (commentSubmitted)="onCommentSubmitted($event)">
     </app-comment-modal>
+
+    <!-- Edit Post Modal -->
+    <app-edit-post
+        *ngIf="showEditModal && selectedPost"
+        [visible]="showEditModal"
+        [post]="selectedPost"
+        (close)="onCloseEditModal()"
+        (postUpdated)="onPostUpdated($event)">
+    </app-edit-post>
 </div>

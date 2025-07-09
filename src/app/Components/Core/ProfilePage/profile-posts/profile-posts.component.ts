@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { PostService } from '../../../../Services/post.service';
 import { PostAggregationResponse } from '../../../../Interfaces/post/post-aggrigation-response';
 import { CommentModalComponent } from '../../../Shared/comment-modal/comment-modal.component';
+import { EditPostComponent } from '../../../Shared/edit-post/edit-post.component';
 import { CommentService } from '../../../../Services/comment.service';
 import { GetPagedCommentRequest } from '../../../../Interfaces/Comment/get-paged-comment-request';
 import { MediaType } from '../../../../Interfaces/Comment/media-enum-type';
@@ -13,7 +14,7 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './profile-posts.component.html',
   styleUrls: ['./profile-posts.component.scss'],
   standalone: true,
-  imports: [CommonModule, CommentModalComponent, FormsModule]
+  imports: [CommonModule, CommentModalComponent, EditPostComponent, FormsModule]
 })
 export class ProfilePostsComponent implements OnInit {
   userId: string = localStorage.getItem('userId') || '';
@@ -28,6 +29,8 @@ export class ProfilePostsComponent implements OnInit {
   selectedPostId: string | null = null;
   newCommentText: string = '';
   modalLoading: boolean = false;
+  showEditModal: boolean = false;
+  selectedPost: PostAggregationResponse | null = null;
 
   constructor(
     private postService: PostService,
@@ -137,6 +140,28 @@ export class ProfilePostsComponent implements OnInit {
     this.modalMode = 'reactions';
     this.showModal = true;
     this.selectedReactions = []; // Placeholder for reactions data
+  }
+
+  isCurrentUserPost(post: PostAggregationResponse): boolean {
+    return post.authorId === this.userId;
+  }
+
+  editPost(post: PostAggregationResponse): void {
+    this.selectedPost = post;
+    this.showEditModal = true;
+  }
+
+  onCloseEditModal(): void {
+    this.showEditModal = false;
+    this.selectedPost = null;
+  }
+
+  onPostUpdated(updatedPost: PostAggregationResponse): void {
+    const index = this.posts.findIndex(p => p.postId === updatedPost.postId);
+    if (index !== -1) {
+      this.posts[index] = { ...this.posts[index], ...updatedPost };
+    }
+    this.onCloseEditModal();
   }
 }
 
