@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../enviroment/enviroment';
 import { HttpClient } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError, tap, switchMap, map } from 'rxjs/operators';
+import { ProfileService } from './profile.service';
 import { v4 as uuidv4 } from 'uuid';
 import { ResponseWrapper } from '../Interfaces/response-wrapper/response-wrapper';
 import { PostResponseDTO } from '../Interfaces/post/post-response-dto';
@@ -23,10 +24,18 @@ export class PostService {
   private baseUrl = environment.apiBaseUrl;
 
 
-  constructor(private _http: HttpClient) { }
+  constructor(
+    private _http: HttpClient,
+    private profileService: ProfileService
+  ) { }
 
   AddPost(postDto: PostCreateDto): Observable<ResponseWrapper<PostResponseDTO>> {
     const formData = this.buildFormData(postDto);
+    const userId = localStorage.getItem('userId');
+    
+    if (!userId) {
+      return throwError(() => new Error('User not logged in'));
+    }
 
     // Ensure HasMedia is always sent
     formData.append('HasMedia', String(postDto.Media && postDto.Media.length > 0));
@@ -35,8 +44,23 @@ export class PostService {
       `${this.baseUrl}post`,
       formData
     ).pipe(
+      switchMap(response => {
+        // After post is created, get the user profile
+        return this.profileService.GetProfileByUserIdMin(userId).pipe(
+          map(profileResponse => {
+            // Combine the post response with the user profile
+            return {
+              ...response,
+              data: {
+                ...response.data,
+                author: profileResponse.data
+              }
+            };
+          })
+        );
+      }),
       tap(response => {
-        console.log('Post created successfully:', response);
+        console.log('Post created successfully with author:', response);
       }),
       catchError((error) => {
         console.error('--- Full Error Response ---');
@@ -118,19 +142,20 @@ export class PostService {
 
   private buildFormData(postDto: any): FormData {
     const formData = new FormData();
-    formData.append('content', postDto.content ?? postDto.Content);
-    formData.append('privacy', String(postDto.privacy ?? postDto.Privacy));
-    formData.append('mediaType', String(postDto.mediaType ?? postDto.MediaType));
-    // HasMedia will be appended in AddPost
-    const mediaArr = postDto.media ?? postDto.Media;
+    formData.append('Content', postDto.Content);
+    formData.append('Privacy', String(postDto.Privacy));
+    formData.append('MediaType', String(postDto.MediaType));
+    
+    const mediaArr = postDto.Media;
     if (mediaArr && mediaArr.length > 0) {
       mediaArr.forEach((media: any, index: number) => {
-        if (media.file instanceof File) {
-          formData.append('media', media.file);
+        if (media.File instanceof File) {
+          formData.append('Media', media.File);
         }
       });
     }
-    // 3. Log the FormData for debugging
+    
+    // Log the FormData for debugging
     console.log('--- FormData Contents ---');
     formData.forEach((value, key) => {
       console.log(key, value);

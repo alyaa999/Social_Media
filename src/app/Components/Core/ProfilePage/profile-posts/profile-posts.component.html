@@ -32,9 +32,7 @@
         <div *ngIf="post.hasMedia && post.media?.length" class="mb-2 px-14">
             <div class="grid grid-cols-1 gap-2 max-h-[300px] overflow-hidden">
                 <ng-container *ngFor="let media of post.media">
-                  <img *ngIf="media.Type === 1" [src]="media.Url" alt="Post image"
-                      class="w-full object-cover rounded-md">
-                  <img *ngIf="!media.Type && media.Type" [src]="media.Url" alt="Post image"
+                  <img [src]="media.Url" alt="Post image"
                       class="w-full object-cover rounded-md">
                   <!-- You can add support for VIDEO, AUDIO, DOCUMENT here if needed -->
                 </ng-container>

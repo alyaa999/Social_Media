@@ -53,22 +53,20 @@ export class NewPostComponent {
     this.isLoading = true;
     this.error = null;
 
-    // Create post data using the new DTO
     const hasMedia = !!this.selectedImage;
-    const postData: any = {
-      content: content,
-      privacy: Privacy.PUBLIC,
-      mediaType: hasMedia ? MediaType.IMAGE : MediaType.UNKNOWN,
-      media: hasMedia ? [{
-        id: '',
-        mediaType: MediaType.IMAGE,
-        mediaUrl: '',
-        file: this.selectedImage
-      } as any] : [],
-      hasMedia: hasMedia
+    const postData: PostCreateDto = {
+      Content: content,
+      Privacy: Privacy.PUBLIC,
+      MediaType: hasMedia ? MediaType.IMAGE : MediaType.UNKNOWN,
+      Media: hasMedia ? [{
+        Id: '',
+        MediaType: MediaType.IMAGE,
+        MediaUrl: '',
+        File: this.selectedImage // Will be handled by buildFormData
+      } as any] : []
     };
 
-    console.log('Creating post with new DTO:', postData);
+    console.log('Creating post with DTO:', postData);
 
     this.postService.AddPost(postData).subscribe({
       next: (response: any) => {
