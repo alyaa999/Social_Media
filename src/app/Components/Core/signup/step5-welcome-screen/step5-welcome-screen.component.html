@@ -1,0 +1,21 @@
+<div class="w-full max-w-md mx-auto bg-[#0f2a36] p-10 rounded-3xl shadow-2xl text-white text-center">
+  <!-- Progress Bar -->
+  <div class="w-full h-1 rounded-full mb-6 bg-gray-700 relative">
+    <div class="h-1 rounded-full bg-gradient-to-r from-red-500 via-yellow-400 to-green-400 absolute top-0 left-0 w-full"></div>
+  </div>
+
+  <!-- Confetti Icon -->
+  <div class="text-5xl mb-4">🎉</div>
+
+  <!-- Welcome Message -->
+  <h2 class="text-2xl md:text-3xl font-bold text-lime-400 mb-2">Welcome to <br>Thryve!</h2>
+  <p class="text-gray-300 mb-2">
+    Hey {{ signupService.formData.firstName }}! Your account has been <br>created successfully.
+  </p>
+  <p class="text-gray-500 italic text-sm mb-8">Together we create, together we thryve 🚀</p>
+
+  <!-- Get Started Button -->
+  <button type="button" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-6 rounded-full">
+    Get Started
+  </button>
+</div>
