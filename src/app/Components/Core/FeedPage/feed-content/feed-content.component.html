@@ -82,6 +82,7 @@
     [visible]="showModal"
     [mode]="modalMode"
     [loading]="modalLoading"
+    [postId]="selectedPostId!"
     (close)="closeModal()"
     (commentSubmitted)="handleCommentSubmission($event)"
   ></app-comment-modal>

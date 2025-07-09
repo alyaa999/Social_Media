@@ -9,9 +9,12 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
     token = localStorage.getItem('refreshToken');
   }
 
-  const setHeaders: Record<string, string> = {
-    'Content-Type': 'application/json'
-  };
+  let setHeaders: Record<string, string> = {};
+  
+  // Only set Content-Type to application/json if it's not a FormData request
+  if (!(req.body instanceof FormData)) {
+    setHeaders['Content-Type'] = 'application/json';
+  }
 
   if (token) {
     setHeaders['Authorization'] = `Bearer ${token}`;
