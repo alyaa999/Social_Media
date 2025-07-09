@@ -31,6 +31,38 @@ export class FeedContentComponent implements OnInit {
 
   constructor(private feedService: FeedService, private commentService: CommentService, private reactionService : ReactionService) {}
 
+  toggleLike(post: Post) {
+    // Simulate userId for demo; replace with real userId in production
+    const userId = localStorage.getItem('userId') || 'current-user-id';
+    if (!post.isLiked) {
+      // Like the post
+      post.isLiked = true;
+      post.reactsCount = (post.reactsCount || 0) + 1;
+      // Call API if needed
+      this.reactionService.addReactionComment({ postId: post.postId, reactionType: 0 }, userId).subscribe({
+        next: () => {},
+        error: () => {
+          // Rollback UI if error
+          post.isLiked = false;
+          post.reactsCount = Math.max(0, (post.reactsCount || 1) - 1);
+        }
+      });
+    } else {
+      // Unlike the post
+      post.isLiked = false;
+      post.reactsCount = Math.max(0, (post.reactsCount || 1) - 1);
+      // Call API if needed
+      this.reactionService.deleteReactionComment({ postId: post.postId }, userId).subscribe({
+        next: () => {},
+        error: () => {
+          // Rollback UI if error
+          post.isLiked = true;
+          post.reactsCount = (post.reactsCount || 0) + 1;
+        }
+      });
+    }
+  }
+
   openCommentsModal(postId: string) {
     this.selectedReactions = []; // Clear reactions before opening comments
 

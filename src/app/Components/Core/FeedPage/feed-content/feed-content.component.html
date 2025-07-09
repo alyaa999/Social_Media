@@ -52,13 +52,19 @@
     
     <!-- Post Actions -->
     <div class="flex items-center gap-6 text-sm text-fg-muted pt-2 mt-1 px-1">
-      <button class="flex items-center hover:text-redis-red transition-colors" (click)="openReactionsModal(post.postId)">
+      <button 
+        class="flex items-center transition-colors px-2 py-1 rounded-lg"
+        [ngClass]="post.isLiked ? 'bg-redis-red/10 text-redis-red font-bold' : 'hover:text-redis-red'"
+        (click)="toggleLike(post)"
+        [attr.aria-pressed]="post.isLiked"
+      >
         <span class="mr-2">👍</span>
-        <span>{{ post.reactsCount || 0 }} Likes</span>
+        <span>{{ post.reactsCount || 0 }} Like{{ post.reactsCount === 1 ? '' : 's' }}</span>
       </button>
       <button class="hover:text-redis-red transition-colors" (click)="openCommentsModal(post.postId)">
         {{ post.commentsCount || 0 }} Comments
       </button>
+      <span *ngIf="post.isLiked" class="ml-2 text-xs text-redis-red font-semibold">You liked this</span>
     </div>
   </div>
   
