@@ -87,3 +87,7 @@
   background: linear-gradient(90deg, #e4291e, #dcff1e, #e4291e);
   animation: shimmer 3s ease-in-out infinite;
 }
+@keyframes shimmer {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
