@@ -46,7 +46,9 @@ export class SignupComponent {
     LastName: '',
     Bio: '',
     Address: '',
-    MobileNo: ''
+    MobileNo: '',
+    ProfilePic: undefined,
+    CoverPic: undefined
   };
 
   private authService = inject(AuthService);
@@ -129,8 +131,16 @@ export class SignupComponent {
     this.signup.resetData();
   }
 
-  async completeSignup() {
+  async completeSignup(data?: { profilePic?: File, coverPic?: File }) {
     try {
+      // Update profile data with any uploaded images
+      if (data?.profilePic) {
+        this.profileData.ProfilePic = data.profilePic;
+      }
+      if (data?.coverPic) {
+        this.profileData.CoverPic = data.coverPic;
+      }
+
       // Final profile update with all collected data
       await firstValueFrom(this.profileService.UpdateProfile(this.profileData));
       this.step = 5; // move to welcome screen

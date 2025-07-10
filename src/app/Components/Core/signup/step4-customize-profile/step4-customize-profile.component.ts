@@ -11,16 +11,19 @@ import { CommonModule } from '@angular/common';
 })
 export class Step4CustomizeProfileComponent {
   @Output() prev = new EventEmitter<void>();
-  @Output() complete = new EventEmitter<void>();
+  @Output() complete = new EventEmitter<{ profilePic?: File, coverPic?: File }>();
 
   profilePicUrl: string | null = null;
   coverPicUrl: string | null = null;
+  profilePicFile?: File;
+  coverPicFile?: File;
 
   constructor(public signupService: SignupService) {}
 
   onProfilePicSelected(event: any) {
     const file = event.target.files[0];
     if (file) {
+      this.profilePicFile = file;
       this.profilePicUrl = URL.createObjectURL(file);
     }
   }
@@ -28,12 +31,16 @@ export class Step4CustomizeProfileComponent {
   onCoverPicSelected(event: any) {
     const file = event.target.files[0];
     if (file) {
+      this.coverPicFile = file;
       this.coverPicUrl = URL.createObjectURL(file);
     }
   }
 
   completeSignup() {
-    this.complete.emit();
+    this.complete.emit({
+      profilePic: this.profilePicFile,
+      coverPic: this.coverPicFile
+    });
   }
 }
 

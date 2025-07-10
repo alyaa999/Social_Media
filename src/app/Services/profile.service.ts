@@ -48,6 +48,15 @@ export class ProfileService {
       formData.append("Email", profile.Email);
     }
 
+    // Add profile and cover pictures if they exist
+    if(profile.ProfilePic) {
+      formData.append("ProfilePic", profile.ProfilePic);
+    }
+    
+    if(profile.CoverPic) {
+      formData.append("CoverPic", profile.CoverPic);
+    }
+
     return this._http.post<ResponseWrapper<Profile>>(`${this.baseUrl}profile`, formData);
   }
 
