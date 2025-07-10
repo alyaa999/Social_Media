@@ -1,12 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../../Services/auth.service';
 import { LoginRequest } from '../../../Interfaces/Auth/LoginRequest';
 
 @Component({
   selector: 'app-login',
-  imports: [CommonModule],
+  standalone: true,
+  imports: [CommonModule, RouterModule],
   templateUrl:'./login.component.html',
   styleUrls: ['./login.component.scss']
 })
