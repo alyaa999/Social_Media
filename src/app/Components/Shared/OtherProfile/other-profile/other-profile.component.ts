@@ -6,6 +6,7 @@ import { ProfileService } from '../../../../Services/profile.service';
 import { CommentModalComponent } from '../../../Shared/comment-modal/comment-modal.component';
 import { CommentService } from '../../../../Services/comment.service';
 import { GetPagedCommentRequest } from '../../../../Interfaces/Comment/get-paged-comment-request';
+import { ReactionService } from '../../../../Services/reaction.service';
 
 @Component({
   selector: 'app-other-profile',
@@ -34,7 +35,8 @@ export class OtherProfileComponent {
     private route: ActivatedRoute,
     private postService: PostService,
     private profileService: ProfileService,
-    private commentService: CommentService
+    private commentService: CommentService,
+    private reactionService: ReactionService
   ) {
     this.route.params.subscribe(params => {
       const otherId = params['otherId'];
@@ -115,6 +117,63 @@ export class OtherProfileComponent {
     const target = event.target as HTMLImageElement | null;
     if (target) {
       target.src = fallback;
+    }
+  }
+
+  toggleLike(post: any) {
+    if (post.isLikeLoading) return; // Prevent double-clicking while loading
+    
+    // Set loading state
+    post.isLikeLoading = true;
+    
+    if (!post.isLiked) {
+      // Optimistic UI update for like
+      post.isLiked = true;
+      post.numberOfLikes = (post.numberOfLikes || 0) + 1;
+      
+      // Call API
+      this.reactionService.addReaction({ postId: post.postId }).subscribe({
+        next: (response) => {
+          if (response.statusCode === 200 || response.statusCode === 201) {
+            post.isLikeLoading = false;
+          } else {
+            // Rollback UI if status code indicates failure
+            post.isLiked = false;
+            post.numberOfLikes = Math.max(0, (post.numberOfLikes || 1) - 1);
+            post.isLikeLoading = false;
+          }
+        },
+        error: () => {
+          // Rollback UI if error
+          post.isLiked = false;
+          post.numberOfLikes = Math.max(0, (post.numberOfLikes || 1) - 1);
+          post.isLikeLoading = false;
+        }
+      });
+    } else {
+      // Optimistic UI update for unlike
+      post.isLiked = false;
+      post.numberOfLikes = Math.max(0, (post.numberOfLikes || 1) - 1);
+      
+      // Call API
+      this.reactionService.deleteReaction({ postId: post.postId }).subscribe({
+        next: (response) => {
+          if (response.statusCode === 200 || response.statusCode === 204) {
+            post.isLikeLoading = false;
+          } else {
+            // Rollback UI if status code indicates failure
+            post.isLiked = true;
+            post.numberOfLikes = (post.numberOfLikes || 0) + 1;
+            post.isLikeLoading = false;
+          }
+        },
+        error: () => {
+          // Rollback UI if error
+          post.isLiked = true;
+          post.numberOfLikes = (post.numberOfLikes || 0) + 1;
+          post.isLikeLoading = false;
+        }
+      });
     }
   }
 }

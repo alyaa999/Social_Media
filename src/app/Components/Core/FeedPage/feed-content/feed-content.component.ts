@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { NewPostComponent } from '../../../Shared/new-post/new-post.component';
-import { Post, STATIC_POSTS } from '../../../../Interfaces/feed/post';
 import { SimpleUserProfile } from '../../../../Interfaces/post/simple-user-profile';
 import { CommentModalComponent } from '../../../Shared/comment-modal/comment-modal.component';
 import { AggregatedComment, STATIC_COMMENTS } from '../../../../Interfaces/Comment/aggregated-comment';
@@ -11,6 +10,7 @@ import { FeedService } from '../../../../Services/feed.service';
 import { CommentService } from '../../../../Services/comment.service';
 import { GetPagedCommentRequest } from '../../../../Interfaces/Comment/get-paged-comment-request';
 import { ReactionService } from '../../../../Services/reaction.service';
+import { Post } from '../../../../Interfaces/feed/post';
 
 @Component({
   selector: 'app-feed-content',
@@ -34,32 +34,61 @@ export class FeedContentComponent implements OnInit {
   constructor(private feedService: FeedService, private commentService: CommentService, private reactionService : ReactionService) {}
 
   toggleLike(post: Post) {
+    if (post.isLikeLoading) return; // Prevent double-clicking while loading
+    
     // Simulate userId for demo; replace with real userId in production
     const userId = localStorage.getItem('userId') || 'current-user-id';
-    if (!post.isLiked) {
-      // Like the post
+    const wasLiked = post.isLiked;
+    
+    // Set loading state
+    post.isLikeLoading = true;
+    
+    if (!wasLiked) {
+      // Optimistic UI update for like
       post.isLiked = true;
       post.reactsCount = (post.reactsCount || 0) + 1;
-      // Call API if needed
-      this.reactionService.addReactionComment({ postId: post.postId, reactionType: 0 }, userId).subscribe({
-        next: () => {},
+      
+      // Call API
+      this.reactionService.addReaction({ postId: post.postId}).subscribe({
+        next: (response) => {
+          if (response.statusCode === 200 || response.statusCode === 201) {
+            post.isLikeLoading = false;
+          } else {
+            // Rollback UI if status code indicates failure
+            post.isLiked = false;
+            post.reactsCount = Math.max(0, (post.reactsCount || 1) - 1);
+            post.isLikeLoading = false;
+          }
+        },
         error: () => {
           // Rollback UI if error
           post.isLiked = false;
           post.reactsCount = Math.max(0, (post.reactsCount || 1) - 1);
+          post.isLikeLoading = false;
         }
       });
     } else {
-      // Unlike the post
+      // Optimistic UI update for unlike
       post.isLiked = false;
       post.reactsCount = Math.max(0, (post.reactsCount || 1) - 1);
-      // Call API if needed
-      this.reactionService.deleteReactionComment({ postId: post.postId }, userId).subscribe({
-        next: () => {},
+      
+      // Call API
+      this.reactionService.deleteReaction({ postId: post.postId }).subscribe({
+        next: (response) => {
+          if (response.statusCode === 200 || response.statusCode === 204) {
+            post.isLikeLoading = false;
+          } else {
+            // Rollback UI if status code indicates failure
+            post.isLiked = true;
+            post.reactsCount = (post.reactsCount || 0) + 1;
+            post.isLikeLoading = false;
+          }
+        },
         error: () => {
           // Rollback UI if error
           post.isLiked = true;
           post.reactsCount = (post.reactsCount || 0) + 1;
+          post.isLikeLoading = false;
         }
       });
     }
