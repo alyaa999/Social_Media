@@ -13,9 +13,13 @@
          class="message"
          [class.sent]="message.senderId === currentUserId"
          [class.received]="message.senderId !== currentUserId">
-      <div class="message-avatar">{{ message.senderProfile.profilePictureUrl }}</div>
+      <div class="message-avatar">
+        {{ message.senderProfile?.profilePictureUrl || 
+           (message.senderProfile?.displayName?.charAt(0) || '👤') }}
+      </div>
       <div class="message-content">
-        <div class="message-text">{{ message.content }}</div>      </div>
+        <div class="message-text">{{ message.content }}</div>
+      </div>
     </div>
   </div>
 </div>

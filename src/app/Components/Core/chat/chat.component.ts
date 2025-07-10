@@ -1,4 +1,3 @@
-// chat.component.ts
 import { Component } from '@angular/core';
 import { ConversationDTO } from '../../../Interfaces/Chat/ConversationDTO';
 import { ChatService } from './chat.service';
@@ -11,7 +10,7 @@ import { CommonModule } from '@angular/common';
   selector: 'app-chat',
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.css'],
-  imports: [ConversationListComponent, MessageListComponent, MessageInputComponent,CommonModule]
+  imports: [ConversationListComponent, MessageListComponent, MessageInputComponent, CommonModule]
 })
 export class ChatComponent {
   currentConversation: ConversationDTO | null = null;
@@ -19,6 +18,10 @@ export class ChatComponent {
   sidebarOpen = false;
 
   constructor(private chatService: ChatService) {}
+
+  get currentConversationId(): string {
+    return this.currentConversation?.id || '';
+  }
 
   selectConversation(conversation: ConversationDTO) {
     this.currentConversation = conversation;
