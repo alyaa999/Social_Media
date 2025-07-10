@@ -26,7 +26,7 @@ export class ProfileService {
   }
 
   GetProfileByUserIdMin(userId: string){
-    return this._http.get<ResponseWrapper<SimpleUserProfile>>(`${this.baseUrl}min/id/${userId}`);
+    return this._http.get<ResponseWrapper<SimpleUserProfile>>(`${this.baseUrl}profile/min/${userId}`);
   }
 
   GetProfileByUserNameMin(userName: string){

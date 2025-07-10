@@ -68,10 +68,11 @@
         <span class="text-xs text-dusk-50">{{ newCommentText.length }}/400</span>
         <button
             (click)="onPostComment()"
-            [disabled]="!newCommentText.trim()"
-            class="px-4 py-2 bg-hyper-light-blue text-white font-semibold rounded-md hover:bg-hyper-blue disabled:bg-dusk-30 disabled:cursor-not-allowed shadow"
+            [disabled]="!newCommentText.trim() || submitting"
+            class="px-4 py-2 bg-hyper-light-blue text-white font-semibold rounded-md hover:bg-hyper-blue disabled:bg-dusk-30 disabled:cursor-not-allowed shadow flex items-center gap-2"
         >
-            Post
+            <div *ngIf="submitting" class="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
+            <span>Post</span>
         </button>
       </div>
     </div>

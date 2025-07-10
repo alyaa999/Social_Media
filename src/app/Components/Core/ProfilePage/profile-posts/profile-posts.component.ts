@@ -43,6 +43,12 @@ export class ProfilePostsComponent implements OnInit {
     this.selectedPostId = postId;
     this.modalMode = 'comments';
     this.showModal = true;
+    this.selectedComments = [];
+    this.selectedReactions = [];
+    this.loadComments(postId);
+  }
+
+  private loadComments(postId: string) {
     this.modalLoading = true;
     const req: GetPagedCommentRequest = {
       PostId: postId,
@@ -52,7 +58,6 @@ export class ProfilePostsComponent implements OnInit {
       next: (data) => {
         this.selectedComments = data.data;
         this.modalLoading = false;
-        console.log('Comments loaded:', data);
       },
       error: (err) => {
         this.modalLoading = false;
@@ -70,26 +75,16 @@ export class ProfilePostsComponent implements OnInit {
   }
 
   onCommentSubmitted(commentText: string) {
-    if (!this.selectedPostId || !commentText.trim()) return;
+    // Find the post and update its comment count immediately
+    const post = this.posts.find(p => p.postId === this.selectedPostId);
+    if (post) {
+      post.numberOfComments = (post.numberOfComments || 0) + 1;
+    }
 
-    const commentData = {
-      PostId: this.selectedPostId,
-      Content: commentText,
-      HasMedia: false,
-      MediaType: MediaType.None,
-      UserId: this.userId
-    };
-
-    this.commentService.CreateComment(commentData).subscribe({
-      next: (response) => {
-        if (this.selectedPostId) {
-          this.openCommentsModal(this.selectedPostId);
-        }
-      },
-      error: (err) => {
-        console.error('Error posting comment:', err);
-      }
-    });
+    // Reload comments to show the new comment immediately
+    if (this.selectedPostId) {
+      this.loadComments(this.selectedPostId);
+    }
   }
 
   ngOnInit(): void {

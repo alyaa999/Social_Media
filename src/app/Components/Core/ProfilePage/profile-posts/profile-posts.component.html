@@ -99,12 +99,13 @@
 
     <!-- Comments Modal -->
     <app-comment-modal
-        *ngIf="showModal"
+        *ngIf="showModal && selectedPostId"
         [comments]="selectedComments"
         [reactions]="selectedReactions"
         [visible]="showModal"
         [mode]="modalMode"
         [loading]="modalLoading"
+        [postId]="selectedPostId"
         (close)="onCloseModal()"
         (commentSubmitted)="onCommentSubmitted($event)">
     </app-comment-modal>

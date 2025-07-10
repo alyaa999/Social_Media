@@ -47,12 +47,7 @@ export class OtherProfileComponent {
     });
   }
 
-  openCommentsModal(postId: string) {
-    this.selectedReactions = [];
-    this.selectedComments = [];
-    this.selectedPostId = postId;
-    this.modalMode = 'comments';
-    this.showModal = true;
+  private loadComments(postId: string) {
     this.modalLoading = true;
     const req: GetPagedCommentRequest = {
       PostId: postId,
@@ -65,8 +60,31 @@ export class OtherProfileComponent {
       },
       error: (err) => {
         this.modalLoading = false;
+        console.error('Error loading comments:', err);
       }
     });
+  }
+
+  openCommentsModal(postId: string) {
+    this.selectedReactions = [];
+    this.selectedComments = [];
+    this.selectedPostId = postId;
+    this.modalMode = 'comments';
+    this.showModal = true;
+    this.loadComments(postId);
+  }
+
+  onCommentSubmitted(commentText: string) {
+    // Find the post and update its comment count
+    const post = this.posts.find(p => p.postId === this.selectedPostId);
+    if (post) {
+      post.numberOfComments = (post.numberOfComments || 0) + 1;
+    }
+    
+    // Reload comments to show the new comment immediately
+    if (this.selectedPostId) {
+      this.loadComments(this.selectedPostId);
+    }
   }
 
   closeModal() {
