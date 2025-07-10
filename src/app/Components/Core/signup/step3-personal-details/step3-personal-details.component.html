@@ -1,0 +1,70 @@
+<div class="signup-card bg-[#112D3A] text-white p-10 rounded-2xl shadow-xl w-[90vw] max-w-xl animate-slideInUp">
+  <!-- Progress Bar -->
+  <div class="h-1 w-full bg-gray-700 rounded mb-6 overflow-hidden">
+    <div class="h-full bg-gradient-to-r from-green-400 via-yellow-400 to-red-500 w-[75%]"></div>
+  </div>
+
+  <!-- Header -->
+  <div class="text-center mb-8">
+    <h2 class="text-3xl font-extrabold text-[#dcff1e] mb-2 signup-title">Tell Us About You</h2>
+    <p class="text-gray-400 text-base">Let’s get to know the amazing person behind the account</p>
+  </div>
+
+  <!-- Form -->
+  <form #form="ngForm" class="flex flex-col gap-6">
+    <!-- Date of Birth (Required) -->
+    <div>
+      <input
+        type="date"
+        name="dob"
+        placeholder="Birthdate"
+        [(ngModel)]="signupService.formData.dob"
+        required
+        #dob="ngModel"
+        [ngClass]="{ 'border-red-500': dob.invalid && dob.touched }"
+        class="w-full px-5 py-3 rounded-lg bg-[#0c1f27] text-white border-2 border-[#2d4754] focus:outline-none focus:ring-2 focus:ring-[#dcff1e] placeholder:text-gray-400"
+      />
+      <p *ngIf="dob.invalid && dob.touched" class="text-red-500 text-sm mt-1">Birthdate is required</p>
+    </div>
+
+    <!-- Address (Optional) -->
+    <div>
+      <input
+        type="text"
+        name="address"
+        placeholder="Address (optional)"
+        [(ngModel)]="signupService.formData.address"
+        class="w-full px-5 py-3 rounded-lg bg-[#0c1f27] text-white border-2 border-[#2d4754] focus:outline-none focus:ring-2 focus:ring-[#dcff1e] placeholder:text-gray-400"
+      />
+    </div>
+
+    <!-- Mobile Number (Optional) -->
+    <div>
+      <input
+        type="tel"
+        name="mobile"
+        placeholder="Mobile Number (optional)"
+        [(ngModel)]="signupService.formData.mobile"
+        class="w-full px-5 py-3 rounded-lg bg-[#0c1f27] text-white border-2 border-[#2d4754] focus:outline-none focus:ring-2 focus:ring-[#dcff1e] placeholder:text-gray-400"
+      />
+    </div>
+
+    <!-- Navigation Buttons -->
+    <div class="flex justify-between mt-6">
+      <button
+        type="button"
+        (click)="prev.emit()"
+        class="bg-red-500 text-white px-10 py-2 rounded-lg font-semibold hover:bg-red-600 transition"
+      >
+        Back
+      </button>
+      <button
+        type="button"
+        (click)="validateAndProceed(form)"
+        class="bg-red-500 text-white px-10 py-2 rounded-lg font-semibold hover:bg-red-600 transition"
+      >
+        Next
+      </button>
+    </div>
+  </form>
+</div>

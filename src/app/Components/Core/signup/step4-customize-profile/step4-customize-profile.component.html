@@ -1,0 +1,48 @@
+<div class="w-full max-w-xl mx-auto bg-[#0f2a36] p-8 rounded-3xl shadow-lg text-white">
+  <div class="w-full h-1 rounded-full mb-6 bg-gray-700 relative">
+    <div class="h-1 rounded-full bg-gradient-to-r from-red-500 via-yellow-400 to-green-400 absolute top-0 left-0 w-full"></div>
+  </div>
+
+  <h2 class="text-2xl md:text-3xl font-bold text-center text-lime-400 mb-2">Customize Your Profile</h2>
+  <p class="text-center text-gray-300 mb-6">Add a personal touch to your profile (all optional)</p>
+
+  <!-- Profile picture -->
+  <div class="flex justify-center mb-2">
+    <label for="profilePicInput" class="cursor-pointer">
+      <div class="w-24 h-24 rounded-full border-2 border-gray-600 flex items-center justify-center text-3xl bg-[#0f2a36]">
+        <ng-container *ngIf="!profilePicUrl; else profilePreview">👤</ng-container>
+        <ng-template #profilePreview>
+          <img [src]="profilePicUrl" alt="Profile" class="rounded-full w-full h-full object-cover">
+        </ng-template>
+      </div>
+    </label>
+    <input id="profilePicInput" type="file" accept="image/*" class="hidden" (change)="onProfilePicSelected($event)">
+  </div>
+  <p class="text-center text-sm text-gray-400 mb-6">Click to add profile picture</p>
+
+  <!-- Cover photo -->
+  <div class="mb-2">
+    <label for="coverPicInput" class="w-full h-32 bg-[#142a37] border border-gray-600 rounded-lg flex items-center justify-center cursor-pointer">
+      <ng-container *ngIf="!coverPicUrl; else coverPreview">
+        <span class="text-4xl opacity-70">🏞️</span>
+      </ng-container>
+      <ng-template #coverPreview>
+        <img [src]="coverPicUrl" alt="Cover" class="w-full h-full object-cover rounded-lg" />
+      </ng-template>
+    </label>
+    <input id="coverPicInput" type="file" accept="image/*" class="hidden" (change)="onCoverPicSelected($event)">
+  </div>
+  <p class="text-center text-sm text-gray-400 mb-6">Click to add cover photo</p>
+
+  <!-- Bio -->
+  <textarea [(ngModel)]="signupService.formData.bio" placeholder="Tell us about yourself" rows="3"
+    class="w-full p-3 rounded-lg bg-[#142a37] text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-lime-400 mb-6 resize-none"></textarea>
+
+  <!-- Buttons -->
+  <div class="flex justify-between mt-4">
+    <button type="button" class="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-6 rounded-lg"
+      (click)="prev.emit()">Previous</button>
+    <button type="button" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-6 rounded-lg"
+      (click)="completeSignup()">Complete Signup</button>
+  </div>
+</div>
