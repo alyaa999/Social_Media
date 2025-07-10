@@ -1,0 +1,103 @@
+<div *ngIf="show" class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+  <!-- Background overlay -->
+  <div class="flex items-center justify-center min-h-screen p-4">
+    <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" (click)="onClose()"></div>
+
+    <!-- Modal panel -->
+    <div class="relative bg-dusk-09 rounded-lg shadow-xl max-w-2xl w-full mx-4 transform transition-all">
+      <!-- Header -->
+      <div class="flex items-center justify-between p-4 border-b border-dusk-50">
+        <h3 class="text-xl font-semibold text-dusk-01">Edit Profile</h3>
+        <button type="button" class="text-dusk-50 hover:text-dusk-01" (click)="onClose()">
+          <span class="sr-only">Close</span>
+          <i class="fa fa-times"></i>
+        </button>
+      </div>
+
+      <!-- Form -->
+      <form (ngSubmit)="onSubmit()" class="p-6">
+        <!-- Error Message -->
+        <div *ngIf="error" class="mb-4 p-3 bg-red-100 text-red-700 rounded">
+          {{ error }}
+        </div>
+
+        <!-- Profile Picture -->
+        <div class="mb-6">
+          <label class="block text-dusk-01 mb-2">Profile Picture</label>
+          <div class="flex items-center space-x-4">
+            <img [src]="getProfilePicUrl()"
+              class="w-20 h-20 rounded-full object-cover">
+            <input type="file" (change)="onProfilePicChange($event)" accept="image/*"
+              class="text-dusk-50">
+          </div>
+        </div>
+
+        <!-- Cover Picture -->
+        <div class="mb-6">
+          <label class="block text-dusk-01 mb-2">Cover Picture</label>
+          <div class="relative">
+            <img [src]="getCoverPicUrl()"
+              class="w-full h-32 object-cover rounded">
+            <input type="file" (change)="onCoverPicChange($event)" accept="image/*"
+              class="mt-2 text-dusk-50">
+          </div>
+        </div>
+
+        <!-- Name Fields -->
+        <div class="grid grid-cols-2 gap-4 mb-4">
+          <div>
+            <label class="block text-dusk-01 mb-2">First Name</label>
+            <input type="text" [(ngModel)]="editedProfile.FirstName" name="firstName"
+              class="w-full px-3 py-2 bg-dusk-08 text-dusk-01 rounded border border-dusk-50 focus:border-redis-red focus:outline-none">
+          </div>
+          <div>
+            <label class="block text-dusk-01 mb-2">Last Name</label>
+            <input type="text" [(ngModel)]="editedProfile.LastName" name="lastName"
+              class="w-full px-3 py-2 bg-dusk-08 text-dusk-01 rounded border border-dusk-50 focus:border-redis-red focus:outline-none">
+          </div>
+        </div>
+
+        <!-- Username -->
+        <div class="mb-4">
+          <label class="block text-dusk-01 mb-2">Username</label>
+          <input type="text" [(ngModel)]="editedProfile.UserName" name="username"
+            class="w-full px-3 py-2 bg-dusk-08 text-dusk-01 rounded border border-dusk-50 focus:border-redis-red focus:outline-none">
+        </div>
+
+        <!-- Bio -->
+        <div class="mb-4">
+          <label class="block text-dusk-01 mb-2">Bio</label>
+          <textarea [(ngModel)]="editedProfile.Bio" name="bio" rows="3"
+            class="w-full px-3 py-2 bg-dusk-08 text-dusk-01 rounded border border-dusk-50 focus:border-redis-red focus:outline-none"></textarea>
+        </div>
+
+        <!-- Location -->
+        <div class="mb-4">
+          <label class="block text-dusk-01 mb-2">Location</label>
+          <input type="text" [(ngModel)]="editedProfile.Address" name="location"
+            class="w-full px-3 py-2 bg-dusk-08 text-dusk-01 rounded border border-dusk-50 focus:border-redis-red focus:outline-none">
+        </div>
+
+        <!-- Mobile -->
+        <div class="mb-6">
+          <label class="block text-dusk-01 mb-2">Mobile Number</label>
+          <input type="tel" [(ngModel)]="editedProfile.MobileNo" name="mobile"
+            class="w-full px-3 py-2 bg-dusk-08 text-dusk-01 rounded border border-dusk-50 focus:border-redis-red focus:outline-none">
+        </div>
+
+        <!-- Buttons -->
+        <div class="flex justify-end space-x-3">
+          <button type="button" (click)="onClose()"
+            class="px-4 py-2 border border-dusk-50 text-dusk-01 rounded hover:bg-dusk-08">
+            Cancel
+          </button>
+          <button type="submit" [disabled]="isSubmitting"
+            class="px-4 py-2 bg-redis-red text-white rounded hover:bg-redis-red/90 disabled:opacity-50">
+            <span *ngIf="!isSubmitting">Save Changes</span>
+            <span *ngIf="isSubmitting">Saving...</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

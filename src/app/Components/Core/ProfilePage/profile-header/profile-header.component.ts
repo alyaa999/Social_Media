@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { ProfileService } from '../../../../Services/profile.service';
 import { Profile } from '../../../../Interfaces/Profile/profile';
 import { HttpErrorResponse } from '@angular/common/http';
+import { EditProfileModalComponent } from '../edit-profile-modal/edit-profile-modal.component';
 
 @Component({
   selector: 'app-profile-header',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, EditProfileModalComponent],
   templateUrl: './profile-header.component.html',
   styleUrl: './profile-header.component.scss'
 })
@@ -16,6 +17,7 @@ export class ProfileHeaderComponent implements OnInit {
   isCurrentUser: boolean = false;
   error: string | null = null;
   isLoading: boolean = true;
+  showEditModal: boolean = false;
 
   constructor(private profileService: ProfileService) {}
 
@@ -49,6 +51,19 @@ export class ProfileHeaderComponent implements OnInit {
           this.isLoading = false;
         }
       });
+  }
+
+  openEditModal() {
+    this.showEditModal = true;
+  }
+
+  closeEditModal() {
+    this.showEditModal = false;
+  }
+
+  onProfileUpdated(updatedProfile: Profile) {
+    this.profile = updatedProfile;
+    this.showEditModal = false;
   }
 }
 

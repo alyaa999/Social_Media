@@ -29,12 +29,22 @@
         </div>
         <!-- Header Actions -->
         <div class="flex justify-end items-center mt-4 px-6">
-            <button *ngIf="isCurrentUser"
-                class="ml-4 px-6 py-2 rounded-full border border-dusk-50 bg-dusk-09 text-dusk-01 font-semibold hover:bg-dusk-01/10 transition">Edit
-                profile</button>
+            <button *ngIf="isCurrentUser" (click)="openEditModal()"
+                class="ml-4 px-6 py-2 rounded-full border border-dusk-50 bg-dusk-09 text-dusk-01 font-semibold hover:bg-dusk-01/10 transition">
+                Edit profile
+            </button>
             <button *ngIf="!isCurrentUser"
                 class="ml-4 pl-6 pr-6 py-2 rounded-full font-semibold bg-white hover:bg-[rgb(120_135_142)] text-white transition"
                 style="color: rgba(255, 68, 56, 1)">Follow</button>
+
+            <!-- Edit Profile Modal -->
+            <app-edit-profile-modal
+                *ngIf="profile"
+                [profile]="profile"
+                [show]="showEditModal"
+                (close)="closeEditModal()"
+                (profileUpdated)="onProfileUpdated($event)">
+            </app-edit-profile-modal>
         </div>
         <!-- Profile Info -->
         <div class="pt-10 px-14 mb-10">
