@@ -18,39 +18,63 @@ import { UserConversationsDTO } from '../Interfaces/Chat/UserConversationsDTO';
 })
 export class ChatService {
 
-  constructor( private _http: HttpClient) { }
+  constructor(private _http: HttpClient) { }
 
-  private baseUrlCommand = `${environment.apiBaseUrl}api/ChatCommand`;
-  private baseUrlQuery= `${environment.apiBaseUrl}api/ChatQuery`;
- 
+  private baseUrl = `${environment.apiBaseUrl}chat`;
+
   getMessagesPage(request: MessagesPageRequestDTO): Observable<ConversationMessagesDTO> {
     return this._http.post<ConversationMessagesDTO>(
-      `${this.baseUrlQuery}/messages`, request
+      `${this.baseUrl}/messages`, request
     );
   }
-  
+
   getUserConversations(request: ConversationsPageRequestDTO): Observable<UserConversationsDTO> {
     return this._http.post<UserConversationsDTO>(
-      `${this.baseUrlQuery}/conversations`, request
+      `${this.baseUrl}/conversations`, request
     );
   }
 
   sendMessage(message: NewMessageDTO): Observable<MessageDTO> {
-  
-    return this._http.post<MessageDTO>(`${this.baseUrlCommand}/message`, message);
-  }
+    const formData = new FormData();
 
+    // Add text fields
+    formData.append('Content', message.content ? message.content : '');
+    formData.append('ConversationId', message.conversationId);
+    if (message.senderId) {
+      formData.append('SenderId', message.senderId);
+    }
+
+    // Add media file if exists
+    if (message.media) {
+      formData.append('Media', message.media);
+      if (message.mediaType) {
+        formData.append('MediaType', message.mediaType.toString());
+      }
+    }
+
+    // Debug: log formData contents
+    for (let [key, value] of formData.entries()) {
+      console.log(`${key}:`, value);
+    }
+
+    return this._http.post<MessageDTO>(
+      `${this.baseUrl}/message`,
+      formData
+      // No need for Content-Type header - browser will set it automatically with boundary
+    );
+  }
+  
   editMessage(message: MessageDTO): Observable<MessageDTO> {
-    return this._http.patch<MessageDTO>(`${this.baseUrlCommand}/message`, message);
+    return this._http.patch<MessageDTO>(`${this.baseUrl}/message`, message);
   }
 
   deleteMessage(messageId: string): Observable<void> {
-    const url = `${this.baseUrlCommand}/message/${messageId}`;
+    const url = `${this.baseUrl}/message/${messageId}`;
     return this._http.delete<void>(url);
   }
-  
+
   markRead(request: MarkReadRequestDTO): Observable<void> {
-    const url = `${this.baseUrlCommand}/mark-read`;
+    const url = `${this.baseUrl}/mark-read`;
     return this._http.post<void>(url, request);
   }
 
@@ -60,13 +84,13 @@ export class ChatService {
     data.participants.forEach(p => formData.append('participants', p));
     if (data.userId) formData.append('userId', data.userId);
     if (data.groupName) formData.append('groupName', data.groupName);
-    if (data.groupImage)formData.append('groupImage', data.groupImage );
+    if (data.groupImage) formData.append('groupImage', data.groupImage);
     // Log actual contents
     for (const [key, value] of formData.entries()) {
       console.log(`${key}:`, value);
     }
     return this._http.post<ConversationDTO>(
-      `${this.baseUrlCommand}/conversation`,
+      `${this.baseUrl}/conversation`,
       formData
     );
   }
@@ -76,17 +100,17 @@ export class ChatService {
     formData.append('isGroup', String(data.isGroup));
     data.participants.forEach(p => formData.append('participants', p));
     if (data.groupName) formData.append('groupName', data.groupName);
-  
-  // Log actual contents
-  for (const [key, value] of formData.entries()) {
-    console.log(`${key}:`, value);
+
+    // Log actual contents
+    for (const [key, value] of formData.entries()) {
+      console.log(`${key}:`, value);
+    }
+
+    return this._http.patch<ConversationDTO>(`${this.baseUrl}/conversation`, formData);
   }
 
-    return this._http.patch<ConversationDTO>(`${this.baseUrlCommand}/conversation`, formData);
-  }
-    
 
   deleteConversation(id: string): Observable<void> {
-    return this._http.delete<void>(`${this.baseUrlCommand}/conversation/${id}`);
+    return this._http.delete<void>(`${this.baseUrl}/conversation/${id}`);
   }
 }

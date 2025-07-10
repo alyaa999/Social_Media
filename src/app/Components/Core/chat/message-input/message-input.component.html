@@ -1,0 +1,19 @@
+<!-- message-input.component.html -->
+<div class="input-area">
+    <div class="input-container">
+        <button class="attachment-btn">📎</button>
+        <textarea 
+            class="message-input" 
+            [(ngModel)]="message" 
+            placeholder="Type a message..." 
+            rows="1"
+            (keydown.enter)="sendMessage()" > 
+        </textarea>
+        <button 
+            class="send-btn" 
+            (click)="sendMessage()"
+            [disabled]="!message.trim()"> <!-- Add disabled state -->
+            ➤
+        </button>
+    </div>
+</div>

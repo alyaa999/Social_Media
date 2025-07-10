@@ -1,0 +1,74 @@
+.input-area {
+    padding: 20px;
+    background: rgba(22, 51, 65, 0.3);
+    border-top: 1px solid #2d4754;
+}
+
+.input-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(22, 51, 65, 0.5);
+    border-radius: 25px;
+    padding: 5px;
+}
+
+.attachment-btn {
+    width: 40px;
+    height: 40px;
+    border: none;
+    background: transparent;
+    color: #b9c2c6;
+    cursor: pointer;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+
+    &:hover {
+        background: rgba(228, 41, 30, 0.2);
+        color: #e4291e;
+    }
+}
+
+.message-input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    color: #fff;
+    padding: 12px 15px;
+    font-size: 14px;
+    outline: none;
+    resize: none;
+    max-height: 100px;
+
+    &::placeholder {
+        color: #b9c2c6;
+    }
+}
+
+.send-btn {
+    width: 40px;
+    height: 40px;
+    border: none;
+    background: linear-gradient(45deg, #e4291e, #ff4438);
+    color: #fff;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+
+    &:hover:not(:disabled) {
+        transform: scale(1.1);
+        box-shadow: 0 5px 15px rgba(228, 41, 30, 0.4);
+    }
+
+    &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none;
+    }
+}
