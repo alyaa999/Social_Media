@@ -7,17 +7,20 @@
     <div class="conversations">
         <div *ngFor="let conversation of filteredConversations" class="conversation"
             [class.active]="conversation === currentConversation" (click)="onConversationSelected(conversation)">
-            <div class="conversation-avatar">{{ conversation.isGroup ? '👥' : '👤' }}</div>
+            <div class="conversation-avatar">
+                <img *ngIf="conversation.isGroup" [src]="conversation.groupImageUrl || 'assets/default-group.png'"
+                    alt="Group Avatar" class="rounded-full group-avatar">
+                <img *ngIf="!conversation.isGroup" [src]="conversation.receiverProfile?.profilePictureUrl || 'assets/default-avatar.png'"
+                    alt="User Avatar" class="rounded-full user-avatar">
+            </div>
             <div class="conversation-info">
                 <div class="conversation-header">
                     <div class="conversation-name">{{ conversation.isGroup ? conversation?.groupName :
-                        conversation.lastMessage?.senderProfile?.displayName }}</div>
+                        conversation.receiverProfile?.displayName }}</div>
                     <div class="conversation-time">{{ conversation.createdAt| date: 'short' }}</div>
                 </div>
                 <div class="conversation-preview">
-                    {{ conversation.lastMessage?.senderProfile?.displayName ?
-                    conversation.lastMessage?.senderProfile?.displayName + ': ' : '' }}
-                    {{ conversation.lastMessage?.content }}
+                    {{ conversation.lastMessage?.content || 'No messages yet' }}
                 </div>
             </div>
         </div>

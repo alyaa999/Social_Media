@@ -15,7 +15,7 @@ import { MessagesPageRequestDTO } from '../../../../Interfaces/Chat/MessagesPage
 export class MessageListComponent implements OnInit {
   @Input() conversation: ConversationDTO | null = null;
   messages: MessageDTO[] = [];
-  currentUserId = 'user1'; // Replace with actual user ID from authentication service 
+  @Input() currentUserId = 'user1'; // Replace with actual user ID from authentication service
 
   constructor(private chatService: ChatService) {}
 

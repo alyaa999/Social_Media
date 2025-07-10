@@ -29,7 +29,7 @@
       <div class="chat-area flex-1 flex flex-col bg-[#091a23] relative">
         <div *ngIf="!showWelcomeState" class="active-chat flex flex-col h-full">
           <div class="flex-1 overflow-y-auto">
-            <app-message-list [conversation]="currentConversation"></app-message-list>
+            <app-message-list [conversation]="currentConversation" [currentUserId]="currentConversationId"></app-message-list>
           </div>
 
           <div class="sticky bottom-0 w-full">
