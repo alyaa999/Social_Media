@@ -1,0 +1,113 @@
+.chat-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background: #091a23;
+    color: #fff;
+    overflow: hidden;
+    font-family: 'Space Grotesk', sans-serif;
+
+    .header {
+        background: linear-gradient(135deg, #163341, #2d4754);
+        padding: 15px 20px;
+        border-bottom: 1px solid #2d4754;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #e4291e;
+            text-shadow: 0 0 20px rgba(228, 41, 30, 0.3);
+            font-family: "Norican", cursive;
+        }
+
+        .mobile-toggle {
+            background: none;
+            border: none;
+            color: #e4291e;
+            font-size: 20px;
+            cursor: pointer;
+            display: none;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #e4291e, #ff4438);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .user-status {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .user-name {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .status-indicator {
+            font-size: 12px;
+            color: #dcff1e;
+        }
+    }
+
+    .main-content {
+        display: flex;
+        height: calc(100vh - 70px);
+    }
+
+    .sidebar {
+        width: 350px;
+        background: #163341;
+        border-right: 1px solid #2d4754;
+        display: flex;
+        flex-direction: column;
+        transition: left 0.3s ease;
+    }
+
+    .chat-area {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        background: #091a23;
+    }
+
+    @media (max-width: 768px) {
+        .mobile-toggle {
+            display: block !important;
+        }
+
+        .sidebar {
+            position: absolute;
+            left: -350px;
+            z-index: 1000;
+            height: 100%;
+
+            &.open {
+                left: 0;
+            }
+        }
+    }
+}

@@ -1,0 +1,25 @@
+<!-- conversation-list.component.html -->
+<div class="conversation-list">
+    <div class="search-bar">
+        <input type="text" class="search-input" [(ngModel)]="searchTerm" placeholder="Search conversations...">
+    </div>
+
+    <div class="conversations">
+        <div *ngFor="let conversation of filteredConversations" class="conversation"
+            [class.active]="conversation === currentConversation" (click)="onConversationSelected(conversation)">
+            <div class="conversation-avatar">{{ conversation.isGroup ? '👥' : '👤' }}</div>
+            <div class="conversation-info">
+                <div class="conversation-header">
+                    <div class="conversation-name">{{ conversation.isGroup ? conversation?.groupName :
+                        conversation.lastMessage?.senderProfile?.displayName }}</div>
+                    <div class="conversation-time">{{ conversation.createdAt| date: 'short' }}</div>
+                </div>
+                <div class="conversation-preview">
+                    {{ conversation.lastMessage?.senderProfile?.displayName ?
+                    conversation.lastMessage?.senderProfile?.displayName + ': ' : '' }}
+                    {{ conversation.lastMessage?.content }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

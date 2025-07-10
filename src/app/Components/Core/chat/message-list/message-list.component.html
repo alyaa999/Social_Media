@@ -1,0 +1,21 @@
+<!-- message-list.component.html -->
+<div class="message-list">
+  <div class="chat-header">
+    <div class="chat-avatar">{{ conversation?.isGroup ? '👥' : '👤' }}</div>
+    <div class="chat-info">
+      <h3>{{ conversation?.isGroup ? conversation?.groupName : conversation?.lastMessage?.senderProfile?.displayName }}</h3>
+      <div class="chat-status">● Online</div>
+    </div>
+  </div>
+
+  <div id="messages-container" class="messages">
+    <div *ngFor="let message of messages" 
+         class="message"
+         [class.sent]="message.senderId === currentUserId"
+         [class.received]="message.senderId !== currentUserId">
+      <div class="message-avatar">{{ message.senderProfile.profilePictureUrl }}</div>
+      <div class="message-content">
+        <div class="message-text">{{ message.content }}</div>      </div>
+    </div>
+  </div>
+</div>
