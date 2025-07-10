@@ -2,8 +2,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MessageDTO } from '../../../../Interfaces/Chat/MessageDTO';
 import { ConversationDTO } from '../../../../Interfaces/Chat/ConversationDTO';
-import { ChatService } from '../chat.service';
 import { CommonModule } from '@angular/common';
+import { ChatService } from '../../../../Services/chat.service';
+import { MessagesPageRequestDTO } from '../../../../Interfaces/Chat/MessagesPageRequestDTO';
 
 @Component({
   selector: 'app-message-list',
@@ -28,9 +29,17 @@ export class MessageListComponent implements OnInit {
 
   loadMessages() {
     if (this.conversation?.id) {
-      this.chatService.getMessages(this.conversation.id).subscribe(messages => {
-        this.messages = messages;
-        setTimeout(() => this.scrollToBottom(), 0);
+      const messagepageRequest: MessagesPageRequestDTO = {
+        conversationId: this.conversation.id,
+        next: "",
+        pageSize: 20
+      };
+      this.chatService.getMessagesPage(messagepageRequest).subscribe(messages => {
+        this.messages = messages.messages;
+        console.log('Messages loaded:', this.messages);
+        this.scrollToBottom();
+      }, error => {
+        console.error('Error loading messages:', error);
       });
     }
   }

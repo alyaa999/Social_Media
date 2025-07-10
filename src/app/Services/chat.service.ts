@@ -20,37 +20,36 @@ export class ChatService {
 
   constructor( private _http: HttpClient) { }
 
-  private baseUrlCommand = `${environment.apiBaseUrl}api/ChatCommand`;
-  private baseUrlQuery= `${environment.apiBaseUrl}api/ChatQuery`;
+  private baseUrl = `${environment.apiBaseUrl}chat`;
  
   getMessagesPage(request: MessagesPageRequestDTO): Observable<ConversationMessagesDTO> {
     return this._http.post<ConversationMessagesDTO>(
-      `${this.baseUrlQuery}/messages`, request
+      `${this.baseUrl}/messages`, request
     );
   }
   
   getUserConversations(request: ConversationsPageRequestDTO): Observable<UserConversationsDTO> {
     return this._http.post<UserConversationsDTO>(
-      `${this.baseUrlQuery}/conversations`, request
+      `${this.baseUrl}/conversations`, request
     );
   }
 
   sendMessage(message: NewMessageDTO): Observable<MessageDTO> {
   
-    return this._http.post<MessageDTO>(`${this.baseUrlCommand}/message`, message);
+    return this._http.post<MessageDTO>(`${this.baseUrl}/message`, message);
   }
 
   editMessage(message: MessageDTO): Observable<MessageDTO> {
-    return this._http.patch<MessageDTO>(`${this.baseUrlCommand}/message`, message);
+    return this._http.patch<MessageDTO>(`${this.baseUrl}/message`, message);
   }
 
   deleteMessage(messageId: string): Observable<void> {
-    const url = `${this.baseUrlCommand}/message/${messageId}`;
+    const url = `${this.baseUrl}/message/${messageId}`;
     return this._http.delete<void>(url);
   }
   
   markRead(request: MarkReadRequestDTO): Observable<void> {
-    const url = `${this.baseUrlCommand}/mark-read`;
+    const url = `${this.baseUrl}/mark-read`;
     return this._http.post<void>(url, request);
   }
 
@@ -66,7 +65,7 @@ export class ChatService {
       console.log(`${key}:`, value);
     }
     return this._http.post<ConversationDTO>(
-      `${this.baseUrlCommand}/conversation`,
+      `${this.baseUrl}/conversation`,
       formData
     );
   }
@@ -82,11 +81,11 @@ export class ChatService {
     console.log(`${key}:`, value);
   }
 
-    return this._http.patch<ConversationDTO>(`${this.baseUrlCommand}/conversation`, formData);
+    return this._http.patch<ConversationDTO>(`${this.baseUrl}/conversation`, formData);
   }
     
 
   deleteConversation(id: string): Observable<void> {
-    return this._http.delete<void>(`${this.baseUrlCommand}/conversation/${id}`);
+    return this._http.delete<void>(`${this.baseUrl}/conversation/${id}`);
   }
 }

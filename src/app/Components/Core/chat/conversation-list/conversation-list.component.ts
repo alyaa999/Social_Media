@@ -1,9 +1,10 @@
 // conversation-list.component.ts
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ConversationDTO } from '../../../../Interfaces/Chat/ConversationDTO';
-import { ChatService } from '../chat.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ChatService } from '../../../../Services/chat.service';
+import { ConversationsPageRequestDTO } from '../../../../Interfaces/Chat/ConversationsPageRequestDTO';
 
 @Component({
   selector: 'app-conversation-list',
@@ -25,8 +26,20 @@ export class ConversationListComponent implements OnInit {
   }
 
   loadConversations() {
-    this.chatService.getConversations().subscribe(convs => {
-      this.conversations = convs;
+    const conversationpageRequest: ConversationsPageRequestDTO = {
+   
+      next:'',
+      pageSize: 20,
+    }
+    this.chatService.getUserConversations(conversationpageRequest).subscribe(convs => {
+      this.conversations = convs.conversations;
+      console.log('Conversations loaded:', this.conversations);
+      if (this.conversations.length > 0) {
+        this.currentConversation = this.conversations[0];
+        this.onConversationSelected(this.currentConversation);
+      }
+    }, error => {
+      console.error('Error loading conversations:', error);
     });
   }
 
