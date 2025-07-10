@@ -15,7 +15,7 @@
           'border-gray-600': !emailRef.valid && !emailRef.touched,
           'border-red-500': emailRef.invalid && emailRef.touched,
           'border-green-500': emailRef.valid
-        }" placeholder="Email Address" name="email" required email [(ngModel)]="signupService.formData.email"
+        }" placeholder="Email Address" name="email" required email        [(ngModel)]="email"
         #emailRef="ngModel" />
       <label for="email" class="form-label absolute left-4 text-sm text-gray-400 transition-all duration-200
           peer-placeholder-shown:text-base
@@ -37,8 +37,8 @@
       <input [type]="passwordVisible ? 'text' : 'password'"
         class="form-input peer w-full px-4 py-3 my-2 rounded-md bg-[#0c1f27] text-white placeholder-transparent border border-gray-600 focus:outline-none focus:ring-2 focus:ring-yellow-400"
         placeholder="Create Password" name="password" required minlength="6"
-        [(ngModel)]="signupService.formData.password" #passwordRef="ngModel"
-        (input)="onPasswordInput(signupService.formData.password)" />
+        [(ngModel)]="password" #passwordRef="ngModel"
+        (input)="onPasswordInput(password)" />
       <label for="password" class="form-label absolute left-4 text-sm text-gray-400 transition-all duration-200
           peer-placeholder-shown:text-base
           peer-placeholder-shown:top-1/3

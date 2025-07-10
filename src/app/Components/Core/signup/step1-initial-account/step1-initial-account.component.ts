@@ -2,6 +2,7 @@ import { Component, EventEmitter, Output } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { SignupService } from '../signup.service';
+import { SignupData } from '../signup.component';
 
 @Component({
   selector: 'app-step1-initial-account',
@@ -11,8 +12,10 @@ import { SignupService } from '../signup.service';
   styleUrls: ['./step1-initial-account.component.css']
 })
 export class Step1InitialAccountComponent {
-  @Output() next = new EventEmitter<void>();
+  @Output() next = new EventEmitter<SignupData>();
 
+  email: string = '';
+  password: string = '';
   passwordVisible = false;
   strengthClass = '';
   barWidth = '0%';
@@ -44,7 +47,12 @@ export class Step1InitialAccountComponent {
   }
 
   proceed() {
-    console.log("Proceeding to next step...");
-    this.next.emit();
+    if (this.email && this.password) {
+      console.log("Proceeding to next step...");
+      this.next.emit({
+        email: this.email,
+        password: this.password
+      });
+    }
   }
 }

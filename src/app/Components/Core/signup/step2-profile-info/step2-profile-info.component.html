@@ -18,7 +18,7 @@
         <input
           type="text"
           name="firstName"
-          [(ngModel)]="signupService.formData.firstName"
+          [(ngModel)]="formData.FirstName"
           required
           #firstName="ngModel"
           placeholder="First Name"
@@ -33,7 +33,7 @@
         <input
           type="text"
           name="lastName"
-          [(ngModel)]="signupService.formData.lastName"
+          [(ngModel)]="formData.LastName"
           required
           #lastName="ngModel"
           placeholder="Last Name"
@@ -48,7 +48,7 @@
         <input
           type="text"
           name="username"
-          [(ngModel)]="signupService.formData.username"
+          [(ngModel)]="formData.UserName"
           required
           #username="ngModel"
           placeholder="Choose Username"

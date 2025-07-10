@@ -11,9 +11,11 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
   let setHeaders: Record<string, string> = {};
   
-  // Only set Content-Type to application/json if it's not a FormData request
+  // For FormData requests, don't set any Content-Type or Accept headers
+  // Let the browser handle it automatically
   if (!(req.body instanceof FormData)) {
     setHeaders['Content-Type'] = 'application/json';
+    setHeaders['Accept'] = 'application/json';
   }
 
   if (token) {

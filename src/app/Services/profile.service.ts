@@ -11,21 +11,11 @@ import { ProfileRequest } from '../Interfaces/Profile/profile-request';
 })
 export class ProfileService {
 
-  private headers = new HttpHeaders()
-    .set("Authorization", environment.token)
-    .set("Accept", "application/json");
-
   private baseUrl = environment.apiBaseUrl;  
 
   constructor(private _http: HttpClient) {}
 
-  private createHeader(userId: string,  Email?:string){
-    if(Email !== undefined)
-    {
-      return this.headers.set("userId", userId).set("Email", Email);
-    }
-    return this.headers.set("userId", userId);
-  }
+  
 
   GetProfileByUserId(userId: string){
     return this._http.get<ResponseWrapper<Profile>>(`${this.baseUrl}profile/${userId}`);
@@ -43,45 +33,32 @@ export class ProfileService {
     return this._http.get<ResponseWrapper<SimpleUserProfile>>(`${this.baseUrl}/min/username/${userName}`);
   }
 
-  AddProfile(userId: string, Email: string, profile: ProfileRequest){
-    const headers = this.createHeader(userId, Email);
+  AddProfile(Email: string, profile: ProfileRequest){
 
     const formData = new FormData();
-    formData.append("BirthDate", String(profile.BirthDate));
+    const birthDate = new Date(profile.BirthDate).toISOString().split('T')[0];
+    formData.append("BirthDate", birthDate);
 
-    if(profile.FirstName)
-      formData.append("FirstName", profile.FirstName);
-
-    if(profile.LastName)
-      formData.append("LastName", profile.LastName);
-
-    if(profile.UserName)
+    // Append UserName and Email as they are required for initial profile
+    if(profile.UserName) {
       formData.append("UserName", profile.UserName);
+    }
+    
+    if(profile.Email) {
+      formData.append("Email", profile.Email);
+    }
 
-    if(profile.Address)
-      formData.append("Address", profile.Address);
-
-    if(profile.MobileNo)
-      formData.append("MobileNo", profile.MobileNo);
-
-    if(profile.Bio)
-      formData.append("Bio", profile.Bio);
-
-    if(profile.ProfilePic)
-      formData.append("ProfilePic", profile.ProfilePic);
-
-    if(profile.CoverPic)
-      formData.append("CoverPic", profile.CoverPic);
-
-    return this._http.post<ResponseWrapper<Profile>>(this.baseUrl, formData, {headers});
-
+    return this._http.post<ResponseWrapper<Profile>>(`${this.baseUrl}profile`, formData);
   }
 
-  UpdateProfile(Email: string, userId: string,  profile:ProfileRequest){
-    const headers = this.createHeader(userId, Email);
-
+  UpdateProfile(profile:Partial<ProfileRequest>){
     const formData = new FormData();
-    formData.append("BirthDate", String(profile.BirthDate));
+    
+    // Only append BirthDate if it exists
+    if (profile.BirthDate) {
+      const birthDate = new Date(profile.BirthDate).toISOString().split('T')[0];
+      formData.append("BirthDate", birthDate);
+    }
 
     if(profile.FirstName)
       formData.append("FirstName", profile.FirstName);
@@ -101,18 +78,20 @@ export class ProfileService {
     if(profile.Bio)
       formData.append("Bio", profile.Bio);
 
+    if(profile.Email)
+      formData.append("Email", profile.Email);
+
     if(profile.ProfilePic)
       formData.append("ProfilePic", profile.ProfilePic);
 
     if(profile.CoverPic)
       formData.append("CoverPic", profile.CoverPic);
 
-    return this._http.patch<ResponseWrapper<Profile>>(this.baseUrl, formData, {headers});
+    // Let the browser set the appropriate Content-Type for FormData
+    return this._http.patch<ResponseWrapper<Profile>>(`${this.baseUrl}profile`, formData);
   }
 
   DeleteProfile(userId: string){
-    const headers = this.createHeader(userId);
-    
-    return this._http.delete<ResponseWrapper<boolean>>(this.baseUrl, {headers});
+    return this._http.delete<ResponseWrapper<boolean>>(this.baseUrl);
   }
 }
