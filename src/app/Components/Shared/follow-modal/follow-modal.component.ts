@@ -14,6 +14,7 @@ export class FollowModalComponent {
   @Input() users: ProfileAggregation[] = [];
   @Input() title: string = '';
   @Input() visible: boolean = false;
+  @Input() isLoading: boolean = false;
   @Output() close = new EventEmitter<void>();
 
   onClose() {

@@ -4,11 +4,14 @@ import { ProfileService } from '../../../../Services/profile.service';
 import { Profile } from '../../../../Interfaces/Profile/profile';
 import { HttpErrorResponse } from '@angular/common/http';
 import { EditProfileModalComponent } from '../edit-profile-modal/edit-profile-modal.component';
+import { FollowModalComponent } from '../../../Shared/follow-modal/follow-modal.component';
+import { FollowService } from '../../../../Services/follow.service';
+import { ProfileAggregation } from '../../../../Interfaces/Profile/profile-aggrigation';
 
 @Component({
   selector: 'app-profile-header',
   standalone: true,
-  imports: [CommonModule, EditProfileModalComponent],
+  imports: [CommonModule, EditProfileModalComponent, FollowModalComponent],
   templateUrl: './profile-header.component.html',
   styleUrl: './profile-header.component.scss'
 })
@@ -19,7 +22,16 @@ export class ProfileHeaderComponent implements OnInit {
   isLoading: boolean = true;
   showEditModal: boolean = false;
 
-  constructor(private profileService: ProfileService) {}
+  // Follow Modal state
+  showFollowModal: boolean = false;
+  followModalTitle: string = '';
+  followModalUsers: ProfileAggregation[] = [];
+  isLoadingFollowList: boolean = false;
+
+  constructor(
+    private profileService: ProfileService,
+    private followService: FollowService
+  ) {}
 
   ngOnInit() {
     this.loadProfile();
@@ -64,6 +76,53 @@ export class ProfileHeaderComponent implements OnInit {
   onProfileUpdated(updatedProfile: Profile) {
     this.profile = updatedProfile;
     this.showEditModal = false;
+  }
+
+  openFollowModal(type: 'followers' | 'following') {
+    if (!this.profile?.userId) return;
+
+    this.isLoadingFollowList = true;
+    this.showFollowModal = true;
+    this.followModalTitle = type === 'followers' ? 'Followers' : 'Following';
+
+    if (type === 'followers') {
+      const request = {
+        OtherId: this.profile.userId,
+        next: ''
+      };
+
+      this.followService.getFollowers(request, this.profile.userId).subscribe({
+        next: (response) => {
+          this.followModalUsers = response.data;
+          this.isLoadingFollowList = false;
+        },
+        error: (error) => {
+          console.error(`Error loading ${type}:`, error);
+          this.isLoadingFollowList = false;
+        }
+      });
+    } else {
+      const request = {
+        OtherId: this.profile.userId,
+        next: ''
+      };
+
+      this.followService.getFollowing(request).subscribe({
+        next: (response) => {
+          this.followModalUsers = response.data;
+          this.isLoadingFollowList = false;
+        },
+        error: (error) => {
+          console.error(`Error loading ${type}:`, error);
+          this.isLoadingFollowList = false;
+        }
+      });
+    }
+  }
+
+  closeFollowModal() {
+    this.showFollowModal = false;
+    this.followModalUsers = [];
   }
 }
 

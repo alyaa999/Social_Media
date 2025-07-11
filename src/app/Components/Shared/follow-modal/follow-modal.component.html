@@ -20,7 +20,13 @@
 
             <!-- Body -->
             <div class="px-6 py-4 max-h-[60vh] overflow-y-auto">
-                <div class="space-y-4">
+                <!-- Loading State -->
+                <div *ngIf="isLoading" class="flex justify-center items-center py-8">
+                    <div class="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-redis-red"></div>
+                </div>
+
+                <!-- User List -->
+                <div class="space-y-4" *ngIf="!isLoading">
                     <div *ngFor="let user of users" 
                         class="flex items-center p-4 rounded-xl bg-dusk-08 hover:bg-dusk-07 transition-colors">
                         <a [routerLink]="['/other', user.userId]" (click)="onClose()" class="flex items-center flex-1 min-w-0">
