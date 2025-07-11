@@ -1,23 +1,24 @@
 import { Component } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { PostService } from '../../../../Services/post.service';
 import { ProfileService } from '../../../../Services/profile.service';
-import { CommentModalComponent } from '../../../Shared/comment-modal/comment-modal.component';
 import { CommentService } from '../../../../Services/comment.service';
-import { GetPagedCommentRequest } from '../../../../Interfaces/Comment/get-paged-comment-request';
 import { ReactionService } from '../../../../Services/reaction.service';
-import { MediaType } from '../../../../Interfaces/feed/enums';
 import { FollowService } from '../../../../Services/follow.service';
 import { ChatService } from '../../../../Services/chat.service';
-import { ConversationsPageRequestDTO } from '../../../../Interfaces/Chat/ConversationsPageRequestDTO';
-import { UserConversationsDTO } from '../../../../Interfaces/Chat/UserConversationsDTO';
+import { CommentModalComponent } from '../../../Shared/comment-modal/comment-modal.component';
+import { FollowModalComponent } from '../../../Shared/follow-modal/follow-modal.component';
+import { MediaType } from '../../../../Interfaces/Chat/MediaType';
+import { GetPagedCommentRequest } from '../../../../Interfaces/Comment/get-paged-comment-request';
+import { ProfileAggregation } from '../../../../Interfaces/Profile/profile-aggrigation';
 import { ConversationDTO } from '../../../../Interfaces/Chat/ConversationDTO';
-import { NewConversationDTO } from '../../../../Interfaces/Chat/NewConversationDTO';
+import { UserConversationsDTO } from '../../../../Interfaces/Chat/UserConversationsDTO';
 
 @Component({
   selector: 'app-other-profile',
-  imports: [CommonModule, DatePipe, CommentModalComponent],
+  standalone: true,
+  imports: [CommonModule, DatePipe, CommentModalComponent, FollowModalComponent, RouterModule],
   templateUrl: './other-profile.component.html',
   styleUrl: './other-profile.component.css'
 })
@@ -43,6 +44,12 @@ export class OtherProfileComponent {
   isFollowingUser: boolean = false;
   isFollowerUser: boolean = false;
   isFollowLoading: boolean = false;
+
+  // Follow Modal state
+  showFollowModal: boolean = false;
+  followModalTitle: string = '';
+  followModalUsers: ProfileAggregation[] = [];
+  isLoadingFollowList: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -353,5 +360,52 @@ export class OtherProfileComponent {
     //     console.error('Error loading conversations:', error);
     //   }
     // });
+  }
+
+  openFollowModal(type: 'followers' | 'following') {
+    if (!this.profile?.data?.userId) return;
+
+    this.isLoadingFollowList = true;
+    this.showFollowModal = true;
+    this.followModalTitle = type === 'followers' ? 'Followers' : 'Following';
+
+    if (type === 'followers') {
+      const request = {
+        OtherId: this.profile.data.userId,
+        next: ''
+      };
+
+      this.followService.getFollowers(request, this.profile.data.userId).subscribe({
+        next: (response) => {
+          this.followModalUsers = response.data;
+          this.isLoadingFollowList = false;
+        },
+        error: (error) => {
+          console.error(`Error loading ${type}:`, error);
+          this.isLoadingFollowList = false;
+        }
+      });
+    } else {
+      const request = {
+        OtherId: this.profile.data.userId,
+        next: ''
+      };
+
+      this.followService.getFollowing(request).subscribe({
+        next: (response) => {
+          this.followModalUsers = response.data;
+          this.isLoadingFollowList = false;
+        },
+        error: (error) => {
+          console.error(`Error loading ${type}:`, error);
+          this.isLoadingFollowList = false;
+        }
+      });
+    }
+  }
+
+  closeFollowModal() {
+    this.showFollowModal = false;
+    this.followModalUsers = [];
   }
 }

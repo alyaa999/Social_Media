@@ -16,19 +16,10 @@ export class FollowService {
 
   constructor(private http: HttpClient) {}
 
-  private createHeader(userId: string) {
-    return new HttpHeaders({
-      'Authorization': environment.token,
-      'Accept': 'application/json',
-      'userId': userId
-    });
-  }
-
   getFollowers(request: FollowListRequest, userId: string): Observable<PaginationResponseWrapper<ProfileAggregation[]>> {
     return this.http.post<PaginationResponseWrapper<ProfileAggregation[]>>(
-      `${this.baseUrl}followers`,
+      `${this.baseUrl}follow/followers`,
       request,
-      { headers: this.createHeader(userId) }
     );
   }
 

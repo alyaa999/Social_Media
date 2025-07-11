@@ -80,16 +80,16 @@
                     </div>
 
                     <div class="flex space-x-6 mt-4">
-                        <span>
+                        <button (click)="openFollowModal('following')" class="group">
                             <span class="font-bold text-redis-red">{{ (profile?.data?.noFollowing !== undefined &&
                                 profile?.data?.noFollowing !== null) ? profile.data.noFollowing : 0 }}</span>
-                            <span class="text-dusk-50"> Following</span>
-                        </span>
-                        <span>
+                            <span class="text-dusk-50 group-hover:text-dusk-30 transition-colors"> Following</span>
+                        </button>
+                        <button (click)="openFollowModal('followers')" class="group">
                             <span class="font-bold text-redis-red">{{ (profile?.data?.noFollowers !== undefined &&
                                 profile?.data?.noFollowers !== null) ? profile.data.noFollowers : 0 }}</span>
-                            <span class="text-dusk-50"> Followers</span>
-                        </span>
+                            <span class="text-dusk-50 group-hover:text-dusk-30 transition-colors"> Followers</span>
+                        </button>
                     </div>
                 </div>
             </ng-container>
@@ -172,4 +172,12 @@
             </div>
         </div>
     </div>
+
+    <!-- Follow Modal -->
+    <app-follow-modal
+        [users]="followModalUsers"
+        [title]="followModalTitle"
+        [visible]="showFollowModal"
+        (close)="closeFollowModal()">
+    </app-follow-modal>
 </div>
