@@ -97,14 +97,20 @@
         <p class="text-base text-fg-body mb-2 px-14">{{ post.postContent }}</p>
 
         <!-- Post Media -->
-        <div *ngIf="post.hasMedia && post.media?.length" class="mb-2 px-14">
+        <div *ngIf="post.hasMedia && post.media && post.media.length > 0" class="mb-2 px-14">
             <div class="grid grid-cols-1 gap-2 max-h-[300px] overflow-hidden">
                 <ng-container *ngFor="let media of post.media">
-                  <img *ngIf="media.Type === 1" [src]="media.Url" alt="Post image"
-                      class="w-full object-cover rounded-md">
-                  <img *ngIf="!media.Type && media.Type" [src]="media.Url" alt="Post image"
-                      class="w-full object-cover rounded-md">
-                  <!-- You can add support for VIDEO, AUDIO, DOCUMENT here if needed -->
+                    <img *ngIf="media.MediaType === MediaType.IMAGE" [src]="media.MediaUrl" 
+                        [alt]="'Post image'" class="w-full object-cover rounded-md"
+                        (error)="onImgError($event, 'assets/default-image.jpg')">
+                    <video *ngIf="media.MediaType === MediaType.VIDEO" [src]="media.MediaUrl" 
+                        controls class="w-full rounded-md"></video>
+                    <audio *ngIf="media.MediaType === MediaType.AUDIO" [src]="media.MediaUrl" 
+                        controls class="w-full rounded-md"></audio>
+                    <a *ngIf="media.MediaType === MediaType.DOCUMENT" [href]="media.MediaUrl" 
+                        target="_blank" class="text-redis-red hover:underline">
+                        Download Document
+                    </a>
                 </ng-container>
             </div>
         </div>

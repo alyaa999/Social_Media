@@ -7,6 +7,7 @@ import { CommentModalComponent } from '../../../Shared/comment-modal/comment-mod
 import { CommentService } from '../../../../Services/comment.service';
 import { GetPagedCommentRequest } from '../../../../Interfaces/Comment/get-paged-comment-request';
 import { ReactionService } from '../../../../Services/reaction.service';
+import { MediaType } from '../../../../Interfaces/feed/enums';
 
 @Component({
   selector: 'app-other-profile',
@@ -22,6 +23,7 @@ export class OtherProfileComponent {
   errorProfile: string | null = null;
   errorPosts: string | null = null;
   isCurrentUser = false; // You can update this logic as needed
+  MediaType = MediaType; // Expose enum to template
 
   // Modal state
   showModal: boolean = false;
