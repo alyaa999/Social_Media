@@ -16,7 +16,9 @@
       class="sidebar w-[350px] bg-[#163341] border-r border-[#2d4754] flex flex-col transition-all duration-300 ease-in-out"
       [class.-left-[350px]]="!sidebarOpen" [class.left-0]="sidebarOpen" [class.absolute]="sidebarOpen"
       [class.z-50]="sidebarOpen" [class.h-full]="sidebarOpen">
-      <app-conversation-list (conversationSelected)="selectConversation($event)">
+      <app-conversation-list 
+        (conversationSelected)="selectConversation($event)"
+        [updatedConversation]="currentConversation">
       </app-conversation-list>
     </div>
 
@@ -33,7 +35,7 @@
           </div>
 
           <div class="sticky bottom-0 w-full">
-            <app-message-input [conversationId]="currentConversationId"></app-message-input>
+            <app-message-input [conversationId]="currentConversationId" (messageSent)="onMessageSent($event)"></app-message-input>
           </div>
         </div>
       </div>

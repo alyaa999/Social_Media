@@ -12,7 +12,7 @@
     </div>
   </div>
 
-  <div id="messages-container" class="messages">
+  <div #messagesContainer id="messages-container" class="messages">
     <div *ngFor="let message of messages" class="message" 
       [class.sent]="message.senderId === currentUserId"
       [class.received]="message.senderId !== currentUserId">

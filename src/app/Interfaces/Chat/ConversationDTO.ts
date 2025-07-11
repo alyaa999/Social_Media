@@ -4,6 +4,7 @@ import { MessageDTO } from "./MessageDTO";
 export interface ConversationDTO {
     id: string;
     participants: string[];
+    messages: MessageDTO[];
     isGroup: boolean;
     adminId: string;
     groupName: string;

@@ -1,5 +1,5 @@
 // message-list.component.ts
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnChanges, SimpleChanges, ViewChild, ElementRef, AfterViewChecked } from '@angular/core';
 import { MessageDTO } from '../../../../Interfaces/Chat/MessageDTO';
 import { ConversationDTO } from '../../../../Interfaces/Chat/ConversationDTO';
 import { CommonModule } from '@angular/common';
@@ -12,19 +12,29 @@ import { MessagesPageRequestDTO } from '../../../../Interfaces/Chat/MessagesPage
   templateUrl: './message-list.component.html',
   styleUrls: ['./message-list.component.css']
 })
-export class MessageListComponent implements OnInit {
+export class MessageListComponent implements OnInit, OnChanges, AfterViewChecked {
   @Input() conversation: ConversationDTO | null = null;
   messages: MessageDTO[] = [];
   @Input() currentUserId: string | null = null;
+  @ViewChild('messagesContainer') private messagesContainer!: ElementRef;
 
   constructor(private chatService: ChatService) {}
 
   ngOnInit() {
-    this.loadMessages();
+    if (this.conversation) {
+      this.messages = this.conversation.messages || [];
+    }
   }
 
-  ngOnChanges() {
-    this.loadMessages();
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['conversation'] && changes['conversation'].currentValue) {
+      this.messages = changes['conversation'].currentValue.messages || [];
+      this.loadMessages();
+    }
+  }
+
+  ngAfterViewChecked() {
+    this.scrollToBottom();
   }
 
   loadMessages() {
@@ -44,10 +54,9 @@ export class MessageListComponent implements OnInit {
     }
   }
 
-  scrollToBottom() {
-    const container = document.getElementById('messages-container');
-    if (container) {
-      container.scrollTop = container.scrollHeight;
+  scrollToBottom(): void {
+    if (this.messagesContainer) {
+      this.messagesContainer.nativeElement.scrollTop = this.messagesContainer.nativeElement.scrollHeight;
     }
   }
 }

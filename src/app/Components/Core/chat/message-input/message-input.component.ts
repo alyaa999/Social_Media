@@ -1,7 +1,8 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { ChatService } from '../../../../Services/chat.service';
 import { NewMessageDTO } from '../../../../Interfaces/Chat/NewMessageDTO';
-import { FormsModule } from '@angular/forms'; // Add this import
+import { FormsModule } from '@angular/forms';
+import { MessageDTO } from '../../../../Interfaces/Chat/MessageDTO';
 
 @Component({
   selector: 'app-message-input',
@@ -11,6 +12,7 @@ import { FormsModule } from '@angular/forms'; // Add this import
 })
 export class MessageInputComponent {
   @Input() conversationId: string = '';
+  @Output() messageSent = new EventEmitter<MessageDTO>();
   message: string = '';
 
   constructor(private chatService: ChatService) {}
@@ -33,6 +35,7 @@ export class MessageInputComponent {
       this.chatService.sendMessage(newMessageDTO).subscribe({
         next: (response) => {
           console.log('Message sent successfully:', response);
+          this.messageSent.emit(response);
           this.message = '';
         },
         error: (error) => {

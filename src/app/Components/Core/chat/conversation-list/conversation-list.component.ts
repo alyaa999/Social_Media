@@ -1,5 +1,5 @@
 // conversation-list.component.ts
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, OnChanges, SimpleChanges } from '@angular/core';
 import { ConversationDTO } from '../../../../Interfaces/Chat/ConversationDTO';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -14,8 +14,9 @@ import { ProfileService } from '../../../../Services/profile.service';
   templateUrl: './conversation-list.component.html',
   styleUrls: ['./conversation-list.component.css']
 })
-export class ConversationListComponent implements OnInit {
+export class ConversationListComponent implements OnInit, OnChanges {
   @Input() currentConversation: ConversationDTO | null = null;
+  @Input() updatedConversation: ConversationDTO | null = null;
   conversations: ConversationDTO[] = [];
   searchTerm = '';
   @Output() conversationSelected = new EventEmitter<ConversationDTO>();
@@ -24,6 +25,22 @@ export class ConversationListComponent implements OnInit {
 
   ngOnInit() {
     this.loadConversations();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['updatedConversation'] && changes['updatedConversation'].currentValue) {
+      this.updateConversation(changes['updatedConversation'].currentValue);
+    }
+  }
+
+  updateConversation(updatedConv: ConversationDTO) {
+    const index = this.conversations.findIndex(c => c.id === updatedConv.id);
+    if (index !== -1) {
+      this.conversations[index] = updatedConv;
+      // Move the updated conversation to the top of the list
+      this.conversations.splice(index, 1);
+      this.conversations.unshift(updatedConv);
+    }
   }
 
   loadConversations() {

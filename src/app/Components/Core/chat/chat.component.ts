@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ConversationDTO } from '../../../Interfaces/Chat/ConversationDTO';
+import { MessageDTO } from '../../../Interfaces/Chat/MessageDTO';
 import { ConversationListComponent } from "./conversation-list/conversation-list.component";
 import { MessageListComponent } from "./message-list/message-list.component";
 import { MessageInputComponent } from "./message-input/message-input.component";
@@ -46,5 +47,17 @@ export class ChatComponent implements OnInit {
 
   toggleSidebar() {
     this.sidebarOpen = !this.sidebarOpen;
+  }
+
+  onMessageSent(newMessage: MessageDTO) {
+    if (this.currentConversation) {
+      const existingMessages = Array.isArray(this.currentConversation.messages) ? this.currentConversation.messages : [];
+      const updatedMessages = [...existingMessages, newMessage];
+      this.currentConversation = {
+        ...this.currentConversation,
+        messages: updatedMessages,
+        lastMessage: newMessage,
+      };
+    }
   }
 }
