@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ChatService } from '../../../../Services/chat.service';
 import { ConversationsPageRequestDTO } from '../../../../Interfaces/Chat/ConversationsPageRequestDTO';
+import { ProfileService } from '../../../../Services/profile.service';
 
 @Component({
   selector: 'app-conversation-list',
@@ -19,7 +20,7 @@ export class ConversationListComponent implements OnInit {
   searchTerm = '';
   @Output() conversationSelected = new EventEmitter<ConversationDTO>();
 
-  constructor(private chatService: ChatService) {}
+  constructor(private chatService: ChatService, private profileService: ProfileService) { }
 
   ngOnInit() {
     this.loadConversations();
@@ -27,20 +28,33 @@ export class ConversationListComponent implements OnInit {
 
   loadConversations() {
     const conversationpageRequest: ConversationsPageRequestDTO = {
-   
-      next:'',
+
+      next: '',
       pageSize: 20,
     }
     this.chatService.getUserConversations(conversationpageRequest).subscribe(convs => {
       this.conversations = convs.conversations;
-      console.log('Conversations loaded:', this.conversations);
+
+      const userId = localStorage.getItem('userId');
+
+      this.conversations.forEach(element => {
+        if (!element.isGroup) {
+          const receiver = (element?.participants ? element.participants[0] : " ") === userId ? (element?.participants ? element.participants[1] : " ") : (element?.participants ? element.participants[0] : " ");
+          this.profileService.GetProfileByUserIdMin(receiver).subscribe(profile => {
+            element.receiverProfile = profile.data;
+          });
+        }
+      });
       if (this.conversations.length > 0) {
         this.currentConversation = this.conversations[0];
         this.onConversationSelected(this.currentConversation);
       }
+      console.log('Conversations loaded:', this.conversations);
     }, error => {
       console.error('Error loading conversations:', error);
     });
+
+
   }
 
   onConversationSelected(conversation: ConversationDTO) {
@@ -48,7 +62,7 @@ export class ConversationListComponent implements OnInit {
   }
 
   get filteredConversations() {
-    return this.conversations.filter(conv => 
+    return this.conversations.filter(conv =>
       (conv.groupName?.toLowerCase().includes(this.searchTerm.toLowerCase()) ?? false) ||
       (!conv.isGroup && conv.lastMessage?.senderProfile?.displayName?.toLowerCase().includes(this.searchTerm.toLowerCase())) ||
       (conv.lastMessage?.content?.toLowerCase().includes(this.searchTerm.toLowerCase()) ?? false)

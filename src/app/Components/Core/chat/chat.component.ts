@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { ConversationDTO } from '../../../Interfaces/Chat/ConversationDTO';
-import { ChatService } from './chat.service';
 import { ConversationListComponent } from "./conversation-list/conversation-list.component";
 import { MessageListComponent } from "./message-list/message-list.component";
 import { MessageInputComponent } from "./message-input/message-input.component";
 import { CommonModule } from '@angular/common';
+import { ChatService } from '../../../Services/chat.service';
 
 @Component({
   selector: 'app-chat',

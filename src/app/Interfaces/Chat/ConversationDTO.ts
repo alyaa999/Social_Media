@@ -1,12 +1,14 @@
+import { SimpleUserProfile } from "../Profile/simple-user-profile";
 import { MessageDTO } from "./MessageDTO";
 
 export interface ConversationDTO {
     id: string;
-    participants: string[] | null;
+    participants: string[];
     isGroup: boolean;
     adminId: string;
-    groupName: string | null;
-    groupImageUrl: string | null;
+    groupName: string;
+    groupImageUrl: string ;
     createdAt: string; // ISO date string
-    lastMessage: MessageDTO | null;
+    lastMessage?: MessageDTO;
+    receiverProfile?: SimpleUserProfile;
   }
