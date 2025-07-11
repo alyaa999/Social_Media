@@ -48,12 +48,14 @@
                                 </div>
                             </div>
                         </a>
-                        <!-- Follow Status -->
+                        <!-- Follow/Unfollow Button -->
                         <div class="ml-4">
-                            <span *ngIf="user.isFollowing"
-                                class="px-3 py-1.5 rounded-full bg-dusk-90 text-sm text-hyper-05 font-semibold whitespace-nowrap">
-                                Following
-                            </span>
+                            <button (click)="toggleFollow(user)" 
+                                [class]="user.isFollowing ? 
+                                    'px-3 py-1.5 rounded-full bg-dusk-90 text-sm text-hyper-05 font-semibold whitespace-nowrap hover:bg-dusk-80 transition-colors' : 
+                                    'px-3 py-1.5 rounded-full bg-hyper-05 text-sm text-white font-semibold whitespace-nowrap hover:bg-hyper-04 transition-colors'">
+                                {{ user.isFollowing ? 'Following' : 'Follow' }}
+                            </button>
                         </div>
                     </div>
                 </div>
