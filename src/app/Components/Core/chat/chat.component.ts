@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ConversationDTO } from '../../../Interfaces/Chat/ConversationDTO';
 import { ConversationListComponent } from "./conversation-list/conversation-list.component";
 import { MessageListComponent } from "./message-list/message-list.component";
 import { MessageInputComponent } from "./message-input/message-input.component";
 import { CommonModule } from '@angular/common';
 import { ChatService } from '../../../Services/chat.service';
+import { AuthService } from '../../../Services/auth.service';
 
 @Component({
   selector: 'app-chat',
@@ -12,12 +13,24 @@ import { ChatService } from '../../../Services/chat.service';
   styleUrls: ['./chat.component.css'],
   imports: [ConversationListComponent, MessageListComponent, MessageInputComponent, CommonModule]
 })
-export class ChatComponent {
+export class ChatComponent implements OnInit {
   currentConversation: ConversationDTO | null = null;
   showWelcomeState = true;
   sidebarOpen = false;
+  currentUserId: string = '';
 
-  constructor(private chatService: ChatService) {}
+  constructor(private chatService: ChatService, private authService: AuthService) {}
+
+  ngOnInit(): void {
+    this.authService.verify().subscribe({
+      next: (response) => {
+        this.currentUserId = response.id;
+      },
+      error: (error) => {
+        console.error('Failed to verify user', error);
+      }
+    });
+  }
 
   get currentConversationId(): string {
     return this.currentConversation?.id || '';
