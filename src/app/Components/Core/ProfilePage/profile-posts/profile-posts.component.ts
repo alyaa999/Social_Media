@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PostService } from '../../../../Services/post.service';
 import { PostAggregationResponse } from '../../../../Interfaces/post/post-aggrigation-response';
@@ -162,27 +162,58 @@ export class ProfilePostsComponent implements OnInit {
     this.dropdownOpenPostId = null;
   }
 
+  // Delete modal state
+  showDeleteModal: boolean = false;
+  isDeleting: boolean = false;
+  postToDelete: PostAggregationResponse | null = null;
+
   deletePost(post: PostAggregationResponse): void {
-    if (confirm('Are you sure you want to delete this post?')) {
-      const deletePostRequest: DeletePostRequest = {
-        postId: post.postId
-      };
-      this.postService.DeletePost(deletePostRequest).subscribe({
-        next: (response) => {
-          if (response.data) {
-            // Remove the post from the posts array
-            this.posts = this.posts.filter(p => p.postId !== post.postId);
-          }
-        },
-        error: (error) => {
-          console.error('Error deleting post:', error);
+    this.postToDelete = post;
+    this.showDeleteModal = true;
+    this.dropdownOpenPostId = null; // Close the dropdown
+  }
+
+  cancelDelete(): void {
+    this.showDeleteModal = false;
+    this.postToDelete = null;
+    this.isDeleting = false;
+  }
+
+  confirmDelete(): void {
+    if (!this.postToDelete || this.isDeleting) return;
+
+    this.isDeleting = true;
+    const deletePostRequest: DeletePostRequest = {
+      postId: this.postToDelete.postId
+    };
+
+    this.postService.DeletePost(deletePostRequest).subscribe({
+      next: (response) => {
+        if (response.data) {
+          // Remove the post from the posts array
+          this.posts = this.posts.filter(p => p.postId !== this.postToDelete?.postId);
+          this.showDeleteModal = false;
         }
-      });
-    }
-    this.dropdownOpenPostId = null;
+        this.isDeleting = false;
+        this.postToDelete = null;
+      },
+      error: (error) => {
+        console.error('Error deleting post:', error);
+        this.isDeleting = false;
+      }
+    });
   }
 
   // Close dropdown when clicking outside
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    const target = event.target as HTMLElement;
+    // Check if the click was outside the dropdown and its trigger button
+    if (!target.closest('.dropdown-container')) {
+      this.closeDropdowns();
+    }
+  }
+
   closeDropdowns(): void {
     this.dropdownOpenPostId = null;
   }
