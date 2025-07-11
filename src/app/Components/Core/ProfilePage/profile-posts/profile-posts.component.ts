@@ -9,13 +9,14 @@ import { GetPagedCommentRequest } from '../../../../Interfaces/Comment/get-paged
 import { MediaType } from '../../../../Interfaces/Comment/media-enum-type';
 import { FormsModule } from '@angular/forms';
 import { ReactionService } from '../../../../Services/reaction.service';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-profile-posts',
   templateUrl: './profile-posts.component.html',
   styleUrls: ['./profile-posts.component.scss'],
   standalone: true,
-  imports: [CommonModule, CommentModalComponent, EditPostComponent, FormsModule]
+  imports: [CommonModule, CommentModalComponent, EditPostComponent, FormsModule, RouterModule]
 })
 export class ProfilePostsComponent implements OnInit {
   userId: string = localStorage.getItem('userId') || '';
@@ -218,4 +219,3 @@ export class ProfilePostsComponent implements OnInit {
     }
   }
 }
-
