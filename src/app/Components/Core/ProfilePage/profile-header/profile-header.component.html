@@ -1,72 +1,67 @@
-<div class="rounded-3xl shadow-lg overflow-hidden bg-dusk-09 max-w-5xl mx-auto">
-    <!-- Debug Info -->
-    <div *ngIf="!profile && !isLoading && !error" class="p-4 text-center text-yellow-500">
-        Debug: No profile data available
+<div class="rounded-3xl shadow-lg bg-dusk-09 max-w-5xl mx-auto mb-2">
+    <!-- Cover Photo -->
+    <div class="relative w-full h-48 sm:h-64 bg-dusk-09">
+        <img [src]="profile?.coverUrl || 'assets/default-cover.jpg'" alt="Cover"
+            class="w-full h-full object-cover rounded-t-3xl">
+        
+        <!-- Profile Image -->
+        <div class="absolute left-4 sm:left-10 -bottom-16 sm:-bottom-20">
+            <img [src]="profile?.profileUrl" alt="Profile"
+                class="w-28 h-28 sm:w-40 sm:h-40 rounded-full border-4 border-gray-400 object-cover bg-gray-100 shadow-lg">
+        </div>
     </div>
 
-    <!-- Loading State -->
-    <div *ngIf="isLoading" class="p-4 flex justify-center items-center min-h-[200px]">
-        <div class="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-redis-red"></div>
-        <span class="ml-2">Loading profile...</span>
-    </div>
-
-    <!-- Error State -->
-    <div *ngIf="error" class="p-4 text-center text-redis-red">
-        {{ error }}
-    </div>
-
-    <!-- Profile Content -->
-    <ng-container *ngIf="profile && !isLoading && !error">
-        <!-- Cover Photo -->
-        <div class="relative w-full h-64 bg-dusk-09">
-            <img [src]="profile.coverUrl || 'assets/default-cover.jpg'" alt="Cover"
-                class="w-full h-full object-cover rounded-t-3xl">
-            <!-- Profile Image -->
-            <div class="absolute left-10 -bottom-20">
-                <img [src]="profile.profileUrl || 'assets/default-avatar.jpg'" alt="Profile"
-                    class="w-40 h-40 rounded-full border-4 border-gray-400 object-cover bg-gray-100 shadow-lg">
+    <div class="flex justify-between items-start mt-10 sm:mt-24">
+        <!-- Profile Info -->
+        <div class="px-4 sm:px-14 mb-10 text-center sm:text-left">
+            <h2 class="text-xl sm:text-2xl font-bold text-dusk-01">
+                {{ profile?.firstName }} {{ profile?.lastName || '' }}
+            </h2>
+            <div class="text-dusk-50 text-sm sm:text-lg font-mono" *ngIf="profile?.userName">
+                &#64;{{ profile?.userName }}
+            </div>
+            <div class="mt-2 text-sm sm:text-base text-dusk-01" *ngIf="profile?.bio">{{ profile?.bio }}</div>
+    
+            <div class="flex flex-col sm:flex-row items-center sm:items-start text-dusk-50 mt-3 sm:mt-2 gap-2 sm:gap-4">
+                <div class="flex items-center text-sm">
+                    <i class="fa fa-calendar mr-1"></i>
+                    <span>Joined {{ profile?.birthDate| date:'MMMM yyyy' }}</span>
+                </div>
+                <div class="flex items-center text-sm" *ngIf="profile?.address">
+                    <i class="fa fa-map-marker mr-1"></i>
+                    <span>{{ profile?.address }}</span>
+                </div>
+            </div>
+    
+            <div class="flex justify-center sm:justify-start space-x-4 sm:space-x-6 mt-2 text-sm">
+                <span>
+                    <span class="font-bold text-dusk-01">{{ profile?.noFollowing }}</span>
+                    <span class="text-dusk-50">Following</span>
+                </span>
+                <span>
+                    <span class="font-bold text-dusk-01">{{ profile?.noFollowers }}</span>
+                    <span class="text-dusk-50">Followers</span>
+                </span>
             </div>
         </div>
         <!-- Header Actions -->
-        <div class="flex justify-end items-center mt-4 px-6">
+        <div class="flex flex-wrap justify-end items-center px-4 sm:px-6 gap-2 sm:gap-4">
             <button *ngIf="isCurrentUser" (click)="openEditModal()"
-                class="ml-4 px-6 py-2 rounded-full border border-dusk-50 bg-dusk-09 text-dusk-01 font-semibold hover:bg-dusk-01/10 transition">
+                class="px-4 sm:px-6 py-2 rounded-full border border-dusk-50 bg-dusk-09 text-dusk-01 font-semibold hover:bg-dusk-01/10 transition text-sm sm:text-base">
                 Edit profile
             </button>
             <button *ngIf="!isCurrentUser"
-                class="ml-4 pl-6 pr-6 py-2 rounded-full font-semibold bg-white hover:bg-[rgb(120_135_142)] text-white transition"
+                class="px-4 sm:px-6 py-2 rounded-full font-semibold bg-white hover:bg-[rgb(120_135_142)] text-white transition text-sm sm:text-base"
                 style="color: rgba(255, 68, 56, 1)">Follow</button>
+        </div>
+    </div>
 
-            <!-- Edit Profile Modal -->
-            <app-edit-profile-modal
-                *ngIf="profile"
-                [profile]="profile"
-                [show]="showEditModal"
-                (close)="closeEditModal()"
-                (profileUpdated)="onProfileUpdated($event)">
-            </app-edit-profile-modal>
-        </div>
-        <!-- Profile Info -->
-        <div class="pt-10 px-14 mb-10">
-            <h2 class="text-2xl font-bold text-dusk-01">{{ profile.firstName || '' }} {{ profile.lastName || '' }}</h2>
-            <div class="text-dusk-50 text-lg font-mono" *ngIf="profile.userName">&#64;{{ profile.userName }}</div>
-            <div class="mt-2 text-base text-dusk-01" *ngIf="profile.bio">{{ profile.bio }}</div>
-            <div class="flex items-center text-dusk-50 mt-2 space-x-4">
-                <div class="flex items-center">
-                    <i class="fa fa-calendar mr-1"></i>
-                    <span>Joined {{ profile.birthDate | date:'MMMM yyyy' }}</span>
-                </div>
-                <div class="flex items-center" *ngIf="profile.address">
-                    <i class="fa fa-map-marker mr-1"></i>
-                    <span>{{ profile.address }}</span>
-                </div>
-            </div>
-            <div class="flex space-x-6 mt-2">
-                <span><span class="font-bold text-dusk-01">{{ profile.noFollowing }}</span> <span
-                        class="text-dusk-50">Following</span></span>
-                <span><span class="font-bold text-dusk-01">{{ profile.noFollowers }}</span> <span
-                        class="text-dusk-50">Followers</span></span>
-            </div>
-        </div>
-    </ng-container>
+    <!-- Modal -->
+    <app-edit-profile-modal
+        *ngIf="profile"
+        [profile]="profile"
+        [show]="showEditModal"
+        (close)="closeEditModal()"
+        (profileUpdated)="onProfileUpdated($event)">
+    </app-edit-profile-modal>
 </div>

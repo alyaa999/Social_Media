@@ -1,171 +1,180 @@
-<div class="rounded-3xl shadow-lg overflow-hidden bg-dusk-09 max-w-5xl mx-auto">
-    <!-- Debug Info -->
-    <div *ngIf="!profile && !isLoadingProfile && !errorProfile" class="p-4 text-center text-yellow-500">
-        Debug: No profile data available
-    </div>
-
-    <!-- Loading State -->
-    <div *ngIf="isLoadingProfile" class="p-4 flex justify-center items-center min-h-[200px]">
-        <div class="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-redis-red"></div>
-        <span class="ml-2">Loading profile...</span>
-    </div>
-
-    <!-- Error State -->
-    <div *ngIf="errorProfile" class="p-4 text-center text-redis-red">
-        {{ errorProfile }}
-    </div>
-
-    <!-- Profile Content -->
-    <ng-container *ngIf="profile && !isLoadingProfile && !errorProfile">
-        <!-- Cover Photo -->
-        <div class="relative w-full h-64 bg-dusk-09">
-            <img [src]="profile?.data?.coverUrl ? profile.data.coverUrl : 'assets/default-avatar.jpg'" alt="Cover"
-                class="w-full h-full object-cover rounded-t-3xl border-b-4 border-dusk-50" (error)="onImgError($event, 'assets/default-avatar.jpg')">
-            <!-- Profile Image -->
-            <div class="absolute left-10 -bottom-20">
-                <img [src]="profile?.data?.profileUrl ? profile.data.profileUrl : 'assets/default-avatar.jpg'" alt="Profile"
-                    class="w-40 h-40 rounded-full border-4 border-redis-red object-cover bg-base-white shadow-lg" (error)="onImgError($event, 'assets/default-avatar.jpg')">
+<div class="flex flex-col h-screen overflow-hidden">
+    <!-- Main content area with vertical scroll -->
+    <div class="flex-1 overflow-y-auto pb-16">
+        <!-- Profile Card Container -->
+        <div class="rounded-3xl shadow-lg bg-dusk-09 max-w-5xl mx-auto">
+            
+            <!-- Debug Info -->
+            <div *ngIf="!profile && !isLoadingProfile && !errorProfile" class="p-4 text-center text-yellow-500">
+                Debug: No profile data available
             </div>
-        </div>
-        <!-- Header Actions -->
-        <div class="flex justify-end items-center mt-4 px-6">
-            <button *ngIf="isCurrentUser"
-                class="ml-4 px-6 py-2 rounded-full border border-dusk-50 bg-dusk-09 text-dusk-01 font-semibold hover:bg-dusk-01/10 transition">Edit
-                profile</button>
-            <button *ngIf="!isCurrentUser"
-                class="ml-4 pl-6 pr-6 py-2 rounded-full font-semibold bg-redis-red text-white hover:bg-hyper-07 transition-colors"
-            >Follow</button>
-        </div>
-        <!-- Profile Info -->
-        <div class="pt-10 px-14 mb-10">
-            <h2 class="text-2xl font-bold text-dusk-01">{{ profile?.data?.firstName || '' }} {{ profile?.data?.lastName || '' }}</h2>
-            <div class="text-dusk-50 text-lg font-mono" *ngIf="profile?.data?.userName">&#64;{{ profile.data.userName }}</div>
-            <div class="mt-2 text-base text-dusk-01" *ngIf="profile?.data?.bio">{{ profile.data.bio }}</div>
-            <div class="flex items-center text-dusk-50 mt-2 space-x-4">
-                <div class="flex items-center">
-                    <i class="fa fa-calendar mr-1"></i>
-                    <span>Joined {{ profile?.data?.birthDate | date:'MMMM yyyy' }}</span>
+
+            <!-- Loading State -->
+            <div *ngIf="isLoadingProfile" class="p-8 flex justify-center items-center min-h-[200px]">
+                <div class="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-redis-red"></div>
+                <span class="ml-3">Loading profile...</span>
+            </div>
+
+            <!-- Error State -->
+            <div *ngIf="errorProfile" class="p-8 text-center text-redis-red">
+                {{ errorProfile }}
+            </div>
+
+            <!-- Profile Content (Visible when data is loaded) -->
+            <ng-container *ngIf="profile && !isLoadingProfile && !errorProfile">
+                <!-- Cover Photo Section -->
+                <div class="relative w-full h-56 bg-dusk-08">
+                    <img [src]="profile?.data?.coverUrl ? profile.data.coverUrl : 'assets/default-avatar.jpg'"
+                         [alt]="getCoverPhotoAltText()"
+                         [title]="getCoverPhotoAltText()"
+                         class="w-full h-full object-cover rounded-t-3xl border-b-4 border-dusk-50" 
+                         (error)="onImgError($event, 'assets/default-avatar.jpg')">
+                    
+                    <!-- Profile Image (Overlapping) -->
+                    <div class="absolute left-8 -bottom-16 sm:left-10 sm:-bottom-20">
+                        <img [src]="profile?.data?.profileUrl ? profile.data.profileUrl : 'assets/default-avatar.jpg'"
+                             [alt]="getProfilePictureAltText()"
+                             [title]="getProfilePictureAltText()"
+                             class="w-32 h-32 sm:w-40 sm:h-40 rounded-full border-4 border-redis-red object-cover bg-base-white shadow-lg" 
+                             (error)="onImgError($event, 'assets/default-avatar.jpg')">
+                    </div>
                 </div>
-                <div class="flex items-center" *ngIf="profile?.data?.address">
-                    <i class="fa fa-map-marker mr-1"></i>
-                    <span>{{ profile.data.address }}</span>
+
+                <!-- Header Actions (Edit/Follow Buttons) -->
+                <div class="flex justify-end items-center mt-4 px-6">
+                    <button *ngIf="isCurrentUser"
+                        class="ml-4 px-6 py-2 rounded-full border border-dusk-50 bg-dusk-09 text-dusk-01 font-semibold hover:bg-dusk-01/10 transition-colors">
+                        Edit profile
+                    </button>
+                    <button *ngIf="!isCurrentUser"
+                        class="ml-4 px-6 py-2 rounded-full font-semibold bg-redis-red text-white hover:bg-hyper-07 transition-colors">
+                        Follow
+                    </button>
+                </div>
+
+                <!-- Profile Info Section -->
+                <div class="pt-12 px-8 pb-8">
+                    <h2 class="text-3xl font-bold text-dusk-01">{{ profile?.data?.firstName || '' }} {{ profile?.data?.lastName || '' }}</h2>
+                    <div class="text-dusk-50 text-lg font-mono" *ngIf="profile?.data?.userName">&#64;{{ profile.data.userName }}</div>
+                    <p class="mt-4 text-base text-dusk-01" *ngIf="profile?.data?.bio">{{ profile.data.bio }}</p>
+                    
+                    <div class="flex flex-wrap items-center text-dusk-50 mt-4 space-x-4">
+                        <div class="flex items-center">
+                            <i class="fa fa-calendar mr-2"></i>
+                            <span>Joined {{ profile?.data?.birthDate | date:'MMMM yyyy' }}</span>
+                        </div>
+                        <div class="flex items-center" *ngIf="profile?.data?.address">
+                            <i class="fa fa-map-marker mr-2"></i>
+                            <span>{{ profile.data.address }}</span>
+                        </div>
+                    </div>
+
+                    <div class="flex space-x-6 mt-4">
+                        <span>
+                            <span class="font-bold text-redis-red">{{ (profile?.data?.noFollowing !== undefined && profile?.data?.noFollowing !== null) ? profile.data.noFollowing : 0 }}</span>
+                            <span class="text-dusk-50"> Following</span>
+                        </span>
+                        <span>
+                            <span class="font-bold text-redis-red">{{ (profile?.data?.noFollowers !== undefined && profile?.data?.noFollowers !== null) ? profile.data.noFollowers : 0 }}</span>
+                            <span class="text-dusk-50"> Followers</span>
+                        </span>
+                    </div>
+                </div>
+            </ng-container>
+
+            <!-- Posts Section -->
+            <div class="border-t border-dusk-08">
+                <!-- Loading State -->
+                <div *ngIf="isLoadingPosts" class="flex justify-center p-8">
+                    <div class="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-redis-red"></div>
+                </div>
+
+                <!-- Error State -->
+                <div *ngIf="errorPosts && !isLoadingPosts" class="m-4 p-4 bg-bg-subtle border-l-4 border-hyper-05 text-fg-default rounded">
+                    <p>{{ errorPosts }}</p>
+                    <button (click)="loadPosts(profile?.userId)" class="mt-2 px-4 py-2 bg-bg-muted text-fg-default rounded hover:bg-dusk transition-colors">
+                        Retry
+                    </button>
+                </div>
+
+                <!-- Profile Posts Content -->
+                <div *ngFor="let post of posts" class="border-b border-dusk-08 last:border-b-0">
+                    <!-- Unified Post Wrapper -->
+                    <div class="px-6 sm:px-8 py-4">
+                        <!-- Post Header -->
+                        <div class="flex items-center mb-4">
+                            <img [src]="post.postAuthorProfile?.profilePictureUrl || 'assets/default-avatar.png'"
+                                 [alt]="getPostAuthorProfilePictureAltText(post)"
+                                 [title]="getPostAuthorProfilePictureAltText(post)"
+                                 class="w-12 h-12 rounded-full mr-4 object-cover">
+                            <div>
+                                <h3 class="text-lg font-bold text-fg-default">{{ post.postAuthorProfile?.displayName }}</h3>
+                                <p class="text-sm text-fg-muted">{{ formatDate(post.createdAt) }}</p>
+                            </div>
+                        </div>
+
+                        <!-- Post Content -->
+                        <p class="text-base text-fg-body mb-4">{{ post.postContent }}</p>
+
+                        <!-- Post Media (Contained and Aligned) -->
+                        <div *ngIf="post.hasMedia && post.media && post.media.length > 0" class="mb-4">
+                            <div class="grid grid-cols-1 gap-2">
+                                <div *ngFor="let media of post.media" class="relative w-full">
+                                    <img [src]="media.url"
+                                         [alt]="getPostImageAltText(post)"
+                                         [title]="getPostImageAltText(post)"
+                                         class="w-full h-auto max-h-[600px] object-contain rounded-lg bg-dusk-08"
+                                         (error)="onImgError($event, 'assets/default-image.jpg')">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Post Actions -->
+                        <div class="flex items-center gap-6 text-sm text-fg-muted">
+                            <button class="flex items-center transition-all duration-200 px-2 py-1 rounded-lg relative group"
+                                [ngClass]="{'bg-redis-red/10 text-redis-red font-bold': post.isLiked && !post.isLikeLoading, 'hover:text-redis-red': !post.isLiked && !post.isLikeLoading}"
+                                (click)="toggleLike(post)"
+                                [attr.aria-pressed]="post.isLiked"
+                                [disabled]="post.isLikeLoading">
+                                
+                                <!-- Loading spinner -->
+                                <div *ngIf="post.isLikeLoading" class="absolute inset-0 flex items-center justify-center">
+                                    <div class="animate-spin rounded-full h-4 w-4 border-2 border-redis-red border-t-transparent"></div>
+                                </div>
+                                
+                                <!-- Like icon and text -->
+                                <div class="flex items-center" [class.opacity-0]="post.isLikeLoading">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2 transition-transform duration-200 ease-in-out group-hover:scale-110" [ngClass]="post.isLiked ? 'fill-redis-red' : 'fill-none stroke-current stroke-2'" viewBox="0 0 24 24">
+                                        <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                    <span>{{ post.numberOfLikes || 0 }} Like{{ post.numberOfLikes === 1 ? '' : 's' }}</span>
+                                </div>
+                            </button>
+                            <button class="hover:text-redis-red transition-colors" (click)="openCommentsModal(post.postId)">
+                                {{ post.numberOfComments || 0 }} Comments
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Comments Modal -->
+                <app-comment-modal
+                  *ngIf="showModal"
+                  [comments]="selectedComments"
+                  [reactions]="selectedReactions"
+                  [visible]="showModal"
+                  [mode]="modalMode"
+                  [loading]="modalLoading"
+                  [postId]="selectedPostId!"
+                  (close)="closeModal()"
+                  (commentSubmitted)="onCommentSubmitted($event)"
+                ></app-comment-modal>
+
+                <!-- Empty State -->
+                <div *ngIf="!isLoadingPosts && !errorPosts && posts.length === 0" class="text-center py-8 text-fg-muted">
+                    <p>No posts to show yet.</p>
                 </div>
             </div>
-            <div class="flex space-x-6 mt-2">
-                <span>
-                  <span class="font-bold text-redis-red">{{ (profile?.data?.noFollowing !== undefined && profile?.data?.noFollowing !== null) ? profile.data.noFollowing : 0 }}</span>
-                  <span class="text-dusk-50"> Following</span>
-                </span>
-                <span>
-                  <span class="font-bold text-redis-red">{{ (profile?.data?.noFollowers !== undefined && profile?.data?.noFollowers !== null) ? profile.data.noFollowers : 0 }}</span>
-                  <span class="text-dusk-50"> Followers</span>
-                </span>
-            </div>
         </div>
-    </ng-container>
-</div>
-
-<!-- Posts Section -->
-<div class="rounded-3xl shadow-lg overflow-hidden bg-dusk-09 max-w-5xl mx-auto mt-6">
-    <!-- Loading State -->
-    <div *ngIf="isLoadingPosts" class="flex justify-center p-4">
-        <div class="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-redis-red"></div>
-    </div>
-
-    <!-- Error State -->
-    <div *ngIf="errorPosts && !isLoadingPosts" class="p-3 mb-2 bg-bg-subtle border-l-4 border-hyper-05 text-fg-default">
-        <p>{{ errorPosts }}</p>
-        <button (click)="loadPosts(profile?.userId)"
-            class="mt-2 px-3 py-1.5 bg-bg-muted text-fg-default rounded hover:bg-dusk transition-colors">
-            Retry
-        </button>
-    </div>
-
-    <!-- Profile Posts content -->
-    <div *ngFor="let post of posts" class="p-2 mb-2 border-b border-dusk-08">
-        <!-- Post Header -->
-        <div class="flex items-center mb-2 px-14">
-            <img [src]="post.postAuthorProfile?.profilePictureUrl || 'assets/default-avatar.png'" alt="Profile"
-                class="w-10 h-10 rounded-full mr-3 object-cover">
-            <div>
-                <h3 class="text-base font-semibold text-fg-default">{{ post.postAuthorProfile?.displayName }}</h3>
-                <p class="text-sm text-fg-muted">{{ formatDate(post.createdAt) }}</p>
-            </div>
-        </div>
-
-        <!-- Post Content -->
-        <p class="text-base text-fg-body mb-2 px-14">{{ post.postContent }}</p>
-
-        <!-- Post Media -->
-        <div *ngIf="post.hasMedia && post.media && post.media.length > 0" class="mb-2 px-14">
-            <div class="grid grid-cols-1 gap-2 max-h-[300px] overflow-hidden">
-                <ng-container *ngFor="let media of post.media">
-                    <img *ngIf="media.MediaType === MediaType.IMAGE" [src]="media.MediaUrl" 
-                        [alt]="'Post image'" class="w-full object-cover rounded-md"
-                        (error)="onImgError($event, 'assets/default-image.jpg')">
-                    <video *ngIf="media.MediaType === MediaType.VIDEO" [src]="media.MediaUrl" 
-                        controls class="w-full rounded-md"></video>
-                    <audio *ngIf="media.MediaType === MediaType.AUDIO" [src]="media.MediaUrl" 
-                        controls class="w-full rounded-md"></audio>
-                    <a *ngIf="media.MediaType === MediaType.DOCUMENT" [href]="media.MediaUrl" 
-                        target="_blank" class="text-redis-red hover:underline">
-                        Download Document
-                    </a>
-                </ng-container>
-            </div>
-        </div>
-
-        <!-- Post Actions -->
-        <div class="flex items-center gap-6 text-sm text-fg-muted pt-2 mt-1 px-14">
-            <button 
-                class="flex items-center transition-all duration-200 px-2 py-1 rounded-lg relative group"
-                [ngClass]="{'bg-redis-red/10 text-redis-red font-bold': post.isLiked && !post.isLikeLoading, 'hover:text-redis-red': !post.isLiked && !post.isLikeLoading}"
-                (click)="toggleLike(post)"
-                [attr.aria-pressed]="post.isLiked"
-                [disabled]="post.isLikeLoading"
-            >
-                <!-- Loading spinner -->
-                <div *ngIf="post.isLikeLoading" 
-                    class="absolute left-2 w-5 h-5 flex items-center justify-center">
-                    <div class="animate-spin rounded-full h-4 w-4 border-2 border-redis-red border-t-transparent"></div>
-                </div>
-                
-                <!-- Like icon -->
-                <svg 
-                    xmlns="http://www.w3.org/2000/svg" 
-                    [class.opacity-0]="post.isLikeLoading"
-                    class="w-5 h-5 mr-2 transition-transform duration-200 ease-in-out group-hover:scale-110"
-                    [ngClass]="post.isLiked ? 'fill-redis-red' : 'fill-none stroke-current stroke-2'"
-                    viewBox="0 0 24 24"
-                >
-                    <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-                
-                <span [class.opacity-0]="post.isLikeLoading">
-                    {{ post.numberOfLikes || 0 }} Like{{ post.numberOfLikes === 1 ? '' : 's' }}
-                </span>
-            </button>
-            <button class="hover:text-redis-red transition-colors" (click)="openCommentsModal(post.postId)">
-                {{ post.numberOfComments || 0 }} Comments
-            </button>
-        </div>
-    </div>
-
-    <!-- Comments Modal -->
-    <app-comment-modal
-      *ngIf="showModal"
-      [comments]="selectedComments"
-      [reactions]="selectedReactions"
-      [visible]="showModal"
-      [mode]="modalMode"
-      [loading]="modalLoading"
-      [postId]="selectedPostId!"
-      (close)="closeModal()"
-      (commentSubmitted)="onCommentSubmitted($event)"
-    ></app-comment-modal>
-
-    <!-- Empty State -->
-    <div *ngIf="!isLoadingPosts && !errorPosts && posts.length === 0" class="text-center py-4 text-fg-muted">
-        <p>No posts to show yet.</p>
     </div>
 </div>

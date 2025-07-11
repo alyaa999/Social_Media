@@ -119,6 +119,7 @@ export class OtherProfileComponent {
       next: (response) => {
         // Assuming response is PaginationResponseWrapper<PostAggregationResponse[]>
         this.posts = response?.data || [];
+        console.log('Loaded posts:', this.posts);
         this.isLoadingPosts = false;
       },
       error: (err) => {
@@ -138,6 +139,22 @@ export class OtherProfileComponent {
     if (target) {
       target.src = fallback;
     }
+  }
+
+  getCoverPhotoAltText(): string {
+    return (this.profile?.data?.userName || 'User') + ' cover photo';
+  }
+
+  getProfilePictureAltText(): string {
+    return (this.profile?.data?.userName || 'User') + ' profile picture';
+  }
+
+  getPostImageAltText(post: any): string {
+    return 'Image for post by ' + post.postAuthorProfile?.displayName;
+  }
+
+  getPostAuthorProfilePictureAltText(post: any): string {
+    return post.postAuthorProfile?.displayName + ' profile picture';
   }
 
   toggleLike(post: any) {
