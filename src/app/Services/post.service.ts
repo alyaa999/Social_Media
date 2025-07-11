@@ -11,10 +11,8 @@ import { PostInputDto } from '../Interfaces/post/post-input-dto';
 import { PostCreateDto } from '../Interfaces/post/post-create-dto';
 import { PostAggregationResponse } from '../Interfaces/post/post-aggrigation-response';
 import { PaginationResponseWrapper } from '../Interfaces/response-wrapper/PaginationResponseWrapper';
-import { GetPagedCommentRequest } from '../Interfaces/Comment/get-paged-comment-request';
-import { SimpleUserProfile } from '../Interfaces/post/simple-user-profile';
-import { MediaType, Privacy } from '../Interfaces/feed/enums';
 import { Media } from '../Interfaces/post/media';
+import { DeletePostRequest } from '../Interfaces/post/delete-post-request';
 
 @Injectable({
   providedIn: 'root'
@@ -83,8 +81,9 @@ export class PostService {
     return this._http.put<ResponseWrapper<PostResponseDTO>>(`${this.baseUrl}post`, formData, {});
   }
 
-  DeletePost(postId: string, userId: string): Observable<ResponseWrapper<PostResponseDTO>> {
-    return this._http.delete<ResponseWrapper<PostResponseDTO>>(`${this.baseUrl}DeletePost/${postId}/${userId}`, {
+  DeletePost(deletePostDto: DeletePostRequest): Observable<ResponseWrapper<PostResponseDTO>> {
+    return this._http.delete<ResponseWrapper<PostResponseDTO>>(`${this.baseUrl}post`, {
+      body: deletePostDto
     });
   }
 

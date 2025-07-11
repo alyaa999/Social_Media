@@ -10,6 +10,7 @@ import { MediaType } from '../../../../Interfaces/Comment/media-enum-type';
 import { FormsModule } from '@angular/forms';
 import { ReactionService } from '../../../../Services/reaction.service';
 import { RouterModule } from '@angular/router';
+import { DeletePostRequest } from '../../../../Interfaces/post/delete-post-request';
 
 @Component({
   selector: 'app-profile-posts',
@@ -163,7 +164,10 @@ export class ProfilePostsComponent implements OnInit {
 
   deletePost(post: PostAggregationResponse): void {
     if (confirm('Are you sure you want to delete this post?')) {
-      this.postService.DeletePost(post.postId, this.userId).subscribe({
+      const deletePostRequest: DeletePostRequest = {
+        postId: post.postId
+      };
+      this.postService.DeletePost(deletePostRequest).subscribe({
         next: (response) => {
           if (response.data) {
             // Remove the post from the posts array
