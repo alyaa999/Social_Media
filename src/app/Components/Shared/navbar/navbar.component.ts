@@ -23,6 +23,18 @@ export class NavbarComponent {
     this.isNotificationOpen = false;
   }
 
+  navigateToFeed() {
+    this.router.navigate(['/feed']);
+  }
+
+  navigateToProfile() {
+    this.router.navigate(['/profile']);
+  }
+
+  navigateToChat() {
+    this.router.navigate(['/chat']);
+  }
+
   logout() {
     localStorage.removeItem('userId');
     localStorage.removeItem('refreshToken');
