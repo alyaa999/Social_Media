@@ -17,7 +17,7 @@
     <div class="p-4">
         <div *ngFor="let post of posts" class="bg-dusk-08 rounded-lg shadow-md p-4 mb-4">
             <!-- Post Header -->
-            <div class="flex items-center mb-2 px-1">
+            <div class="flex items-center justify-between mb-2 px-1 mb-4">
                 <a [routerLink]="['/other', post.postAuthorProfile.userId]" class="flex items-center group" style="text-decoration: none;">
                     <img [src]="post.postAuthorProfile.profilePictureUrl || 'assets/default-avatar.png'" alt="Profile"
                         class="w-10 h-10 rounded-full mr-3 object-cover group-hover:ring-2 group-hover:ring-hyper-05 transition">
@@ -28,17 +28,47 @@
                         <p class="text-sm text-fg-muted">{{ formatDate(post.createdAt) }}</p>
                     </div>
                 </a>
-            </div>
 
-            <!-- Post Actions Menu -->
-            <div class="flex justify-end mb-2 px-1" *ngIf="isCurrentUserPost(post)">
-                <button class="text-dusk-30 hover:text-hyper-05 transition-colors p-2" (click)="editPost(post)">
-                    <i class="fas fa-edit"></i> Edit
-                </button>
+                <!-- Post Actions Menu -->
+                <div class="relative" *ngIf="isCurrentUserPost(post)">
+                    <button 
+                        class="text-dusk-30 hover:text-hyper-05 transition-colors p-2 rounded-full"
+                        (click)="toggleDropdown(post)"
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
+                        </svg>
+                    </button>
+                    <!-- Dropdown Menu -->
+                    <div *ngIf="dropdownOpenPostId === post.postId" 
+                        class="absolute right-7 top-[20px]  w-48 rounded-xl bg-dusk-09 border border-dusk-70 shadow-lg z-50"
+                    >
+                        <div class="py-1">
+                            <button 
+                                (click)="editPost(post)"
+                                class="w-full px-4 py-2 text-left text-white hover:bg-dusk-07 transition-colors flex items-center gap-2"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                </svg>
+                                Edit
+                            </button>
+                            <button 
+                                (click)="deletePost(post)"
+                                class="w-full px-4 py-2 text-left text-redis-red hover:bg-dusk-07 transition-colors flex items-center gap-2"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                </svg>
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- Post Content -->
-            <p class="text-base text-fg-body mb-2 px-1">{{ post.postContent }}</p>
+            <p class="text-base text-fg-body mb-2 px-2">{{ post.postContent }}</p>
 
             <!-- Post Media -->
             <div *ngIf="post.hasMedia && post.media?.length" class="mb-2 px-1">

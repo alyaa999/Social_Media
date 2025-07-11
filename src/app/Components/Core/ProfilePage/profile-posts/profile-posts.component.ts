@@ -144,9 +144,43 @@ export class ProfilePostsComponent implements OnInit {
     return post.authorId === this.userId;
   }
 
+  // Track which post's dropdown is open
+  dropdownOpenPostId: string | null = null;
+
+  toggleDropdown(post: PostAggregationResponse): void {
+    if (this.dropdownOpenPostId === post.postId) {
+      this.dropdownOpenPostId = null;
+    } else {
+      this.dropdownOpenPostId = post.postId;
+    }
+  }
+
   editPost(post: PostAggregationResponse): void {
     this.selectedPost = post;
     this.showEditModal = true;
+    this.dropdownOpenPostId = null;
+  }
+
+  deletePost(post: PostAggregationResponse): void {
+    if (confirm('Are you sure you want to delete this post?')) {
+      this.postService.DeletePost(post.postId, this.userId).subscribe({
+        next: (response) => {
+          if (response.data) {
+            // Remove the post from the posts array
+            this.posts = this.posts.filter(p => p.postId !== post.postId);
+          }
+        },
+        error: (error) => {
+          console.error('Error deleting post:', error);
+        }
+      });
+    }
+    this.dropdownOpenPostId = null;
+  }
+
+  // Close dropdown when clicking outside
+  closeDropdowns(): void {
+    this.dropdownOpenPostId = null;
   }
 
   onCloseEditModal(): void {
