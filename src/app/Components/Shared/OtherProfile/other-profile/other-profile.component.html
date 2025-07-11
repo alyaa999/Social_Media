@@ -38,14 +38,31 @@
                         Edit profile
                     </button>
                     <button *ngIf="!isCurrentUser"
-                            class="ml-4 px-6 py-2 rounded-full font-semibold bg-redis-red text-white hover:bg-hyper-07 transition-colors">
-                        Follow
+                            (click)="toggleFollow()"
+                            [disabled]="isFollowLoading"
+                            class="ml-4 px-6 py-2 rounded-full font-semibold relative transition-colors"
+                            [ngClass]="{
+                                'bg-redis-red text-white hover:bg-hyper-07': !isFollowingUser && !isFollowLoading,
+                                'bg-dusk-09 text-dusk-01 border border-dusk-50 hover:bg-dusk-01/10': isFollowingUser && !isFollowLoading,
+                                'opacity-75 cursor-wait': isFollowLoading
+                            }">
+                        <span *ngIf="!isFollowLoading">{{ isFollowingUser ? 'Unfollow' : 'Follow' }}</span>
+                        <div *ngIf="isFollowLoading" class="absolute inset-0 flex items-center justify-center">
+                            <div class="animate-spin rounded-full h-4 w-4 border-2"
+                                 [ngClass]="{'border-white border-t-transparent': !isFollowingUser, 'border-dusk-01 border-t-transparent': isFollowingUser}">
+                            </div>
+                        </div>
                     </button>
                 </div>
 
                 <div class="pt-12 px-8 pb-8">
-                    <h2 class="text-3xl font-bold text-dusk-01">{{ profile?.data?.firstName || '' }} {{ profile?.data?.lastName || '' }}</h2>
-                    <div class="text-dusk-50 text-lg font-mono" *ngIf="profile?.data?.userName">&#64;{{ profile.data.userName }}</div>
+                    <div class="flex items-center gap-2">
+                        <h2 class="text-3xl font-bold text-dusk-01">{{ profile?.data?.firstName || '' }} {{ profile?.data?.lastName || '' }}</h2>
+                        <span *ngIf="isFollowerUser" class="px-2 py-1 rounded bg-dusk-90 text-xs text-hyper-05 font-semibold whitespace-nowrap self-start mt-2">follows you</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="text-dusk-50 text-lg font-mono" *ngIf="profile?.data?.userName">&#64;{{ profile.data.userName }}</div>
+                    </div>
                     <p class="mt-4 text-base text-dusk-01" *ngIf="profile?.data?.bio">{{ profile.data.bio }}</p>
 
                     <div class="flex flex-wrap items-center text-dusk-50 mt-4 space-x-4">

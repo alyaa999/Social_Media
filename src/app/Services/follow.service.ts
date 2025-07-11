@@ -6,6 +6,7 @@ import { PaginationResponseWrapper } from '../Interfaces/response-wrapper/Pagina
 import { ProfileAggregation } from '../Interfaces/Profile/profile-aggrigation';
 import { Observable } from 'rxjs';
 import { ResponseWrapper } from '../Interfaces/response-wrapper/response-wrapper';
+import { IsFollowRequest } from '../Interfaces/Follow/IsFollow';
 
 @Injectable({
   providedIn: 'root'
@@ -38,22 +39,33 @@ export class FollowService {
     );
   }
 
-  follow(userId: string, otherId: string): Observable<ResponseWrapper<boolean>> {
+  follow(request : IsFollowRequest): Observable<ResponseWrapper<boolean>> {
     return this.http.post<ResponseWrapper<boolean>>(
-      `${this.baseUrl}follow`,
-      otherId,
-      { headers: this.createHeader(userId) }
+      `${this.baseUrl}follow/follow`,
+      request
     );
   }
 
-  unfollow(userId: string,otherId:string): Observable<ResponseWrapper<boolean>> {
-    return this.http.request<ResponseWrapper<boolean>>(
-      'delete',
-      `${this.baseUrl}unfollow`,
+  unfollow(request : IsFollowRequest): Observable<ResponseWrapper<boolean>> {
+    return this.http.delete<ResponseWrapper<boolean>>(
+      `${this.baseUrl}follow/unfollow`,
       {
-        body: otherId,
-        headers: this.createHeader(userId)
+        body : request,
       }
+    );
+  }
+
+  isFollower(request : IsFollowRequest) : Observable<ResponseWrapper<boolean>> {
+    return this.http.post<ResponseWrapper<boolean>>(
+      `${this.baseUrl}follow/is-follower`,
+      request
+    );
+  }
+
+  isFollowing(request : IsFollowRequest) : Observable<ResponseWrapper<boolean>> {
+    return this.http.post<ResponseWrapper<boolean>>(
+      `${this.baseUrl}follow/is-following`,
+      request
     );
   }
 }

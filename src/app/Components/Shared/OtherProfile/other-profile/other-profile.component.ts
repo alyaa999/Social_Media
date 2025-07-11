@@ -8,6 +8,7 @@ import { CommentService } from '../../../../Services/comment.service';
 import { GetPagedCommentRequest } from '../../../../Interfaces/Comment/get-paged-comment-request';
 import { ReactionService } from '../../../../Services/reaction.service';
 import { MediaType } from '../../../../Interfaces/feed/enums';
+import { FollowService } from '../../../../Services/follow.service';
 
 @Component({
   selector: 'app-other-profile',
@@ -33,18 +34,25 @@ export class OtherProfileComponent {
   modalLoading: boolean = false;
   selectedPostId: string | null = null;
 
+  // Follow state
+  isFollowingUser: boolean = false;
+  isFollowerUser: boolean = false;
+  isFollowLoading: boolean = false;
+
   constructor(
     private route: ActivatedRoute,
     private postService: PostService,
     private profileService: ProfileService,
     private commentService: CommentService,
-    private reactionService: ReactionService
+    private reactionService: ReactionService,
+    private followService: FollowService
   ) {
     this.route.params.subscribe(params => {
       const otherId = params['otherId'];
       if (otherId) {
         this.loadProfile(otherId);
         this.loadPosts(otherId);
+        this.checkFollowStatus(otherId);
       }
     });
   }
@@ -127,6 +135,75 @@ export class OtherProfileComponent {
         this.isLoadingPosts = false;
       }
     });
+  }
+
+  checkFollowStatus(otherId: string) {
+    const request = { otherId: otherId };
+    
+    // Check if current user is following the profile
+    this.followService.isFollowing(request).subscribe({
+      next: (response) => {
+        this.isFollowingUser = response.data;
+      },
+      error: (error) => {
+        console.error('Error checking following status:', error);
+      }
+    });
+
+    // Check if current user is followed by the profile
+    this.followService.isFollower(request).subscribe({
+      next: (response) => {
+        this.isFollowerUser = response.data;
+      },
+      error: (error) => {
+        console.error('Error checking follower status:', error);
+      }
+    });
+  }
+
+  toggleFollow() {
+    if (this.isFollowLoading || !this.profile?.data?.userId) return;
+    
+    this.isFollowLoading = true;
+    const request = { otherId: this.profile.data.userId };
+
+    if (!this.isFollowingUser) {
+      // Follow request
+      this.followService.follow(request).subscribe({
+        next: (response) => {
+          if (response.data) {
+            this.isFollowingUser = true;
+            // Update follower count
+            if (this.profile?.data) {
+              this.profile.data.noFollowers = (this.profile.data.noFollowers || 0) + 1;
+            }
+          }
+          this.isFollowLoading = false;
+        },
+        error: (error) => {
+          console.error('Error following user:', error);
+          this.isFollowLoading = false;
+        }
+      });
+    } else {
+      // Unfollow request
+      this.followService.unfollow(request).subscribe({
+        next: (response) => {
+          if (response.data) {
+            this.isFollowingUser = false;
+            // Update follower count
+            if (this.profile?.data) {
+              this.profile.data.noFollowers = Math.max(0, (this.profile.data.noFollowers || 1) - 1);
+            }
+          }
+          this.isFollowLoading = false;
+        },
+        error: (error) => {
+          console.error('Error unfollowing user:', error);
+          this.isFollowLoading = false;
+        }
+      });
+    }
   }
 
   formatDate(dateString: string): string {
