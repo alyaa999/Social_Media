@@ -73,11 +73,6 @@
         }
     }
 
-    .main-content {
-        display: flex;
-        height: calc(100vh - 70px);
-    }
-
     .sidebar {
         width: 350px;
         background: #163341;
@@ -85,13 +80,6 @@
         display: flex;
         flex-direction: column;
         transition: left 0.3s ease;
-    }
-
-    .chat-area {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        background: #091a23;
     }
 
     @media (max-width: 768px) {

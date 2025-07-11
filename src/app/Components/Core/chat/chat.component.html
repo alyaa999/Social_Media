@@ -1,42 +1,53 @@
 <!-- chat.component.html -->
 <div class="chat-container flex flex-col h-screen bg-[#091a23] text-white overflow-hidden">
-  <!-- Header -->
-  <div
-    class="header bg-gradient-to-br from-[#163341] to-[#2d4754] px-5 py-4 border-b border-[#2d4754] flex items-center justify-between shadow-lg">
-    <div class="header-left flex items-center gap-4">
-      <button class="mobile-toggle md:hidden text-[#e4291e] text-xl" (click)="toggleSidebar()">☰</button>
-      <div class="logo text-2xl font-bold text-[#e4291e] font-[Norican]">Thryve Chat</div>
-    </div>
-  </div>
-
-  <!-- Main Content -->
+  <!-- Main Content Area -->
   <div class="main-content flex flex-1 overflow-hidden">
+    
     <!-- Sidebar -->
     <div
-      class="sidebar w-[350px] bg-[#163341] border-r border-[#2d4754] flex flex-col transition-all duration-300 ease-in-out"
-      [class.-left-[350px]]="!sidebarOpen" [class.left-0]="sidebarOpen" [class.absolute]="sidebarOpen"
-      [class.z-50]="sidebarOpen" [class.h-full]="sidebarOpen">
-      <app-conversation-list 
-        (conversationSelected)="selectConversation($event)"
-        [updatedConversation]="currentConversation">
-      </app-conversation-list>
+      class="sidebar w-[350px] bg-[#163341] border-r border-[#2d4754] flex flex-col transition-all duration-300 ease-in-out overflow-hidden h-full"
+      [class.-left-[350px]]="!sidebarOpen"
+      [class.left-0]="sidebarOpen"
+      [class.absolute]="sidebarOpen"
+      [class.z-50]="sidebarOpen"
+      [class.h-full]="sidebarOpen"
+    >
+      <!-- Scrollable Conversation List -->
+      <div class="flex-1 overflow-y-auto min-h-0">
+        <app-conversation-list 
+          (conversationSelected)="selectConversation($event)"
+          [updatedConversation]="currentConversation">
+        </app-conversation-list>
+      </div>
     </div>
 
     <!-- Chat Area -->
-    <div class="chat-area flex-1 flex flex-col bg-[#091a23] relative">
-      <!-- Welcome State (if needed) -->
+    <div class="chat-area flex-1 flex flex-col bg-[#091a23] relative min-h-0 overflow-hidden">
+      
+      <!-- Welcome State (optional) -->
       <!-- <app-welcome-state *ngIf="showWelcomeState"></app-welcome-state> -->
 
       <!-- Active Chat -->
-      <div class="chat-area flex-1 flex flex-col bg-[#091a23] relative">
-        <div *ngIf="!showWelcomeState" class="active-chat flex flex-col h-full">
-          <div class="flex-1 overflow-y-auto">
-            <app-message-list [conversation]="currentConversation" [currentUserId]="currentUserId"></app-message-list>
-          </div>
-
-          <div class="sticky bottom-0 w-full">
-            <app-message-input [conversationId]="currentConversationId" (messageSent)="onMessageSent($event)"></app-message-input>
-          </div>
+      <div *ngIf="!showWelcomeState" class="flex flex-col h-[calc(100vh-4rem)]">
+        
+        <!-- Message List (fills remaining height) -->
+        <div class="flex-1 overflow-y-auto max-h-[calc(100vh-14rem)]">
+          <app-message-list
+            [conversation]="currentConversation"
+            [currentUserId]="currentUserId">
+          </app-message-list>
         </div>
+
+        <!-- Message Input (fixed at bottom) -->
+        <div class="border-t border-[#2d4754] p-3 bg-[#091a23] mt-auto">
+          <app-message-input
+            [conversationId]="currentConversationId"
+            (messageSent)="onMessageSent($event)">
+          </app-message-input>
+        </div>
+        
       </div>
     </div>
+
+  </div>
+</div>
