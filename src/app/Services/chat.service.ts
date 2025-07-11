@@ -77,7 +77,9 @@ export class ChatService {
     const url = `${this.baseUrl}/mark-read`;
     return this._http.post<void>(url, request);
   }
-
+  getConversationById(id: string): Observable<ConversationDTO> {
+    return this._http.get<ConversationDTO>(`${this.baseUrl}/conversation/${id}`);
+  }
   createConversation(data: NewConversationDTO): Observable<ConversationDTO> {
     const formData = new FormData();
     formData.append('isGroup', String(data.isGroup));

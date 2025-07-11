@@ -18,30 +18,25 @@
             <ng-container *ngIf="profile && !isLoadingProfile && !errorProfile">
                 <div class="relative w-full h-56 bg-dusk-08">
                     <img [src]="profile?.data?.coverUrl ? profile.data.coverUrl : 'assets/default-avatar.jpg'"
-                         [alt]="getCoverPhotoAltText()"
-                         [title]="getCoverPhotoAltText()"
-                         class="w-full h-full object-cover rounded-t-3xl border-b-4 border-dusk-50"
-                         (error)="onImgError($event, 'assets/default-avatar.jpg')">
+                        [alt]="getCoverPhotoAltText()" [title]="getCoverPhotoAltText()"
+                        class="w-full h-full object-cover rounded-t-3xl border-b-4 border-dusk-50"
+                        (error)="onImgError($event, 'assets/default-avatar.jpg')">
 
                     <div class="absolute left-8 -bottom-16 sm:left-10 sm:-bottom-20">
                         <img [src]="profile?.data?.profileUrl ? profile.data.profileUrl : 'assets/default-avatar.jpg'"
-                             [alt]="getProfilePictureAltText()"
-                             [title]="getProfilePictureAltText()"
-                             class="w-32 h-32 sm:w-40 sm:h-40 rounded-full border-4 border-redis-red object-cover bg-base-white shadow-lg"
-                             (error)="onImgError($event, 'assets/default-avatar.jpg')">
+                            [alt]="getProfilePictureAltText()" [title]="getProfilePictureAltText()"
+                            class="w-32 h-32 sm:w-40 sm:h-40 rounded-full border-4 border-redis-red object-cover bg-base-white shadow-lg"
+                            (error)="onImgError($event, 'assets/default-avatar.jpg')">
                     </div>
                 </div>
 
                 <div class="flex justify-end items-center mt-4 px-6">
                     <button *ngIf="isCurrentUser"
-                            class="ml-4 px-6 py-2 rounded-full border border-dusk-50 bg-dusk-09 text-dusk-01 font-semibold hover:bg-dusk-01/10 transition-colors">
+                        class="ml-4 px-6 py-2 rounded-full border border-dusk-50 bg-dusk-09 text-dusk-01 font-semibold hover:bg-dusk-01/10 transition-colors">
                         Edit profile
                     </button>
-                    <button *ngIf="!isCurrentUser"
-                            (click)="toggleFollow()"
-                            [disabled]="isFollowLoading"
-                            class="ml-4 px-6 py-2 rounded-full font-semibold relative transition-colors"
-                            [ngClass]="{
+                    <button *ngIf="!isCurrentUser" (click)="toggleFollow()" [disabled]="isFollowLoading"
+                        class="ml-4 px-6 py-2 rounded-full font-semibold relative transition-colors" [ngClass]="{
                                 'bg-redis-red text-white hover:bg-hyper-07': !isFollowingUser && !isFollowLoading,
                                 'bg-dusk-09 text-dusk-01 border border-dusk-50 hover:bg-dusk-01/10': isFollowingUser && !isFollowLoading,
                                 'opacity-75 cursor-wait': isFollowLoading
@@ -49,19 +44,27 @@
                         <span *ngIf="!isFollowLoading">{{ isFollowingUser ? 'Unfollow' : 'Follow' }}</span>
                         <div *ngIf="isFollowLoading" class="absolute inset-0 flex items-center justify-center">
                             <div class="animate-spin rounded-full h-4 w-4 border-2"
-                                 [ngClass]="{'border-white border-t-transparent': !isFollowingUser, 'border-dusk-01 border-t-transparent': isFollowingUser}">
+                                [ngClass]="{'border-white border-t-transparent': !isFollowingUser, 'border-dusk-01 border-t-transparent': isFollowingUser}">
                             </div>
                         </div>
+                    </button>
+                    <button *ngIf="!isCurrentUser" (click)="openChat()"
+                        class="ml-4 px-6 py-2 rounded-full bg-dusk-09 text-dusk-01 font-semibold hover:bg-dusk-01/10 transition-colors">
+                        <i class="fa fa-comment mr-2"></i>Message
                     </button>
                 </div>
 
                 <div class="pt-12 px-8 pb-8">
                     <div class="flex items-center gap-2">
-                        <h2 class="text-3xl font-bold text-dusk-01">{{ profile?.data?.firstName || '' }} {{ profile?.data?.lastName || '' }}</h2>
-                        <span *ngIf="isFollowerUser" class="px-2 py-1 rounded bg-dusk-90 text-xs text-hyper-05 font-semibold whitespace-nowrap self-start mt-2">follows you</span>
+                        <h2 class="text-3xl font-bold text-dusk-01">{{ profile?.data?.firstName || '' }} {{
+                            profile?.data?.lastName || '' }}</h2>
+                        <span *ngIf="isFollowerUser"
+                            class="px-2 py-1 rounded bg-dusk-90 text-xs text-hyper-05 font-semibold whitespace-nowrap self-start mt-2">follows
+                            you</span>
                     </div>
                     <div class="flex items-center gap-2">
-                        <div class="text-dusk-50 text-lg font-mono" *ngIf="profile?.data?.userName">&#64;{{ profile.data.userName }}</div>
+                        <div class="text-dusk-50 text-lg font-mono" *ngIf="profile?.data?.userName">&#64;{{
+                            profile.data.userName }}</div>
                     </div>
                     <p class="mt-4 text-base text-dusk-01" *ngIf="profile?.data?.bio">{{ profile.data.bio }}</p>
 
@@ -78,11 +81,13 @@
 
                     <div class="flex space-x-6 mt-4">
                         <span>
-                            <span class="font-bold text-redis-red">{{ (profile?.data?.noFollowing !== undefined && profile?.data?.noFollowing !== null) ? profile.data.noFollowing : 0 }}</span>
+                            <span class="font-bold text-redis-red">{{ (profile?.data?.noFollowing !== undefined &&
+                                profile?.data?.noFollowing !== null) ? profile.data.noFollowing : 0 }}</span>
                             <span class="text-dusk-50"> Following</span>
                         </span>
                         <span>
-                            <span class="font-bold text-redis-red">{{ (profile?.data?.noFollowers !== undefined && profile?.data?.noFollowers !== null) ? profile.data.noFollowers : 0 }}</span>
+                            <span class="font-bold text-redis-red">{{ (profile?.data?.noFollowers !== undefined &&
+                                profile?.data?.noFollowers !== null) ? profile.data.noFollowers : 0 }}</span>
                             <span class="text-dusk-50"> Followers</span>
                         </span>
                     </div>
@@ -95,9 +100,11 @@
                 <div class="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-redis-red"></div>
             </div>
 
-            <div *ngIf="errorPosts && !isLoadingPosts" class="m-4 p-4 bg-bg-subtle border-l-4 border-hyper-05 text-fg-default rounded">
+            <div *ngIf="errorPosts && !isLoadingPosts"
+                class="m-4 p-4 bg-bg-subtle border-l-4 border-hyper-05 text-fg-default rounded">
                 <p>{{ errorPosts }}</p>
-                <button (click)="loadPosts(profile?.userId)" class="mt-2 px-4 py-2 bg-bg-muted text-fg-default rounded hover:bg-dusk transition-colors">
+                <button (click)="loadPosts(profile?.userId)"
+                    class="mt-2 px-4 py-2 bg-bg-muted text-fg-default rounded hover:bg-dusk transition-colors">
                     Retry
                 </button>
             </div>
@@ -106,9 +113,9 @@
                 <div *ngFor="let post of posts" class="bg-dusk-08 rounded-lg shadow-md p-4">
                     <div class="flex items-center mb-4">
                         <img [src]="post.postAuthorProfile?.profilePictureUrl || 'assets/default-avatar.png'"
-                             [alt]="getPostAuthorProfilePictureAltText(post)"
-                             [title]="getPostAuthorProfilePictureAltText(post)"
-                             class="w-12 h-12 rounded-full mr-4 object-cover">
+                            [alt]="getPostAuthorProfilePictureAltText(post)"
+                            [title]="getPostAuthorProfilePictureAltText(post)"
+                            class="w-12 h-12 rounded-full mr-4 object-cover">
                         <div>
                             <h3 class="text-lg font-bold text-fg-default">{{ post.postAuthorProfile?.displayName }}</h3>
                             <p class="text-sm text-fg-muted">{{ formatDate(post.createdAt) }}</p>
@@ -118,25 +125,33 @@
                     <p class="text-base text-fg-body mb-4">{{ post.postContent }}</p>
 
                     <div *ngIf="post.hasMedia && post.media && post.media.length > 0" class="mt-3 mb-4">
-                        <img [src]="post.media[0].url" [alt]="getPostImageAltText(post)" [title]="getPostImageAltText(post)"
-                             class="w-full h-auto max-h-[400px] object-cover rounded-2xl"
-                             (error)="onImgError($event, 'assets/default-image.jpg')">
+                        <img [src]="post.media[0].url" [alt]="getPostImageAltText(post)"
+                            [title]="getPostImageAltText(post)"
+                            class="w-full h-auto max-h-[400px] object-cover rounded-2xl"
+                            (error)="onImgError($event, 'assets/default-image.jpg')">
                     </div>
 
                     <div class="flex items-center gap-6 text-sm text-fg-muted">
-                        <button class="flex items-center transition-all duration-200 px-2 py-1 rounded-lg relative group"
-                                [ngClass]="{'bg-redis-red/10 text-redis-red font-bold': post.isLiked && !post.isLikeLoading, 'hover:text-redis-red': !post.isLiked && !post.isLikeLoading}"
-                                (click)="toggleLike(post)"
-                                [attr.aria-pressed]="post.isLiked"
-                                [disabled]="post.isLikeLoading">
+                        <button
+                            class="flex items-center transition-all duration-200 px-2 py-1 rounded-lg relative group"
+                            [ngClass]="{'bg-redis-red/10 text-redis-red font-bold': post.isLiked && !post.isLikeLoading, 'hover:text-redis-red': !post.isLiked && !post.isLikeLoading}"
+                            (click)="toggleLike(post)" [attr.aria-pressed]="post.isLiked"
+                            [disabled]="post.isLikeLoading">
 
                             <div *ngIf="post.isLikeLoading" class="absolute inset-0 flex items-center justify-center">
-                                <div class="animate-spin rounded-full h-4 w-4 border-2 border-redis-red border-t-transparent"></div>
+                                <div
+                                    class="animate-spin rounded-full h-4 w-4 border-2 border-redis-red border-t-transparent">
+                                </div>
                             </div>
 
                             <div class="flex items-center" [class.opacity-0]="post.isLikeLoading">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2 transition-transform duration-200 ease-in-out group-hover:scale-110" [ngClass]="post.isLiked ? 'fill-redis-red' : 'fill-none stroke-current stroke-2'" viewBox="0 0 24 24">
-                                    <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3" stroke-linecap="round" stroke-linejoin="round"/>
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                    class="w-5 h-5 mr-2 transition-transform duration-200 ease-in-out group-hover:scale-110"
+                                    [ngClass]="post.isLiked ? 'fill-redis-red' : 'fill-none stroke-current stroke-2'"
+                                    viewBox="0 0 24 24">
+                                    <path
+                                        d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"
+                                        stroke-linecap="round" stroke-linejoin="round" />
                                 </svg>
                                 <span>{{ post.numberOfLikes || 0 }} Like{{ post.numberOfLikes === 1 ? '' : 's' }}</span>
                             </div>
@@ -148,17 +163,9 @@
                 </div>
             </div>
 
-            <app-comment-modal
-              *ngIf="showModal"
-              [comments]="selectedComments"
-              [reactions]="selectedReactions"
-              [visible]="showModal"
-              [mode]="modalMode"
-              [loading]="modalLoading"
-              [postId]="selectedPostId!"
-              (close)="closeModal()"
-              (commentSubmitted)="onCommentSubmitted($event)"
-            ></app-comment-modal>
+            <app-comment-modal *ngIf="showModal" [comments]="selectedComments" [reactions]="selectedReactions"
+                [visible]="showModal" [mode]="modalMode" [loading]="modalLoading" [postId]="selectedPostId!"
+                (close)="closeModal()" (commentSubmitted)="onCommentSubmitted($event)"></app-comment-modal>
 
             <div *ngIf="!isLoadingPosts && !errorPosts && posts.length === 0" class="text-center py-8 text-fg-muted">
                 <p>No posts to show yet.</p>

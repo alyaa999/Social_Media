@@ -43,6 +43,10 @@ export class ConversationListComponent implements OnInit, OnChanges {
     }
   }
 
+  addConversation(conversation: ConversationDTO) {
+    this.conversations.unshift(conversation);
+  }
+
   loadConversations() {
     const conversationpageRequest: ConversationsPageRequestDTO = {
 

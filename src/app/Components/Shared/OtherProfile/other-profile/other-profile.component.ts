@@ -9,6 +9,11 @@ import { GetPagedCommentRequest } from '../../../../Interfaces/Comment/get-paged
 import { ReactionService } from '../../../../Services/reaction.service';
 import { MediaType } from '../../../../Interfaces/feed/enums';
 import { FollowService } from '../../../../Services/follow.service';
+import { ChatService } from '../../../../Services/chat.service';
+import { ConversationsPageRequestDTO } from '../../../../Interfaces/Chat/ConversationsPageRequestDTO';
+import { UserConversationsDTO } from '../../../../Interfaces/Chat/UserConversationsDTO';
+import { ConversationDTO } from '../../../../Interfaces/Chat/ConversationDTO';
+import { NewConversationDTO } from '../../../../Interfaces/Chat/NewConversationDTO';
 
 @Component({
   selector: 'app-other-profile',
@@ -45,7 +50,9 @@ export class OtherProfileComponent {
     private profileService: ProfileService,
     private commentService: CommentService,
     private reactionService: ReactionService,
-    private followService: FollowService
+    private followService: FollowService,
+    private chatService: ChatService
+    
   ) {
     this.route.params.subscribe(params => {
       const otherId = params['otherId'];
@@ -289,5 +296,62 @@ export class OtherProfileComponent {
         }
       });
     }
+  }
+
+  conversations:UserConversationsDTO={
+    conversations:[],
+    next:''
+  }
+
+  existingConversation:ConversationDTO={
+    adminId:'',
+    createdAt:"",
+    groupImageUrl:"",
+    groupName:"",
+    id:"",
+    isGroup:false,
+    messages:[],
+    participants:[]
+  }
+
+  openChat() {
+
+    
+
+    // const conversationsReq: ConversationsPageRequestDTO = {
+    //   next:'',
+    //   pageSize:20,
+    // };
+    // this.chatService.getUserConversations(conversationsReq).subscribe({
+    //   next: (response) => {
+    //     this.conversations = response;
+    //     const otherUserId = this.profile?.data?.userId;
+    //     if (otherUserId) {
+    //       const existingConversation = this.conversations.conversations.find(c => c.participants.includes(otherUserId));
+    //       if (existingConversation && !existingConversation.isGroup) {
+    //         this.existingConversation = existingConversation;
+    //       } else {
+    //         const newConversation: NewConversationDTO = {
+    //           participants: [otherUserId],
+    //           groupImage:undefined,
+    //           isGroup: false,
+    //           groupName:null,
+    //           userId:''
+    //         };
+    //         this.chatService.createConversation(newConversation).subscribe({
+    //           next: (createdConv) => {
+    //             this.existingConversation = createdConv;
+    //           },
+    //           error: (error) => {
+    //             console.error('Error creating conversation:', error);
+    //           }
+    //         });
+    //       }
+    //     }
+    //   },
+    //   error: (error) => {
+    //     console.error('Error loading conversations:', error);
+    //   }
+    // });
   }
 }

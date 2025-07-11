@@ -19,11 +19,12 @@ export const routes: Routes = [
   { path: 'other/:otherId', component: OtherProfileComponent, canActivate: [authGuard] },
   { path: 'tailwindtest', component: TailwindTestComponent, canActivate: [authGuard] },
   { path: 'home', component: HomeComponent, canActivate: [authGuard] },
-  { path: 'following', component: FollowingsComponent, canActivate: [authGuard]},
-  { path: 'followers', component: FollowersComponent, canActivate: [authGuard]},
+  { path: 'following', component: FollowingsComponent, canActivate: [authGuard] },
+  { path: 'followers', component: FollowersComponent, canActivate: [authGuard] },
   { path: 'login', component: LoginComponent },
-  { path: 'chat' ,component:ChatComponent},
-  { path: 'signup', component: SignupComponent},
+  { path: 'chat/:otherId', component: ChatComponent, canActivate: [authGuard] },
+  { path: 'chat', component: ChatComponent, canActivate: [authGuard] },
+  { path: 'signup', component: SignupComponent },
   { path: 'landing', component: ThryveLandingComponent },
   { path: '**', redirectTo: '/feed' }
 ];

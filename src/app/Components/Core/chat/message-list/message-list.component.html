@@ -1,57 +1,65 @@
 <!-- message-list.component.html -->
 <div class="message-list flex flex-col h-full bg-[#0e1e24] rounded-lg">
 
-  <!-- Chat Header -->
-  <div class="chat-header z-10 flex items-center gap-3 px-3 py-2 border-b border-[#2d4754] bg-[#163341] shadow-sm">
-    <div class="chat-avatar shrink-0">
-      <img class="w-8 h-8 rounded-full object-cover"
-        [src]="conversation?.isGroup ? conversation?.groupImageUrl : conversation?.receiverProfile?.profilePictureUrl"
-        alt="Avatar" />
-    </div>
-    <div class="chat-info flex flex-col">
-      <h3 class="font-semibold text-white text-sm leading-tight">
-        {{ conversation?.isGroup ? conversation?.groupName : conversation?.receiverProfile?.displayName }}
-      </h3>
-      <span class="text-xs text-green-400 font-medium">● Online</span>
-    </div>
+  <!-- Show this when there's no conversation selected -->
+  <div *ngIf="!conversation" class="flex flex-col items-center justify-center h-full text-gray-400">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+    </svg>
+    <p class="text-lg font-semibold">No Conversation Selected</p>
+    <p class="text-sm">Choose a conversation or start a new one</p>
   </div>
 
-  
-  <!-- Messages Container -->
-<div #messagesContainer class="flex-1 overflow-y-auto px-4 py-4 flex flex-col-reverse">
-  <div *ngFor="let message of messages; let last = last" class="flex items-end"
-    [ngClass]="{
-      'justify-end': message.senderId === currentUserId,
-      'justify-start': message.senderId !== currentUserId
-    }"
-    [ngStyle]="{ 'margin-bottom': !last ? '1rem' : '0' }"
-  >
-
-    <!-- Left Avatar -->
-    <div *ngIf="message.senderId !== currentUserId" class="mr-2">
-      <img class="w-8 h-8 rounded-full" [src]="message.senderProfile.profilePictureUrl" alt="Avatar" />
-    </div>
-
-    <!-- Message Bubble -->
-    <div class="max-w-[70%] px-4 py-2 rounded-lg shadow transition-all duration-200"
-      [ngClass]="{
-        'bg-[#e4291e] text-white rounded-br-none': message.senderId === currentUserId,
-        'bg-[#2d4754] text-white rounded-bl-none': message.senderId !== currentUserId
-      }">
-      <div *ngIf="message.senderId !== currentUserId" class="text-sm font-semibold mb-1 text-gray-200">
-        {{ message.senderProfile.displayName }}
+  <!-- Show this when there's a conversation -->
+  <ng-container *ngIf="conversation">
+    <!-- Chat Header -->
+    <div class="chat-header z-10 flex items-center gap-3 px-3 py-2 border-b border-[#2d4754] bg-[#163341] shadow-sm">
+      <div class="chat-avatar shrink-0">
+        <img class="w-8 h-8 rounded-full object-cover"
+          [src]="conversation.isGroup ? conversation.groupImageUrl : conversation.receiverProfile?.profilePictureUrl"
+          alt="Avatar" />
       </div>
-      <div>{{ message.content }}</div>
+      <div class="chat-info flex flex-col">
+        <h3 class="font-semibold text-white text-sm leading-tight">
+          {{ conversation.isGroup ? conversation.groupName : conversation.receiverProfile?.displayName }}
+        </h3>
+        <span class="text-xs text-green-400 font-medium">● Online</span>
+      </div>
     </div>
 
-    <!-- Right Avatar -->
-    <div *ngIf="message.senderId === currentUserId" class="ml-2">
-      <img class="w-8 h-8 rounded-full" [src]="message.senderProfile.profilePictureUrl" alt="Avatar" />
+    <!-- Messages Container -->
+    <div #messagesContainer class="flex-1 overflow-y-auto px-4 py-4 flex flex-col-reverse">
+      <div *ngFor="let message of messages; let last = last" class="flex items-end"
+        [ngClass]="{
+          'justify-end': message.senderId === currentUserId,
+          'justify-start': message.senderId !== currentUserId
+        }"
+        [ngStyle]="{ 'margin-bottom': !last ? '1rem' : '0' }"
+      >
+
+        <!-- Left Avatar -->
+        <div *ngIf="message.senderId !== currentUserId" class="mr-2">
+          <img class="w-8 h-8 rounded-full" [src]="message.senderProfile.profilePictureUrl" alt="Avatar" />
+        </div>
+
+        <!-- Message Bubble -->
+        <div class="max-w-[70%] px-4 py-2 rounded-lg shadow transition-all duration-200"
+          [ngClass]="{
+            'bg-[#e4291e] text-white rounded-br-none': message.senderId === currentUserId,
+            'bg-[#2d4754] text-white rounded-bl-none': message.senderId !== currentUserId
+          }">
+          <div *ngIf="message.senderId !== currentUserId" class="text-sm font-semibold mb-1 text-gray-200">
+            {{ message.senderProfile.displayName }}
+          </div>
+          <div>{{ message.content }}</div>
+        </div>
+
+        <!-- Right Avatar -->
+        <div *ngIf="message.senderId === currentUserId" class="ml-2">
+          <img class="w-8 h-8 rounded-full" [src]="message.senderProfile.profilePictureUrl" alt="Avatar" />
+        </div>
+
+      </div>
     </div>
-
-  </div>
-</div>
-
-
-
+  </ng-container>
 </div>
