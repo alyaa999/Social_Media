@@ -7,30 +7,33 @@
       </div>
 
       <!-- Center - Search Bar -->
-      <div class="flex-1 flex items-center justify-center px-2 lg:ml-6 lg:justify-end">
-        <div class="max-w-lg w-full lg:max-w-xs relative">
+      <div class="flex-1 flex items-center justify-center px-2 lg:ml-6 lg:justify-center">
+        <div class="max-w-md w-full lg:max-w-lg relative">
           <label for="search" class="sr-only">Search</label>
           <div class="relative">
             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <svg class="h-5 w-5 text-dusk-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                 <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
               </svg>
             </div>
             <input 
               id="search" 
               name="search" 
-              class="block w-full pl-10 pr-3 py-2 rounded-md leading-5 bg-dusk-09 placeholder-dusk-50 focus:outline-none focus:placeholder-dusk-30 focus:ring-1 focus:ring-hyper-05 focus:border-hyper-05 sm:text-sm" 
-              placeholder="Search" 
+              class="block w-full pl-10 pr-3 py-2 rounded-full leading-5 bg-form-input-bg border border-form-input-border text-form-input-fg placeholder-form-input-placeholder focus:outline-none focus:ring-1 focus:ring-hyper-05 focus:border-hyper-05 sm:text-sm" 
+              placeholder="Search for people..." 
               type="search"
               [(ngModel)]="searchQuery"
               (input)="onSearch($event)">
           </div>
-          <div *ngIf="searchResults.length > 0" class="absolute mt-1 w-full rounded-md bg-dusk-08 shadow-lg z-10">
-            <ul class="max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
-              <li *ngFor="let result of searchResults" (click)="navigateToUserProfile(result.userId)" class="text-dusk-01 cursor-pointer select-none relative py-2 pl-3 pr-9 hover:bg-dusk-07">
+          <div *ngIf="searchResults.length > 0" class="absolute mt-2 w-full rounded-lg bg-bg-subtle shadow-lg z-10 border border-border">
+            <ul class="max-h-80 rounded-md py-1 text-base overflow-auto focus:outline-none sm:text-sm">
+              <li *ngFor="let result of searchResults" (click)="navigateToUserProfile(result.userId)" class="cursor-pointer select-none relative py-2 px-4 hover:bg-dusk-90">
                 <div class="flex items-center">
-                  <img [src]="result.profilePictureUrl || 'assets/default-avatar.png'" alt="" class="h-6 w-6 rounded-full">
-                  <span class="ml-3 block font-normal truncate">{{ result.displayName }}</span>
+                  <img [src]="result.profilePictureUrl || 'assets/default-avatar.png'" alt="Profile picture of {{ result.displayName }}" class="h-8 w-8 rounded-full">
+                  <div class="ml-3">
+                    <p class="text-sm font-medium text-fg-default">{{ result.displayName }}</p>
+                    <p class="text-xs text-fg-muted">{{ result.userName }}</p>
+                  </div>
                 </div>
               </li>
             </ul>
