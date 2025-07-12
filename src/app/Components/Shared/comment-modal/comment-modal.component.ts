@@ -5,6 +5,7 @@ import { AggregatedComment } from '../../../Interfaces/Comment/aggregated-commen
 import { SimpleUserProfile } from '../../../Interfaces/post/simple-user-profile';
 import { FormsModule } from '@angular/forms';
 import { CommentService } from '../../../Services/comment.service';
+import { ProfileService } from '../../../Services/profile.service';
 import { CreateCommentRequest } from '../../../Interfaces/Comment/create-comment-request';
 import { CommentResponse } from '../../../Interfaces/Comment/comment-response';
 import { EditCommentRequest } from '../../../Interfaces/Comment/edit-comment-request';
@@ -24,17 +25,24 @@ export class CommentModalComponent {
   @Input() loading: boolean = false;
   @Input() postId!: string;
   @Output() close = new EventEmitter<void>();
-  @Output() commentSubmitted = new EventEmitter<string>();
+  @Output() commentSubmitted = new EventEmitter<AggregatedComment>();
   @Output() commentDeleted = new EventEmitter<void>();
 
   newCommentText: string = '';
   submitting: boolean = false;
   currentUserId: string | null = null;
+  currentUserDisplayName: string | null = null;
+  currentUserUserName: string | null = null;
+  currentUserProfilePictureUrl: string | null = null;
   activeMenuCommentId: string | null = null;
   editingCommentId: string | null = null;
   editedCommentContent: string = '';
 
-  constructor(private commentService: CommentService, private cdr: ChangeDetectorRef) {
+  constructor(
+    private commentService: CommentService,
+    private profileService: ProfileService,
+    private cdr: ChangeDetectorRef
+  ) {
     if (typeof localStorage !== 'undefined') {
       this.currentUserId = localStorage.getItem('userId');
     }
@@ -131,45 +139,42 @@ export class CommentModalComponent {
       Media: undefined
     };
     this.commentService.CreateComment(req).subscribe({
-      next: (response) => {
-        if (response?.data) {
-          // Get the current user's profile from the existing comments or create a basic one
-          const currentUserProfile = this.comments.length > 0 
-            ? this.comments[0].commentAuthor 
-            : {
-                userId: response.data.AuthorId,
-                userName: 'You', // This should ideally come from a user service
-                displayName: 'You',
-                profilePictureUrl: undefined
-              };
+      next: (commentResponse) => {
+        if (commentResponse.data && this.currentUserId) {
+          this.profileService.GetProfileByUserIdMin(this.currentUserId).subscribe({
+            next: (profileResponse) => {
+              if (profileResponse.data) {
+                const newComment: AggregatedComment = {
+                  commentId: commentResponse.data.CommentId,
+                  postId: commentResponse.data.PostId,
+                  authorId: commentResponse.data.AuthorId,
+                  commentContent: commentText,
+                  mediaUrl: commentResponse.data.MediaUrl,
+                  createdAt: new Date(), // Optimistic update
+                  isEdited: commentResponse.data.IsEdited,
+                  reactionsCount: commentResponse.data.ReactionsCount,
+                  isLiked: false,
+                  commentAuthor: profileResponse.data,
+                };
 
-          // Map the response to an AggregatedComment using the returned data
-          const newComment: AggregatedComment = {
-            commentId: response.data.CommentId,
-            postId: response.data.PostId,
-            authorId: response.data.AuthorId,
-            commentContent: response.data.CommentContent || commentText, // Use API response content or fallback to sent content
-            mediaUrl: response.data.MediaUrl,
-            createdAt: new Date(response.data.CreatedAt),
-            isEdited: response.data.IsEdited,
-            reactionsCount: response.data.ReactionsCount,
-            isLiked: false,
-            commentAuthor: currentUserProfile
-          };
-          
-          // Add the new comment to the beginning of the array
-          this.comments = [newComment, ...this.comments];
-          
-          // Reset the form
-          this.newCommentText = '';
-          
-          // Emit the new comment content
-          this.commentSubmitted.emit(newComment.commentContent);
+                this.comments.unshift(newComment);
+                this.newCommentText = '';
+                this.commentSubmitted.emit(newComment);
+                this.cdr.detectChanges();
+              }
+              this.submitting = false;
+            },
+            error: (profileError) => {
+              console.error('Error fetching profile for comment:', profileError);
+              this.submitting = false;
+            }
+          });
+        } else {
+          this.submitting = false;
         }
-        this.submitting = false;
       },
-      error: (error) => {
-        console.error('Error posting comment:', error);
+      error: (commentError) => {
+        console.error('Error posting comment:', commentError);
         this.submitting = false;
       }
     });

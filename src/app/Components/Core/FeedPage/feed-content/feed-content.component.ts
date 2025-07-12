@@ -152,28 +152,8 @@ export class FeedContentComponent implements OnInit {
     this.modalLoading = false;
   }
 
-  handleCommentSubmission(commentText: string) {
+  handleCommentSubmission(newComment: AggregatedComment) {
     if (!this.selectedPostId) return;
-
-    const newComment: AggregatedComment = {
-      commentId: uuidv4(),
-      postId: this.selectedPostId,
-      authorId: 'current-user-id', // Static placeholder
-      commentContent: commentText,
-      createdAt: new Date(),
-      isEdited: false,
-      reactionsCount: 0,
-      isLiked: false,
-      commentAuthor: { // Static placeholder for current user
-        userId: 'current-user-id', // Corrected property name to match interface
-        userName: 'current_user',
-        displayName: 'Current User',
-        profilePictureUrl: 'assets/default-avatar.png',
-      },
-    };
-
-    // Add to the master static array
-    STATIC_COMMENTS.unshift(newComment);
 
     // Add to the currently displayed comments in the modal
     this.selectedComments.unshift(newComment);

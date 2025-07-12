@@ -76,16 +76,14 @@ export class ProfilePostsComponent implements OnInit {
     this.modalLoading = false;
   }
 
-  onCommentSubmitted(commentText: string) {
-    // Find the post and update its comment count immediately
+  onCommentSubmitted(newComment: any) {
+    // Add the new comment to the top of the list
+    this.selectedComments.unshift(newComment);
+
+    // Find the post and update its comment count
     const post = this.posts.find(p => p.postId === this.selectedPostId);
     if (post) {
       post.numberOfComments = (post.numberOfComments || 0) + 1;
-    }
-
-    // Reload comments to show the new comment immediately
-    if (this.selectedPostId) {
-      this.loadComments(this.selectedPostId);
     }
   }
 
