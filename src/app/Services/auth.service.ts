@@ -6,6 +6,7 @@ import { environment } from '../../enviroment/enviroment';
 import { LoginRequest } from '../Interfaces/Auth/LoginRequest';
 import { LoginResponse } from '../Interfaces/Auth/LoginResponse';
 import { RegisterRequest } from '../Interfaces/Auth/RegisterRequest';
+import { RefreshRequest } from '../Interfaces/Auth/refreshRequest';
 
 @Injectable({
   providedIn: 'root'
@@ -27,6 +28,9 @@ export class AuthService {
       tap((response: LoginResponse) => {
         if (response.accessToken) {
           this.setToken(response.accessToken);
+        }
+        if (response.refreshToken) {
+          localStorage.setItem('refreshToken', response.refreshToken);
         }
       }),
       catchError((error: HttpErrorResponse) => {
@@ -68,4 +72,15 @@ export class AuthService {
       })
     );
   }
+
+  refresh(refreshRequest: RefreshRequest): Observable<LoginResponse> {
+  const url = environment.apiBaseUrl + 'auth/refresh';
+  return this.http.post<LoginResponse>(url, refreshRequest).pipe(
+    catchError((error: HttpErrorResponse) => {
+      console.error('Refresh token request failed:', error);
+      return throwError(() => error);
+    })
+  );
+}
+
 }
