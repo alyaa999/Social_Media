@@ -23,7 +23,7 @@
                     <div class="conversation-preview">
                         {{ conversation.lastMessage?.content || 'No messages yet' }}
                     </div>
-                    <span *ngIf="conversation.lastMessage && !conversation.lastMessage.read" class="unread-badge"></span>
+                    <span *ngIf="conversation.lastMessage && !conversation.lastMessage.read && conversation.lastMessage.senderId !== currentUserId" class="unread-badge"></span>
                 </div>
             </div>
         </div>

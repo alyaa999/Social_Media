@@ -17,6 +17,7 @@
         <app-conversation-list
           [conversations]="allConversations"
           [currentConversation]="currentConversation"
+          [currentUserId]="currentUserId"
           (conversationSelected)="selectConversation($event)">
         </app-conversation-list>
       </div>

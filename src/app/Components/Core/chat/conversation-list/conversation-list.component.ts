@@ -16,6 +16,7 @@ export class ConversationListComponent implements OnChanges {
   @Input() currentConversation: ConversationDTO | null = null;
   @Input() updatedConversation: ConversationDTO | null = null;
   @Input() conversations: ConversationDTO[] = [];
+  @Input() currentUserId: string = '';
   searchTerm = '';
   @Output() conversationSelected = new EventEmitter<ConversationDTO>();
 

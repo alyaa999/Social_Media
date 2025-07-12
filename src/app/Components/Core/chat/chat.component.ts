@@ -12,6 +12,7 @@ import { ActivatedRoute } from '@angular/router';
 import { UserConversationsDTO } from '../../../Interfaces/Chat/UserConversationsDTO';
 import { NewConversationDTO } from '../../../Interfaces/Chat/NewConversationDTO';
 import { ConversationsPageRequestDTO } from '../../../Interfaces/Chat/ConversationsPageRequestDTO';
+import { MarkReadRequestDTO } from '../../../Interfaces/Chat/MarkReadRequestDTO';
 
 @Component({
   selector: 'app-chat',
@@ -54,32 +55,43 @@ export class ChatComponent implements OnInit, OnDestroy {
 
   private setupSignalRListeners(): void {
     this.signalrService.addReceivePrivateMessageListener((message: MessageDTO) => {
+      const isCurrentConversation = this.currentConversation?.id === message.conversationId;
+      
+      // If the message is for the currently open chat, mark it as read immediately.
+      if (isCurrentConversation) {
+        message.read = true;
+        const markReadRequest: MarkReadRequestDTO = { conversationId: message.conversationId };
+        this.chatService.markRead(markReadRequest).subscribe({
+          error: (err) => console.error("Failed to mark message as read on the backend", err)
+        });
+      }
+
       let conversation = this.allConversations.find(c => c.id === message.conversationId);
 
       if (conversation) {
-        // If conversation exists, update it
-        conversation.messages = [...(conversation.messages || []), message];
+        // Update the conversation with the new message
         conversation.lastMessage = message;
 
-        // Move the updated conversation to the top of the list
-        this.allConversations = this.allConversations.filter(c => c.id !== message.conversationId);
-        this.allConversations.unshift(conversation);
-
-        // If it's the currently selected conversation, update the view
-        if (this.currentConversation?.id === message.conversationId) {
-          this.currentConversation = { ...conversation };
+        // If the conversation is open, add the message to its detailed view
+        if (isCurrentConversation && this.currentConversation) {
+          // Create a new object to trigger change detection in the message-list component
+          this.currentConversation = {
+            ...this.currentConversation,
+            messages: [...(this.currentConversation.messages || []), message]
+          };
         }
+
+        // Move the updated conversation to the top of the list
+        this.allConversations = this.allConversations.filter(c => c.id !== conversation!.id);
+        this.allConversations.unshift(conversation);
       } else {
-        // If conversation does not exist, it's a new chat.
-        // Fetch the full conversation details from the server.
+        // If the conversation is new, fetch its details from the server
         this.chatService.getConversationById(message.conversationId).subscribe({
           next: (newConversation) => {
-            // Add the new conversation to the top of the list
+            newConversation.lastMessage = message; // Ensure the very latest message is set
             this.allConversations.unshift(newConversation);
           },
-          error: (error) => {
-            console.error('Error fetching new conversation:', error);
-          }
+          error: (error) => console.error('Error fetching new conversation:', error)
         });
       }
     });
@@ -139,6 +151,29 @@ export class ChatComponent implements OnInit, OnDestroy {
   selectConversation(conversation: ConversationDTO) {
     this.currentConversation = conversation;
     this.showWelcomeState = false;
+
+    // Mark conversation as read
+    if (this.currentConversation.lastMessage && !this.currentConversation.lastMessage.read) {
+      const markReadRequest: MarkReadRequestDTO = {
+        conversationId: this.currentConversation.id
+      };
+      this.chatService.markRead(markReadRequest).subscribe({
+        next: () => {
+          // Update the local state to reflect that the message is read
+          if (this.currentConversation?.lastMessage) {
+            this.currentConversation.lastMessage.read = true;
+          }
+          const convInList = this.allConversations.find(c => c.id === this.currentConversation?.id);
+          if (convInList?.lastMessage) {
+            convInList.lastMessage.read = true;
+          }
+        },
+        error: (error) => {
+          console.error('Failed to mark conversation as read:', error);
+        }
+      });
+    }
+
     if (window.innerWidth <= 768) {
       this.sidebarOpen = false;
     }
@@ -155,6 +190,7 @@ export class ChatComponent implements OnInit, OnDestroy {
 
   onMessageSent(newMessage: MessageDTO) {
     if (this.currentConversation) {
+      // Update the current conversation view
       const existingMessages = Array.isArray(this.currentConversation.messages) ? this.currentConversation.messages : [];
       const updatedMessages = [...existingMessages, newMessage];
       this.currentConversation = {
@@ -162,6 +198,16 @@ export class ChatComponent implements OnInit, OnDestroy {
         messages: updatedMessages,
         lastMessage: newMessage,
       };
+
+      // Find and update the conversation in the main list
+      const conversationInList = this.allConversations.find(c => c.id === this.currentConversation?.id);
+      if (conversationInList) {
+        conversationInList.lastMessage = newMessage;
+        
+        // Move the updated conversation to the top of the list
+        this.allConversations = this.allConversations.filter(c => c.id !== conversationInList.id);
+        this.allConversations.unshift(conversationInList);
+      }
     }
   }
 }
