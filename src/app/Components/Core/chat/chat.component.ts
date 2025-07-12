@@ -54,23 +54,32 @@ export class ChatComponent implements OnInit, OnDestroy {
 
   private setupSignalRListeners(): void {
     this.signalrService.addReceivePrivateMessageListener((message: MessageDTO) => {
-      const conversation = this.allConversations.find(c => c.id === message.conversationId);
+      let conversation = this.allConversations.find(c => c.id === message.conversationId);
+
       if (conversation) {
+        // If conversation exists, update it
         conversation.messages = [...(conversation.messages || []), message];
         conversation.lastMessage = message;
-        
-        // Move the updated conversation to the top
-        this.allConversations = this.allConversations.filter(c => c.id !== conversation.id);
+
+        // Move the updated conversation to the top of the list
+        this.allConversations = this.allConversations.filter(c => c.id !== message.conversationId);
         this.allConversations.unshift(conversation);
 
+        // If it's the currently selected conversation, update the view
         if (this.currentConversation?.id === message.conversationId) {
           this.currentConversation = { ...conversation };
         }
       } else {
-        // If the conversation is not in the list, it's a new one.
-        // We should fetch it and add it to the list.
-        this.chatService.getConversationById(message.conversationId).subscribe(newConv => {
-          this.allConversations.unshift(newConv);
+        // If conversation does not exist, it's a new chat.
+        // Fetch the full conversation details from the server.
+        this.chatService.getConversationById(message.conversationId).subscribe({
+          next: (newConversation) => {
+            // Add the new conversation to the top of the list
+            this.allConversations.unshift(newConversation);
+          },
+          error: (error) => {
+            console.error('Error fetching new conversation:', error);
+          }
         });
       }
     });

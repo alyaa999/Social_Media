@@ -19,8 +19,11 @@
                         conversation.receiverProfile?.displayName }}</div>
                     <div class="conversation-time">{{ conversation.createdAt| date: 'short' }}</div>
                 </div>
-                <div class="conversation-preview">
-                    {{ conversation.lastMessage?.content || 'No messages yet' }}
+                <div class="conversation-preview-container">
+                    <div class="conversation-preview">
+                        {{ conversation.lastMessage?.content || 'No messages yet' }}
+                    </div>
+                    <span *ngIf="conversation.lastMessage && !conversation.lastMessage.read" class="unread-badge"></span>
                 </div>
             </div>
         </div>
