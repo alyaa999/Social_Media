@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { environment } from '../../enviroment/environment.development';
+import { environment } from '../../enviroment/enviroment';
 
 
 export type ContentType = 'post' | 'comment' | 'message';
