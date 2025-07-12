@@ -1,6 +1,11 @@
 import { HttpInterceptorFn } from '@angular/common/http';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
+  // Skip the interceptor if the X-Skip-Interceptor header is present
+  if (req.headers.has('X-Skip-Interceptor')) {
+    return next(req);
+  }
+
   console.log('✅ Interceptor triggered');
   console.log('Original request headers:', req.headers);
 

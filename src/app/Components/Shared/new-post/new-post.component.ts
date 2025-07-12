@@ -5,6 +5,7 @@ import { PostService } from '../../../Services/post.service';
 import { Media } from '../../../Interfaces/post/media';
 import { MediaType, Privacy } from '../../../Interfaces/feed/enums';
 import { PostCreateDto } from '../../../Interfaces/post/post-create-dto';
+import { RewriteAiService, ToneType } from '../../../Services/rewrite-ai.service';
 
 @Component({
   selector: 'app-new-post',
@@ -22,8 +23,16 @@ export class NewPostComponent {
   imagePreview: string | ArrayBuffer | null = null;
   isLoading = false;
   error: string | null = null;
+  
+  // Rewrite AI related properties
+  isRewriting = false;
+  selectedTone: ToneType = 'friendly';
+  toneOptions: ToneType[] = ['formal', 'friendly', 'excited', 'angry', 'professional', 'casual'];
 
-  constructor(private postService: PostService) {}
+  constructor(
+    private postService: PostService,
+    private rewriteAiService: RewriteAiService
+  ) {}
 
   toggleModal() {
     this.showModal = !this.showModal;
@@ -85,11 +94,41 @@ export class NewPostComponent {
     });
   }
 
+  rewriteContent() {
+    if (!this.postContent.trim()) {
+      this.error = 'Please enter some content to rewrite';
+      return;
+    }
+
+    this.isRewriting = true;
+    this.error = null;
+
+    this.rewriteAiService.rewrite(this.postContent, 'post', this.selectedTone)
+      .subscribe({
+        next: (rewrittenText) => {
+          this.postContent = rewrittenText;
+          this.isRewriting = false;
+        },
+        error: (error) => {
+          console.error('Error rewriting content:', error);
+          this.error = 'Failed to rewrite content. Please try again.';
+          this.isRewriting = false;
+        }
+      });
+  }
+
+  onToneChange(event: Event) {
+    const select = event.target as HTMLSelectElement;
+    this.selectedTone = select.value as ToneType;
+  }
+
   resetForm() {
     this.postContent = '';
     this.selectedImage = null;
     this.imagePreview = null;
     this.error = null;
     this.isLoading = false;
+    this.selectedTone = 'friendly';
+    this.isRewriting = false;
   }
 }
