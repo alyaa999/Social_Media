@@ -52,6 +52,7 @@
             {{ message.senderProfile.displayName }}
           </div>
           <div>{{ message.content }}</div>
+          <div class="text-xs text-gray-300 mt-1 text-right">{{ message.timeStamp | date:'shortTime' }}</div>
         </div>
 
         <!-- Right Avatar -->
