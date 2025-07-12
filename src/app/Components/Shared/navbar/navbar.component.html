@@ -8,7 +8,7 @@
 
       <!-- Center - Search Bar -->
       <div class="flex-1 flex items-center justify-center px-2 lg:ml-6 lg:justify-end">
-        <div class="max-w-lg w-full lg:max-w-xs">
+        <div class="max-w-lg w-full lg:max-w-xs relative">
           <label for="search" class="sr-only">Search</label>
           <div class="relative">
             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -16,7 +16,24 @@
                 <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
               </svg>
             </div>
-            <input id="search" name="search" class="block w-full pl-10 pr-3 py-2  rounded-md leading-5 bg-dusk-09 placeholder-dusk-50 focus:outline-none focus:placeholder-dusk-30 focus:ring-1 focus:ring-hyper-05 focus:border-hyper-05 sm:text-sm" placeholder="Search" type="search">
+            <input 
+              id="search" 
+              name="search" 
+              class="block w-full pl-10 pr-3 py-2 rounded-md leading-5 bg-dusk-09 placeholder-dusk-50 focus:outline-none focus:placeholder-dusk-30 focus:ring-1 focus:ring-hyper-05 focus:border-hyper-05 sm:text-sm" 
+              placeholder="Search" 
+              type="search"
+              [(ngModel)]="searchQuery"
+              (input)="onSearch($event)">
+          </div>
+          <div *ngIf="searchResults.length > 0" class="absolute mt-1 w-full rounded-md bg-dusk-08 shadow-lg z-10">
+            <ul class="max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
+              <li *ngFor="let result of searchResults" (click)="navigateToUserProfile(result.userId)" class="text-dusk-01 cursor-pointer select-none relative py-2 pl-3 pr-9 hover:bg-dusk-07">
+                <div class="flex items-center">
+                  <img [src]="result.profilePictureUrl || 'assets/default-avatar.png'" alt="" class="h-6 w-6 rounded-full">
+                  <span class="ml-3 block font-normal truncate">{{ result.displayName }}</span>
+                </div>
+              </li>
+            </ul>
           </div>
         </div>
       </div>

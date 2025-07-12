@@ -5,6 +5,8 @@ import { ResponseWrapper } from '../Interfaces/response-wrapper/response-wrapper
 import { Profile } from '../Interfaces/Profile/profile';
 import { SimpleUserProfile } from '../Interfaces/Profile/simple-user-profile';
 import { ProfileRequest } from '../Interfaces/Profile/profile-request';
+import { Observable } from 'rxjs';
+import { PaginationResponseWrapper } from '../Interfaces/response-wrapper/PaginationResponseWrapper';
 
 @Injectable({
   providedIn: 'root'
@@ -31,6 +33,15 @@ export class ProfileService {
 
   GetProfileByUserNameMin(userName: string){
     return this._http.get<ResponseWrapper<SimpleUserProfile>>(`${this.baseUrl}/min/username/${userName}`);
+  }
+
+  searchProfiles(query: string ,pageNumber: number = 1): Observable<PaginationResponseWrapper<SimpleUserProfile[]>> {
+    const params = {
+      query: query,
+      page: pageNumber.toString()
+    };
+
+    return this._http.get<PaginationResponseWrapper<SimpleUserProfile[]>>(`${this.baseUrl}profile/search`, { params });
   }
 
   AddProfile(Email: string, profile: ProfileRequest){
