@@ -1,5 +1,5 @@
 // message-list.component.ts
-import { Component, Input, OnInit, OnChanges, SimpleChanges, ViewChild, ElementRef, AfterViewChecked } from '@angular/core';
+import { Component, Input, OnInit, OnChanges, SimpleChanges, ViewChild, ElementRef, AfterViewChecked, Output, EventEmitter } from '@angular/core';
 import { MessageDTO } from '../../../../Interfaces/Chat/MessageDTO';
 import { ConversationDTO } from '../../../../Interfaces/Chat/ConversationDTO';
 import { CommonModule } from '@angular/common';
@@ -15,6 +15,7 @@ import { MessagesPageRequestDTO } from '../../../../Interfaces/Chat/MessagesPage
 })
 export class MessageListComponent implements OnInit, OnChanges, AfterViewChecked {
   @Input() conversation: ConversationDTO | null = null;
+  @Output() close = new EventEmitter<void>();
   messages: MessageDTO[] = [];
   @Input() currentUserId: string | null = null;
   @ViewChild('messagesContainer') private messagesContainer!: ElementRef;

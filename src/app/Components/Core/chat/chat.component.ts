@@ -20,7 +20,8 @@ import { ConversationsPageRequestDTO } from '../../../Interfaces/Chat/Conversati
   imports: [ConversationListComponent, MessageListComponent, MessageInputComponent, CommonModule]
 })
 export class ChatComponent implements OnInit, OnDestroy {
-  @ViewChild(ConversationListComponent) conversationList!: ConversationListComponent;
+  @ViewChild(ConversationListComponent) conversationListComponent!: ConversationListComponent;
+  allConversations: ConversationDTO[] = [];
   currentConversation: ConversationDTO | null = null;
   showWelcomeState = true;
   sidebarOpen = false;
@@ -53,17 +54,24 @@ export class ChatComponent implements OnInit, OnDestroy {
 
   private setupSignalRListeners(): void {
     this.signalrService.addReceivePrivateMessageListener((message: MessageDTO) => {
-      if (this.conversationList) {
-        const conversation = this.conversationList.conversations.find(c => c.id === message.conversationId);
-        if (conversation) {
-          conversation.messages = [...(conversation.messages || []), message];
-          conversation.lastMessage = message;
-          this.conversationList.updateConversation(conversation);
+      const conversation = this.allConversations.find(c => c.id === message.conversationId);
+      if (conversation) {
+        conversation.messages = [...(conversation.messages || []), message];
+        conversation.lastMessage = message;
+        
+        // Move the updated conversation to the top
+        this.allConversations = this.allConversations.filter(c => c.id !== conversation.id);
+        this.allConversations.unshift(conversation);
 
-          if (this.currentConversation?.id === message.conversationId) {
-            this.currentConversation = { ...conversation };
-          }
+        if (this.currentConversation?.id === message.conversationId) {
+          this.currentConversation = { ...conversation };
         }
+      } else {
+        // If the conversation is not in the list, it's a new one.
+        // We should fetch it and add it to the list.
+        this.chatService.getConversationById(message.conversationId).subscribe(newConv => {
+          this.allConversations.unshift(newConv);
+        });
       }
     });
   }
@@ -71,45 +79,46 @@ export class ChatComponent implements OnInit, OnDestroy {
   private handleRouteParams(): void {
     this.route.params.subscribe(params => {
       const otherId = params['otherId'];
-      if (otherId) {
-        this.findOrCreateConversation(otherId);
-      }
+      // Load all conversations, and then check if we need to open a specific one.
+      this.loadAndHandleConversations(otherId);
     });
   }
 
-  private findOrCreateConversation(otherId: string): void {
+  private loadAndHandleConversations(otherId?: string): void {
     const request: ConversationsPageRequestDTO = {
       next: '',
-      pageSize: 100
+      pageSize: 100 // Assuming a large enough page size to get all conversations
     };
 
-    // First, try to find an existing conversation with this user
     this.chatService.getUserConversations(request).subscribe((response: UserConversationsDTO) => {
-      const existingConversation = response.conversations.find(conv => 
-        !conv.isGroup && 
-        conv.receiverProfile?.userId === otherId
-      );
+      this.allConversations = response.conversations;
 
-      if (existingConversation) {
-        this.selectConversation(existingConversation);
-      } else {
-        // If no existing conversation, create a new one
-        const newConversation: NewConversationDTO = {
-          isGroup: false,
-          participants: [otherId]
-        };
-        
-        this.chatService.createConversation(newConversation).subscribe({
-          next: (createdConversation) => {
-            this.selectConversation(createdConversation);
-            if (this.conversationList) {
-              this.conversationList.addConversation(createdConversation);
+      // If an otherId is provided, find or create that specific conversation
+      if (otherId) {
+        const existingConversation = this.allConversations.find(conv =>
+          !conv.isGroup &&
+          conv.participants.includes(otherId)
+        );
+
+        if (existingConversation) {
+          this.selectConversation(existingConversation);
+        } else {
+          // If no existing conversation, create a new one
+          const newConversation: NewConversationDTO = {
+            isGroup: false,
+            participants: [otherId]
+          };
+
+          this.chatService.createConversation(newConversation).subscribe({
+            next: (createdConversation) => {
+              this.allConversations.unshift(createdConversation);
+              this.selectConversation(createdConversation);
+            },
+            error: (error) => {
+              console.error('Error creating conversation:', error);
             }
-          },
-          error: (error) => {
-            console.error('Error creating conversation:', error);
-          }
-        });
+          });
+        }
       }
     });
   }
@@ -128,6 +137,11 @@ export class ChatComponent implements OnInit, OnDestroy {
 
   toggleSidebar() {
     this.sidebarOpen = !this.sidebarOpen;
+  }
+
+  closeChat() {
+    this.currentConversation = null;
+    this.showWelcomeState = true;
   }
 
   onMessageSent(newMessage: MessageDTO) {

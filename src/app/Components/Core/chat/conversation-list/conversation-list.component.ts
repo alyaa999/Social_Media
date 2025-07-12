@@ -1,10 +1,8 @@
 // conversation-list.component.ts
-import { Component, EventEmitter, Input, OnInit, Output, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, Output, OnChanges, SimpleChanges } from '@angular/core';
 import { ConversationDTO } from '../../../../Interfaces/Chat/ConversationDTO';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ChatService } from '../../../../Services/chat.service';
-import { ConversationsPageRequestDTO } from '../../../../Interfaces/Chat/ConversationsPageRequestDTO';
 import { ProfileService } from '../../../../Services/profile.service';
 
 @Component({
@@ -14,23 +12,37 @@ import { ProfileService } from '../../../../Services/profile.service';
   templateUrl: './conversation-list.component.html',
   styleUrls: ['./conversation-list.component.css']
 })
-export class ConversationListComponent implements OnInit, OnChanges {
+export class ConversationListComponent implements OnChanges {
   @Input() currentConversation: ConversationDTO | null = null;
   @Input() updatedConversation: ConversationDTO | null = null;
-  conversations: ConversationDTO[] = [];
+  @Input() conversations: ConversationDTO[] = [];
   searchTerm = '';
   @Output() conversationSelected = new EventEmitter<ConversationDTO>();
 
-  constructor(private chatService: ChatService, private profileService: ProfileService) { }
-
-  ngOnInit() {
-    this.loadConversations();
-  }
+  constructor(private profileService: ProfileService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['updatedConversation'] && changes['updatedConversation'].currentValue) {
       this.updateConversation(changes['updatedConversation'].currentValue);
     }
+    if (changes['conversations'] && changes['conversations'].currentValue) {
+      this.processConversations(this.conversations);
+    }
+  }
+
+  processConversations(convs: ConversationDTO[]) {
+    const userId = localStorage.getItem('userId');
+
+    convs.forEach(element => {
+      if (!element.isGroup && !element.receiverProfile) {
+        const receiverId = element.participants.find(p => p !== userId);
+        if (receiverId) {
+          this.profileService.GetProfileByUserIdMin(receiverId).subscribe(profile => {
+            element.receiverProfile = profile.data;
+          });
+        }
+      }
+    });
   }
 
   updateConversation(updatedConv: ConversationDTO) {
@@ -47,46 +59,23 @@ export class ConversationListComponent implements OnInit, OnChanges {
     this.conversations.unshift(conversation);
   }
 
-  loadConversations() {
-    const conversationpageRequest: ConversationsPageRequestDTO = {
-
-      next: '',
-      pageSize: 20,
-    }
-    this.chatService.getUserConversations(conversationpageRequest).subscribe(convs => {
-      this.conversations = convs.conversations;
-
-      const userId = localStorage.getItem('userId');
-
-      this.conversations.forEach(element => {
-        if (!element.isGroup) {
-          const receiver = (element?.participants ? element.participants[0] : " ") === userId ? (element?.participants ? element.participants[1] : " ") : (element?.participants ? element.participants[0] : " ");
-          this.profileService.GetProfileByUserIdMin(receiver).subscribe(profile => {
-            element.receiverProfile = profile.data;
-          });
-        }
-      });
-      if (this.conversations.length > 0) {
-        this.currentConversation = this.conversations[0];
-        this.onConversationSelected(this.currentConversation);
-      }
-      console.log('Conversations loaded:', this.conversations);
-    }, error => {
-      console.error('Error loading conversations:', error);
-    });
-
-
-  }
 
   onConversationSelected(conversation: ConversationDTO) {
     this.conversationSelected.emit(conversation);
   }
 
   get filteredConversations() {
-    return this.conversations.filter(conv =>
-      (conv.groupName?.toLowerCase().includes(this.searchTerm.toLowerCase()) ?? false) ||
-      (!conv.isGroup && conv.lastMessage?.senderProfile?.displayName?.toLowerCase().includes(this.searchTerm.toLowerCase())) ||
-      (conv.lastMessage?.content?.toLowerCase().includes(this.searchTerm.toLowerCase()) ?? false)
-    );
+    if (!this.searchTerm) {
+      return this.conversations;
+    }
+    return this.conversations.filter(conv => {
+      const term = this.searchTerm.toLowerCase();
+      if (conv.isGroup) {
+        return conv.groupName?.toLowerCase().includes(term);
+      } else {
+        return conv.receiverProfile?.displayName?.toLowerCase().includes(term) ||
+               conv.receiverProfile?.userName?.toLowerCase().includes(term);
+      }
+    });
   }
 }

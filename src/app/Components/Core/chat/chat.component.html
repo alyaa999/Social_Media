@@ -14,15 +14,17 @@
     >
       <!-- Scrollable Conversation List -->
       <div class="flex-1 overflow-y-auto min-h-0">
-        <app-conversation-list 
-          (conversationSelected)="selectConversation($event)"
-          [updatedConversation]="currentConversation">
+        <app-conversation-list
+          [conversations]="allConversations"
+          [currentConversation]="currentConversation"
+          (conversationSelected)="selectConversation($event)">
         </app-conversation-list>
       </div>
     </div>
 
     <!-- Chat Area -->
-    <div class="chat-area flex-1 flex flex-col bg-[#091a23] relative min-h-0 overflow-hidden">
+    <div class="chat-area flex-1 flex-col bg-[#091a23] relative min-h-0 overflow-hidden"
+         [ngClass]="{'hidden md:flex': showWelcomeState, 'flex': !showWelcomeState}">
       
       <!-- Welcome State (optional) -->
       <div *ngIf="showWelcomeState" class="flex flex-col items-center justify-center h-full text-gray-400">
@@ -37,7 +39,8 @@
         <div class="flex-1 overflow-y-auto max-h-[calc(100vh-14rem)]">
           <app-message-list
             [conversation]="currentConversation"
-            [currentUserId]="currentUserId">
+            [currentUserId]="currentUserId"
+            (close)="closeChat()">
           </app-message-list>
         </div>
 

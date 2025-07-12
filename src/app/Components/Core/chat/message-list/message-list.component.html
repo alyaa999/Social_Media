@@ -19,12 +19,17 @@
           [src]="conversation.isGroup ? conversation.groupImageUrl : conversation.receiverProfile?.profilePictureUrl"
           alt="Avatar" />
       </div>
-      <div class="chat-info flex flex-col">
+      <div class="chat-info flex flex-col flex-1">
         <h3 class="font-semibold text-white text-sm leading-tight">
           {{ conversation.isGroup ? conversation.groupName : conversation.receiverProfile?.displayName }}
         </h3>
         <span class="text-xs text-green-400 font-medium">● Online</span>
       </div>
+      <button (click)="close.emit()" class="text-gray-400 hover:text-white ml-auto">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
     </div>
 
     <!-- Messages Container -->
