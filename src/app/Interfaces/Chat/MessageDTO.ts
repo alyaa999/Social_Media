@@ -10,4 +10,5 @@ export interface MessageDTO {
   hasAttachment: boolean;
   attachment: Attachment|null;
   read: boolean;
+  timeStamp: string;
 }

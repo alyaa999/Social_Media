@@ -1,5 +1,6 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { ConversationDTO } from '../../../Interfaces/Chat/ConversationDTO';
+import { SignalrService } from '../../../Services/signalr.service';
 import { MessageDTO } from '../../../Interfaces/Chat/MessageDTO';
 import { ConversationListComponent } from "./conversation-list/conversation-list.component";
 import { MessageListComponent } from "./message-list/message-list.component";
@@ -18,7 +19,7 @@ import { ConversationsPageRequestDTO } from '../../../Interfaces/Chat/Conversati
   styleUrls: ['./chat.component.css'],
   imports: [ConversationListComponent, MessageListComponent, MessageInputComponent, CommonModule]
 })
-export class ChatComponent implements OnInit {
+export class ChatComponent implements OnInit, OnDestroy {
   @ViewChild(ConversationListComponent) conversationList!: ConversationListComponent;
   currentConversation: ConversationDTO | null = null;
   showWelcomeState = true;
@@ -28,17 +29,41 @@ export class ChatComponent implements OnInit {
   constructor(
     private chatService: ChatService, 
     private authService: AuthService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private signalrService: SignalrService
   ) {}
 
   ngOnInit(): void {
     this.authService.verify().subscribe({
       next: (response) => {
         this.currentUserId = response.id;
+        this.signalrService.startConnection(this.currentUserId);
+        this.setupSignalRListeners();
         this.handleRouteParams();
       },
       error: (error) => {
         console.error('Failed to verify user', error);
+      }
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.signalrService.stopConnection();
+  }
+
+  private setupSignalRListeners(): void {
+    this.signalrService.addReceivePrivateMessageListener((message: MessageDTO) => {
+      if (this.conversationList) {
+        const conversation = this.conversationList.conversations.find(c => c.id === message.conversationId);
+        if (conversation) {
+          conversation.messages = [...(conversation.messages || []), message];
+          conversation.lastMessage = message;
+          this.conversationList.updateConversation(conversation);
+
+          if (this.currentConversation?.id === message.conversationId) {
+            this.currentConversation = { ...conversation };
+          }
+        }
       }
     });
   }

@@ -6,7 +6,7 @@ import { environment } from '../../enviroment/enviroment';
 import { LoginRequest } from '../Interfaces/Auth/LoginRequest';
 import { LoginResponse } from '../Interfaces/Auth/LoginResponse';
 import { RegisterRequest } from '../Interfaces/Auth/RegisterRequest';
-import { RefreshRequest } from '../Interfaces/Auth/refreshRequest';
+import { RefreshRequest } from '../Interfaces/Auth/RefreshRequest';
 
 @Injectable({
   providedIn: 'root'

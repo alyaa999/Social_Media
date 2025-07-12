@@ -8,6 +8,7 @@ import { MessagesPageRequestDTO } from '../../../../Interfaces/Chat/MessagesPage
 
 @Component({
   selector: 'app-message-list',
+  standalone: true,
   imports: [CommonModule],
   templateUrl: './message-list.component.html',
   styleUrls: ['./message-list.component.css']
