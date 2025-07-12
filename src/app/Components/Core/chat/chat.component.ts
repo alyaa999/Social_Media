@@ -9,6 +9,7 @@ import { CommonModule } from '@angular/common';
 import { ChatService } from '../../../Services/chat.service';
 import { AuthService } from '../../../Services/auth.service';
 import { ActivatedRoute } from '@angular/router';
+import { ProfileService } from '../../../Services/profile.service';
 import { UserConversationsDTO } from '../../../Interfaces/Chat/UserConversationsDTO';
 import { NewConversationDTO } from '../../../Interfaces/Chat/NewConversationDTO';
 import { ConversationsPageRequestDTO } from '../../../Interfaces/Chat/ConversationsPageRequestDTO';
@@ -29,10 +30,11 @@ export class ChatComponent implements OnInit, OnDestroy {
   currentUserId: string = '';
 
   constructor(
-    private chatService: ChatService, 
+    private chatService: ChatService,
     private authService: AuthService,
     private route: ActivatedRoute,
-    private signalrService: SignalrService
+    private signalrService: SignalrService,
+    private profileService: ProfileService
   ) {}
 
   ngOnInit(): void {
@@ -132,8 +134,17 @@ export class ChatComponent implements OnInit, OnDestroy {
 
           this.chatService.createConversation(newConversation).subscribe({
             next: (createdConversation) => {
-              this.allConversations.unshift(createdConversation);
-              this.selectConversation(createdConversation);
+              const otherUserId = createdConversation.participants.find(p => p !== this.currentUserId);
+              if (otherUserId && !createdConversation.isGroup) {
+                this.profileService.GetProfileByUserIdMin(otherUserId).subscribe(profile => {
+                  createdConversation.receiverProfile = profile.data;
+                  this.allConversations.unshift(createdConversation);
+                  this.selectConversation(createdConversation);
+                });
+              } else {
+                this.allConversations.unshift(createdConversation);
+                this.selectConversation(createdConversation);
+              }
             },
             error: (error) => {
               console.error('Error creating conversation:', error);

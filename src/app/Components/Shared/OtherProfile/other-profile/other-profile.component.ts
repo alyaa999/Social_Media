@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { PostService } from '../../../../Services/post.service';
 import { ProfileService } from '../../../../Services/profile.service';
 import { CommentService } from '../../../../Services/comment.service';
@@ -44,6 +44,7 @@ export class OtherProfileComponent {
   isFollowingUser: boolean = false;
   isFollowerUser: boolean = false;
   isFollowLoading: boolean = false;
+  otherId: string | null = null;
 
   // Follow Modal state
   showFollowModal: boolean = false;
@@ -53,6 +54,7 @@ export class OtherProfileComponent {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private postService: PostService,
     private profileService: ProfileService,
     private commentService: CommentService,
@@ -62,11 +64,11 @@ export class OtherProfileComponent {
     
   ) {
     this.route.params.subscribe(params => {
-      const otherId = params['otherId'];
-      if (otherId) {
-        this.loadProfile(otherId);
-        this.loadPosts(otherId);
-        this.checkFollowStatus(otherId);
+      this.otherId = params['otherId'];
+      if (this.otherId) {
+        this.loadProfile(this.otherId);
+        this.loadPosts(this.otherId);
+        this.checkFollowStatus(this.otherId);
       }
     });
   }
@@ -327,44 +329,9 @@ export class OtherProfileComponent {
   }
 
   openChat() {
-
-    
-
-    // const conversationsReq: ConversationsPageRequestDTO = {
-    //   next:'',
-    //   pageSize:20,
-    // };
-    // this.chatService.getUserConversations(conversationsReq).subscribe({
-    //   next: (response) => {
-    //     this.conversations = response;
-    //     const otherUserId = this.profile?.data?.userId;
-    //     if (otherUserId) {
-    //       const existingConversation = this.conversations.conversations.find(c => c.participants.includes(otherUserId));
-    //       if (existingConversation && !existingConversation.isGroup) {
-    //         this.existingConversation = existingConversation;
-    //       } else {
-    //         const newConversation: NewConversationDTO = {
-    //           participants: [otherUserId],
-    //           groupImage:undefined,
-    //           isGroup: false,
-    //           groupName:null,
-    //           userId:''
-    //         };
-    //         this.chatService.createConversation(newConversation).subscribe({
-    //           next: (createdConv) => {
-    //             this.existingConversation = createdConv;
-    //           },
-    //           error: (error) => {
-    //             console.error('Error creating conversation:', error);
-    //           }
-    //         });
-    //       }
-    //     }
-    //   },
-    //   error: (error) => {
-    //     console.error('Error loading conversations:', error);
-    //   }
-    // });
+    if (this.otherId) {
+      this.router.navigate(['/chat', this.otherId]);
+    }
   }
 
   openFollowModal(type: 'followers' | 'following') {
