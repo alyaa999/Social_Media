@@ -20,6 +20,7 @@ export class NavbarComponent implements OnInit {
   searchResults: SimpleUserProfile[] = [];
   searchSubject = new Subject<string>();
   searchQuery: string = '';
+  userCache = new Map<string, SimpleUserProfile>();
 
   constructor(private router: Router, private profileService: ProfileService) {}
 
@@ -29,18 +30,38 @@ export class NavbarComponent implements OnInit {
       distinctUntilChanged(),
       switchMap((query: string) => {
         if (query.trim() === '') {
-          this.searchResults = [];
           return [];
         }
         return this.profileService.searchProfiles(query);
       })
     ).subscribe(response => {
-      this.searchResults = response.data || [];
+      const newUsers = response.data || [];
+      newUsers.forEach(user => {
+        if (!this.userCache.has(user.userId)) {
+          this.userCache.set(user.userId, user);
+        }
+      });
+      this.filterResults(this.searchQuery);
     });
   }
 
   onSearch(event: any): void {
-    this.searchSubject.next(event.target.value);
+    const query = event.target.value;
+    this.searchQuery = query;
+    this.filterResults(query);
+    this.searchSubject.next(query);
+  }
+
+  filterResults(query: string): void {
+    if (query.trim() === '') {
+      this.searchResults = [];
+      return;
+    }
+    const cachedUsers = Array.from(this.userCache.values());
+    this.searchResults = cachedUsers.filter(user =>
+      (user.userName && user.userName.toLowerCase().includes(query.toLowerCase())) ||
+      (user.displayName && user.displayName.toLowerCase().includes(query.toLowerCase()))
+    );
   }
 
   navigateToUserProfile(userId: string): void {
