@@ -1,7 +1,9 @@
 import { Component, ElementRef, ViewChild, OnInit, AfterViewInit } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-thryve-landing',
+  imports : [RouterLink],
   templateUrl:'./thryve-landing.component.html',
   styleUrls: ['./thryve-landing.component.scss'],
 })

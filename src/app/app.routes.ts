@@ -11,20 +11,35 @@ import { FollowersComponent } from './Components/Shared/followers/followers/foll
 import { OtherProfileComponent } from './Components/Shared/OtherProfile/other-profile/other-profile.component';
 import { SignupComponent } from './Components/Core/signup/signup.component';
 import { ChatComponent } from './Components/Core/chat/chat.component';
+import { MainLayoutComponent } from './Components/Layouts/main-layout/main-layout.component';
+import { EmptyLayoutComponent } from './Components/Layouts/empty-layout/empty-layout.component';
 
 export const routes: Routes = [
-  { path: '', redirectTo: '/feed', pathMatch: 'full' },
-  { path: 'feed', component: FeedPageComponent, canActivate: [authGuard] },
-  { path: 'profile', component: ProfilePageComponent, canActivate: [authGuard] },
-  { path: 'other/:otherId', component: OtherProfileComponent, canActivate: [authGuard] },
-  { path: 'tailwindtest', component: TailwindTestComponent, canActivate: [authGuard] },
-  { path: 'home', component: HomeComponent, canActivate: [authGuard] },
-  { path: 'following', component: FollowingsComponent, canActivate: [authGuard] },
-  { path: 'followers', component: FollowersComponent, canActivate: [authGuard] },
-  { path: 'login', component: LoginComponent },
-  { path: 'chat/:otherId', component: ChatComponent, canActivate: [authGuard] },
-  { path: 'chat', component: ChatComponent, canActivate: [authGuard] },
-  { path: 'signup', component: SignupComponent },
-  { path: 'landing', component: ThryveLandingComponent },
+  {
+    path: '',
+    component: MainLayoutComponent,
+    canActivate: [authGuard],
+    children: [
+      { path: '', redirectTo: '/feed', pathMatch: 'full' },
+      { path: 'feed', component: FeedPageComponent },
+      { path: 'profile', component: ProfilePageComponent },
+      { path: 'other/:otherId', component: OtherProfileComponent },
+      { path: 'tailwindtest', component: TailwindTestComponent },
+      { path: 'home', component: HomeComponent },
+      { path: 'following', component: FollowingsComponent },
+      { path: 'followers', component: FollowersComponent },
+      { path: 'chat/:otherId', component: ChatComponent },
+      { path: 'chat', component: ChatComponent },
+    ]
+  },
+  {
+    path: '',
+    component: EmptyLayoutComponent,
+    children: [
+      { path: 'login', component: LoginComponent },
+      { path: 'signup', component: SignupComponent },
+      { path: 'landing', component: ThryveLandingComponent }
+    ]
+  },
   { path: '**', redirectTo: '/feed' }
 ];
