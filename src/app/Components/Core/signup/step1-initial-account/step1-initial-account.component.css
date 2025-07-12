@@ -1,5 +1,5 @@
 .signup-card {
-  background: rgba(22, 51, 65, 0.8);
+  background: rgb(30 41 59 / 0.8) ;
   backdrop-filter: blur(20px);
   border-radius: 25px;
   padding: 50px 40px;
