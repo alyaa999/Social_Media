@@ -68,15 +68,16 @@ CreateComment(data: CreateCommentRequest) {
 EditComment(data: EditCommentRequest){
   const formData = new FormData();
 
-  
   formData.append("CommentId", data.CommentId);
   formData.append("Content", data.Content);
-  formData.append("HasMedia", String(data.HasMedia));
   formData.append("MediaType", String(data.MediaType));
 
-  if(data.HasMedia && data.Media && data.MediaUrl){
+  if(data.Media){
     formData.append("Media", data.Media);
+    formData.append("HasMedia", String(true));
+  }else if(data.MediaUrl) {
     formData.append("MediaUrl", data.MediaUrl);
+    formData.append("HasMedia", String(false));
   }
 
   return this._http.put<ResponseWrapper<CommentResponse>>(this.baseUrl, formData, {});

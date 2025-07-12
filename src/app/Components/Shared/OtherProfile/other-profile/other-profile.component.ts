@@ -111,6 +111,13 @@ export class OtherProfileComponent {
     }
   }
 
+  onCommentDeleted() {
+    const post = this.posts.find(p => p.postId === this.selectedPostId);
+    if (post && post.numberOfComments > 0) {
+      post.numberOfComments--;
+    }
+  }
+
   closeModal() {
     this.showModal = false;
     this.selectedComments = [];

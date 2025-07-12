@@ -89,6 +89,13 @@ export class ProfilePostsComponent implements OnInit {
     }
   }
 
+  onCommentDeleted() {
+    const post = this.posts.find(p => p.postId === this.selectedPostId);
+    if (post && post.numberOfComments > 0) {
+      post.numberOfComments--;
+    }
+  }
+
   ngOnInit(): void {
     if (!this.userId) {
       console.error('User ID is required to load profile posts');

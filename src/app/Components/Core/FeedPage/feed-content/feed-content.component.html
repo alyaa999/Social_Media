@@ -98,11 +98,12 @@
   <app-comment-modal
     [comments]="selectedComments"
     [reactions]="selectedReactions"
-    [visible]="showModal"
+    [visible]="showCommentsModal"
     [mode]="modalMode"
     [loading]="modalLoading"
     [postId]="selectedPostId!"
-    (close)="closeModal()"
+    (close)="closeCommentsModal()"
     (commentSubmitted)="handleCommentSubmission($event)"
+    (commentDeleted)="handleCommentDeletion()"
   ></app-comment-modal>
 </div>

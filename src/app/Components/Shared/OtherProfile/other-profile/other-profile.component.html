@@ -163,9 +163,9 @@
                 </div>
             </div>
 
-            <app-comment-modal *ngIf="showModal" [comments]="selectedComments" [reactions]="selectedReactions"
+        <app-comment-modal *ngIf="showModal" [comments]="selectedComments" [reactions]="selectedReactions"
                 [visible]="showModal" [mode]="modalMode" [loading]="modalLoading" [postId]="selectedPostId!"
-                (close)="closeModal()" (commentSubmitted)="onCommentSubmitted($event)"></app-comment-modal>
+                (close)="closeModal()" (commentSubmitted)="onCommentSubmitted($event)" (commentDeleted)="onCommentDeleted()"></app-comment-modal>
 
             <div *ngIf="!isLoadingPosts && !errorPosts && posts.length === 0" class="text-center py-8 text-fg-muted">
                 <p>No posts to show yet.</p>

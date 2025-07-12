@@ -19,7 +19,7 @@
         <ng-container *ngIf="mode === 'comments'">
           <div *ngIf="comments?.length === 0" class="text-center text-dusk-50 my-8">No comments yet.</div>
           <div *ngFor="let comment of comments" class="mb-5 last:mb-0">
-            <div class="flex items-center mb-2">
+            <div class="flex items-start justify-between mb-2">
               <a [routerLink]="['/other', comment.commentAuthor.userId]" class="flex items-center group" style="text-decoration: none;">
                 <img [src]="comment.commentAuthor.profilePictureUrl || 'assets/default-avatar.png'" alt="Profile" class="w-9 h-9 rounded-full mr-3 object-cover group-hover:ring-2 group-hover:ring-hyper-05 transition">
                 <div class="flex flex-col">
@@ -27,15 +27,41 @@
                   <span class="text-xs text-dusk-30">{{ comment.createdAt | date:'medium' }}</span>
                 </div>
               </a>
-            </div>
-            <div class="border border-dusk-70 border-opacity-40 rounded-lg bg-dusk-08 shadow-sm px-4 ml-12 py-3 mt-3 mb-5">
-              <div class="text-fg-body">
-                <p>{{ comment.commentContent }}</p>
-                <img *ngIf="comment.mediaUrl" [src]="comment.mediaUrl" alt="Comment media" class="mt-2 rounded-md max-w-full h-48 object-cover">
+              <!-- 3-dot menu -->
+              <div class="relative">
+                <button (click)="toggleMenu(comment.commentId)" class="text-dusk-50 hover:text-white focus:outline-none" title="Comment options" aria-label="Comment options">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
+                  </svg>
+                </button>
+                <!-- Dropdown Menu -->
+                <div *ngIf="activeMenuCommentId === comment.commentId" class="absolute right-0 mt-2 w-48 bg-dusk-08 border border-dusk-70 rounded-md shadow-lg z-20">
+                  <a *ngIf="currentUserId === comment.authorId" (click)="startEdit(comment); $event.preventDefault()" href="#" class="block px-4 py-2 text-sm text-fg-default hover:bg-dusk-70">Edit</a>
+                  <a *ngIf="currentUserId === comment.authorId" (click)="deleteComment(comment.commentId); $event.preventDefault()" href="#" class="block px-4 py-2 text-sm text-redis-red hover:bg-dusk-70">Delete</a>
+                  <a (click)="reportComment(comment.commentId); $event.preventDefault()" href="#" class="block px-4 py-2 text-sm text-fg-default hover:bg-dusk-70">Report</a>
+                </div>
               </div>
-              <div class="text-xs text-dusk-50 mt-2 flex gap-2 items-center">
-                <span>{{ comment.reactionsCount }} Likes</span>
-                <span *ngIf="comment.isEdited" class="italic text-redis-red">(edited)</span>
+            </div>
+            <!-- Comment Content -->
+            <div class="border border-dusk-70 border-opacity-40 rounded-lg bg-dusk-08 shadow-sm px-4 ml-12 py-3 mt-3 mb-5">
+              <!-- View Mode -->
+              <div *ngIf="editingCommentId !== comment.commentId">
+                <div class="text-fg-body">
+                  <p>{{ comment.commentContent }}</p>
+                  <img *ngIf="comment.mediaUrl" [src]="comment.mediaUrl" alt="Comment media" class="mt-2 rounded-md max-w-full h-48 object-cover">
+                </div>
+                <div class="text-xs text-dusk-50 mt-2 flex gap-2 items-center">
+                  <span>{{ comment.reactionsCount }} Likes</span>
+                  <span *ngIf="comment.isEdited" class="italic text-redis-red">(edited)</span>
+                </div>
+              </div>
+              <!-- Edit Mode -->
+              <div *ngIf="editingCommentId === comment.commentId">
+                <textarea [(ngModel)]="editedCommentContent" class="w-full bg-dusk-09 border border-dusk-70 rounded-md p-2 text-fg-default focus:ring-2 focus:ring-hyper-light-blue focus:outline-none" rows="3" placeholder="Edit your comment..." aria-label="Edit comment text area"></textarea>
+                <div class="flex justify-end gap-2 mt-2">
+                  <button (click)="cancelEdit()" class="px-3 py-1 text-sm bg-dusk-70 text-fg-default rounded-md hover:bg-dusk-50">Cancel</button>
+                  <button (click)="saveEdit(comment)" class="px-3 py-1 text-sm bg-hyper-light-blue text-white rounded-md hover:bg-hyper-blue">Save</button>
+                </div>
               </div>
             </div>
           </div>

@@ -24,6 +24,7 @@ export class FeedContentComponent implements OnInit {
   isLoading = true;
   error: string | null = null;
 
+  showCommentsModal: boolean = false;
   showModal: boolean = false;
   modalMode: 'comments' | 'reactions' = 'comments';
   selectedComments: AggregatedComment[] = [];
@@ -99,7 +100,7 @@ export class FeedContentComponent implements OnInit {
     this.modalLoading = true;
     this.selectedComments = [];
     this.modalMode = 'comments';
-    this.showModal = true;
+    this.showCommentsModal = true;
     this.selectedPostId = postId;
 
     const req : GetPagedCommentRequest = {
@@ -143,8 +144,8 @@ export class FeedContentComponent implements OnInit {
     });
   }
 
-  closeModal() {
-    this.showModal = false;
+  closeCommentsModal() {
+    this.showCommentsModal = false;
     this.selectedComments = [];
     this.selectedReactions = [];
     this.selectedPostId = null;
@@ -181,6 +182,13 @@ export class FeedContentComponent implements OnInit {
     const post = this.posts.find(p => p.postId === this.selectedPostId);
     if (post) {
       post.commentsCount = (post.commentsCount || 0) + 1;
+    }
+  }
+
+  handleCommentDeletion() {
+    const post = this.posts.find(p => p.postId === this.selectedPostId);
+    if (post && post.commentsCount > 0) {
+      post.commentsCount--;
     }
   }
 

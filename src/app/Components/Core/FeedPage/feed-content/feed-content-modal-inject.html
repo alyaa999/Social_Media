@@ -1,5 +1,6 @@
 <app-comment-modal 
   [comments]="selectedComments" 
   [visible]="showCommentsModal" 
-  (close)="closeCommentsModal()">
+  (close)="closeCommentsModal()"
+  (commentDeleted)="handleCommentDeletion()">
 </app-comment-modal>
