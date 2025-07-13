@@ -181,11 +181,17 @@ export class FeedContentComponent implements OnInit {
     this.error = null;
 
     this.feedService.getTimeline().subscribe({
-      next: (data: Post[]) => {this.posts = data;},
+      next: (data: Post[]) => {
+        // Sort posts by creation date, newest first
+        this.posts = data.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+        this.isLoading = false;
+      },
       error: (err) => {
-        console.error('Error loading feed data:', err);}});
-
-    this.isLoading = false;
+        console.error('Error loading feed data:', err);
+        this.error = 'Failed to load feed.';
+        this.isLoading = false;
+      }
+    });
   }
 
   formatDate(dateString: string | Date): string {
