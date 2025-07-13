@@ -3,7 +3,8 @@
     <div class="flex justify-between h-16">
       <!-- Left side - Logo/Brand -->
       <div class="flex-shrink-0 flex items-center" (click)="navigateToFeed()">
-        <h1 class="text-xl font-bold text-dusk-01 cursor-pointer">SocialApp</h1>
+        <!-- <h1 class="text-xl font-bold text-dusk-01 cursor-pointer">SocialApp</h1> -->
+         <img src="assets/LOGO RED.svg" alt="Logo" class="h-8 w-auto cursor-pointer">
       </div>
 
       <!-- Center - Search Bar -->
@@ -16,11 +17,11 @@
                 <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
               </svg>
             </div>
-            <input 
-              id="search" 
-              name="search" 
-              class="block w-full pl-10 pr-3 py-2 rounded-full leading-5 bg-form-input-bg border border-form-input-border text-form-input-fg placeholder-form-input-placeholder focus:outline-none focus:ring-1 focus:ring-hyper-05 focus:border-hyper-05 sm:text-sm" 
-              placeholder="Search for people..." 
+            <input
+              id="search"
+              name="search"
+              class="block w-full pl-10 pr-3 py-2 rounded-full leading-5 bg-form-input-bg border border-form-input-border text-form-input-fg placeholder-form-input-placeholder focus:outline-none focus:ring-1 focus:ring-hyper-05 focus:border-hyper-05 sm:text-sm"
+              placeholder="Search for people..."
               type="search"
               [(ngModel)]="searchQuery"
               (input)="onSearch($event)">
@@ -53,8 +54,8 @@
 
         <!-- Notification button with modal -->
         <div class="relative ml-4">
-          <button 
-            type="button" 
+          <button
+            type="button"
             (click)="toggleNotifications()"
             class="p-1 rounded-full text-dusk-50 hover:text-dusk-30 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-hyper-05 relative"
             [class.text-hyper-05]="isNotificationOpen"
@@ -68,9 +69,9 @@
               <span class="sr-only">New notifications</span>
             </span>
           </button>
-          
+
           <!-- Notification Modal -->
-          <app-notification-modal 
+          <app-notification-modal
             *ngIf="isNotificationOpen"
             [isOpen]="isNotificationOpen"
             (closed)="closeNotifications()"

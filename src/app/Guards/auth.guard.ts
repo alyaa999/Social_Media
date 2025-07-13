@@ -11,7 +11,7 @@ export const authGuard: CanActivateFn = (route, state) => {
       return true;
     }
     // Redirect to login page
-    window.location.href = '/login';
+    window.location.href = '/landing';
     return false;
   }
 };
