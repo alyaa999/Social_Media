@@ -156,6 +156,9 @@
                                 <span>{{ post.numberOfLikes || 0 }} Like{{ post.numberOfLikes === 1 ? '' : 's' }}</span>
                             </div>
                         </button>
+                        <button (click)="openReactionsModal(post.postId)" class="hover:text-redis-red transition-colors">
+                            {{ post.numberOfLikes || 0 }} Like{{ post.numberOfLikes === 1 ? '' : 's' }}
+                        </button>
                         <button class="hover:text-redis-red transition-colors" (click)="openCommentsModal(post.postId)">
                             {{ post.numberOfComments || 0 }} Comments
                         </button>

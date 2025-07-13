@@ -127,7 +127,7 @@ export class FeedContentComponent implements OnInit {
     this.modalLoading = true;
     this.selectedReactions = [];
     this.modalMode = 'reactions';
-    this.showModal = true;
+    this.showCommentsModal = true;
     this.selectedPostId = postId;
 
     this.reactionService.getUsersReacted({ PostId: postId, Next: "" }).subscribe({

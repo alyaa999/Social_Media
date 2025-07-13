@@ -13,17 +13,31 @@
     </div>
   </div>
 
-  <div class="mt-4 flex items-center space-x-4 text-[var(--black-60)]">
-    <button class="flex items-center space-x-1 hover:text-[var(--hyper-07)]" [class.text-[var(--hyper-07)]]="post.isLiked">
-      <i class="fas" [class.fa-heart]="post.isLiked" [class.fa-heart-o]="!post.isLiked"></i>
-      <span>{{ post.reactsCount }}</span>
-    </button>
-    <button class="flex items-center space-x-1 hover:text-[var(--hyper-07)]">
-      <i class="fas fa-comment"></i>
-      <span>{{ post.commentsCount }}</span>
-    </button>
-    <button class="flex items-center space-x-1 hover:text-[var(--hyper-07)]">
-      <i class="fas fa-share"></i>
-    </button>
-  </div>
-</div> 
+  <div class="flex items-center justify-between mt-4 text-sm text-dusk-30">
+    <div class="flex items-center gap-4">
+        <button (click)="toggleLike(post)" [disabled]="post.isLikeLoading"
+            class="flex items-center gap-1.5 text-dusk-30 transition-colors duration-200 hover:text-redis-red"
+            [ngClass]="{'text-redis-red font-semibold': post.isLiked}">
+            <i class="fas fa-heart text-lg"></i>
+            <span>Like</span>
+        </button>
+        <button (click)="openCommentsModal(post.postId)"
+            class="flex items-center gap-1.5 text-dusk-30 transition-colors duration-200 hover:text-hyper-05">
+            <i class="fas fa-comment text-lg"></i>
+            <span>Comment</span>
+        </button>
+        <button class="flex items-center gap-1.5 text-dusk-30 transition-colors duration-200 hover:text-green-400">
+            <i class="fas fa-share text-lg"></i>
+            <span>Share</span>
+        </button>
+    </div>
+    <div class="flex items-center gap-4">
+        <button (click)="openReactionsModal(post.postId)" class="hover:underline">
+            <span>{{ post.reactsCount }} Like{{ post.reactsCount !== 1 ? 's' : '' }}</span>
+        </button>
+        <button (click)="openCommentsModal(post.postId)" class="hover:underline">
+            <span>{{ post.commentsCount }} Comment{{ post.commentsCount !== 1 ? 's' : '' }}</span>
+        </button>
+    </div>
+</div>
+</div>

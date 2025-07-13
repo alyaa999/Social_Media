@@ -82,6 +82,9 @@
           {{ post.reactsCount || 0 }} Like{{ post.reactsCount === 1 ? '' : 's' }}
         </span>
       </button>
+      <button class="hover:text-redis-red transition-colors" (click)="openReactionsModal(post.postId)">
+        {{ post.reactsCount || 0 }} Like{{ post.reactsCount === 1 ? '' : 's' }}
+      </button>
       <button class="hover:text-redis-red transition-colors" (click)="openCommentsModal(post.postId)">
         {{ post.commentsCount || 0 }} Comments
       </button>

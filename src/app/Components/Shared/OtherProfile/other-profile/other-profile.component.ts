@@ -14,6 +14,8 @@ import { GetPagedCommentRequest } from '../../../../Interfaces/Comment/get-paged
 import { ProfileAggregation } from '../../../../Interfaces/Profile/profile-aggrigation';
 import { ConversationDTO } from '../../../../Interfaces/Chat/ConversationDTO';
 import { UserConversationsDTO } from '../../../../Interfaces/Chat/UserConversationsDTO';
+import { ResponseWrapper } from '../../../../Interfaces/response-wrapper/response-wrapper';
+import { SimpleUserProfile } from '../../../../Interfaces/post/simple-user-profile';
 
 @Component({
   selector: 'app-other-profile',
@@ -98,6 +100,23 @@ export class OtherProfileComponent {
     this.modalMode = 'comments';
     this.showModal = true;
     this.loadComments(postId);
+  }
+
+  openReactionsModal(postId: string) {
+    this.selectedPostId = postId;
+    this.modalMode = 'reactions';
+    this.showModal = true;
+    this.modalLoading = true;
+    this.reactionService.getUsersReacted({ PostId: postId, Next: '' }).subscribe({
+      next: (data: ResponseWrapper<SimpleUserProfile[]>) => {
+        this.selectedReactions = data.data;
+        this.modalLoading = false;
+      },
+      error: (err: any) => {
+        this.modalLoading = false;
+        console.error('Error loading reactions:', err);
+      }
+    });
   }
 
   onCommentSubmitted(newComment: any) {

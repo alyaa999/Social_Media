@@ -141,9 +141,20 @@ export class ProfilePostsComponent implements OnInit {
   }
 
   openReactionsModal(postId: string): void {
+    this.selectedPostId = postId;
     this.modalMode = 'reactions';
     this.showModal = true;
-    this.selectedReactions = []; // Placeholder for reactions data
+    this.modalLoading = true;
+    this.reactionService.getUsersReacted({ PostId: postId, Next: '' }).subscribe({
+      next: (data) => {
+        this.selectedReactions = data.data;
+        this.modalLoading = false;
+      },
+      error: (err) => {
+        this.modalLoading = false;
+        console.error('Error loading reactions:', err);
+      }
+    });
   }
 
   isCurrentUserPost(post: PostAggregationResponse): boolean {
