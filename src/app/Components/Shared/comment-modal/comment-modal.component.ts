@@ -157,7 +157,7 @@ export class CommentModalComponent {
                   commentAuthor: profileResponse.data,
                 };
 
-                this.comments.unshift(newComment);
+                this.comments = [newComment, ...this.comments];
                 this.newCommentText = '';
                 this.commentSubmitted.emit(newComment);
                 this.cdr.detectChanges();
