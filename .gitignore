@@ -1,24 +1,31 @@
 # See https://docs.github.com/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
 
-# Compiled output
-/dist
-/tmp
-/out-tsc
-/bazel-out
+# Angular build output
+/dist/
+//tmp/
+//out-tsc/
+//bazel-out/
 
-# Node
-/node_modules
-npm-debug.log
-yarn-error.log
+# Node dependencies
+/node_modules/
+/package-lock.json
+npm-debug.log*
+yarn-error.log*
+
+# Angular cache
+/.angular/cache/
+
+# Coverage reports
+/coverage/
 
 # IDEs and editors
 .idea/
-.project
+/.project
 .classpath
 .c9/
-*.launch
+/*.launch
 .settings/
-*.sublime-workspace
+/*.sublime-workspace
 
 # Visual Studio Code
 .vscode/*
@@ -26,19 +33,20 @@ yarn-error.log
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
-.history/*
 
-# Miscellaneous
-/.angular/cache
+# Remove this, as it forces Git to track .history/
+# .history/*
+
+# Misc
 .sass-cache/
 /connect.lock
-/coverage
 /libpeerconnection.log
-testem.log
-/typings
+/testem.log
+/typings/
 
 # System files
 .DS_Store
 Thumbs.db
 
-src/enviroment/enviroment.ts
+# Environment files (fix typo: "enviroment.ts" → "environment.ts")
+/src/enviroment/enviroment*.ts
