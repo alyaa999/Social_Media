@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from '../../enviroment/enviroment';
+import { environment } from '../../environment/environment';
 import { INotificationsDTO } from '../Interfaces/notification/notification';
 import { Observable } from 'rxjs';
 import { PaginationResponseWrapper } from '../Interfaces/response-wrapper/PaginationResponseWrapper';

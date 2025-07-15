@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from '../../enviroment/enviroment';
+import { environment } from '../../environment/environment';
 import { Post } from '../Interfaces/feed/post';
 import { Observable, tap } from 'rxjs';
 

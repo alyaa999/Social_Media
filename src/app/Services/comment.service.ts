@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from '../../enviroment/enviroment';
+import { environment } from '../../environment/environment';
 import { ResponseWrapper } from '../Interfaces/response-wrapper/response-wrapper';
 import { CommentResponse } from '../Interfaces/Comment/comment-response';
 import { CreateCommentRequest } from '../Interfaces/Comment/create-comment-request';
@@ -43,7 +43,7 @@ CreateComment(data: CreateCommentRequest) {
 
   // First create the comment, then get the user profile and combine them
   return this._http.post<ResponseWrapper<CommentResponse>>(
-    this.baseUrl, 
+    this.baseUrl,
     formData
   ).pipe(
     switchMap(response => {

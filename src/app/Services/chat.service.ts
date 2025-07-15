@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { NewMessageDTO } from '../Interfaces/Chat/NewMessageDTO';
 import { MessageDTO } from '../Interfaces/Chat/MessageDTO';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../../enviroment/enviroment';
+import { environment } from '../../environment/environment';
 import { Observable } from 'rxjs';
 import { MarkReadRequestDTO } from '../Interfaces/Chat/MarkReadRequestDTO';
 import { NewConversationDTO } from '../Interfaces/Chat/NewConversationDTO';
@@ -63,7 +63,7 @@ export class ChatService {
       // No need for Content-Type header - browser will set it automatically with boundary
     );
   }
-  
+
   editMessage(message: MessageDTO): Observable<MessageDTO> {
     return this._http.patch<MessageDTO>(`${this.baseUrl}/message`, message);
   }

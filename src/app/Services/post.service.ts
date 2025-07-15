@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { environment } from '../../enviroment/enviroment';
+import { environment } from '../../environment/environment';
 import { HttpClient } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, tap, switchMap, map } from 'rxjs/operators';
@@ -30,7 +30,7 @@ export class PostService {
   AddPost(postDto: PostCreateDto): Observable<ResponseWrapper<PostResponseDTO>> {
     const formData = this.buildFormData(postDto);
     const userId = localStorage.getItem('userId');
-    
+
     if (!userId) {
       return throwError(() => new Error('User not logged in'));
     }
@@ -69,7 +69,7 @@ export class PostService {
           console.error('--- Backend Validation Errors ---');
           console.error(error.error.errors);
         }
-        
+
         return throwError(() => error);
       })
     );
@@ -144,7 +144,7 @@ export class PostService {
     formData.append('Content', postDto.Content);
     formData.append('Privacy', String(postDto.Privacy));
     formData.append('MediaType', String(postDto.MediaType));
-    
+
     const mediaArr = postDto.Media;
     if (mediaArr && mediaArr.length > 0) {
       mediaArr.forEach((media: any, index: number) => {
@@ -153,7 +153,7 @@ export class PostService {
         }
       });
     }
-    
+
     // Log the FormData for debugging
     console.log('--- FormData Contents ---');
     formData.forEach((value, key) => {

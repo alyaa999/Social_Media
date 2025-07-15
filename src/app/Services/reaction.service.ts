@@ -5,7 +5,7 @@ import { map } from 'rxjs/operators';
 import { CreateCommentReactionRequest } from '../Interfaces/Reaction/Comments/CreateCommentReactionRequest';
 import { ResponseWrapper } from '../Interfaces/response-wrapper/response-wrapper';
 import { DeleteCommentReactionRequest } from '../Interfaces/Reaction/Comments/DeleteCommentReactionRequest';
-import { environment } from '../../enviroment/enviroment';
+import { environment } from '../../environment/environment';
 import { DeletePostReactionRequest } from '../Interfaces/Reaction/Posts/DeletePostReactionRequest';
 import { CreatePostReactionRequest } from '../Interfaces/Reaction/Posts/CreatePostReactionRequest';
 import { GetPagedCommentRequest } from '../Interfaces/Comment/get-paged-comment-request';

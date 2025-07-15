@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from '../../enviroment/enviroment';
+import { environment } from '../../environment/environment';
 import { FollowingListRequest, FollowListRequest } from '../Interfaces/Follow/Follow';
 import { PaginationResponseWrapper } from '../Interfaces/response-wrapper/PaginationResponseWrapper';
 import { ProfileAggregation } from '../Interfaces/Profile/profile-aggrigation';

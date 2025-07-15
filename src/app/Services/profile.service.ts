@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { environment } from '../../enviroment/enviroment';
+import { environment } from '../../environment/environment';
 import { ResponseWrapper } from '../Interfaces/response-wrapper/response-wrapper';
 import { Profile } from '../Interfaces/Profile/profile';
 import { SimpleUserProfile } from '../Interfaces/Profile/simple-user-profile';
@@ -13,11 +13,11 @@ import { PaginationResponseWrapper } from '../Interfaces/response-wrapper/Pagina
 })
 export class ProfileService {
 
-  private baseUrl = environment.apiBaseUrl;  
+  private baseUrl = environment.apiBaseUrl;
 
   constructor(private _http: HttpClient) {}
 
-  
+
 
   GetProfileByUserId(userId: string){
     return this._http.get<ResponseWrapper<Profile>>(`${this.baseUrl}profile/${userId}`);
@@ -54,7 +54,7 @@ export class ProfileService {
     if(profile.UserName) {
       formData.append("UserName", profile.UserName);
     }
-    
+
     if(profile.Email) {
       formData.append("Email", profile.Email);
     }
@@ -63,7 +63,7 @@ export class ProfileService {
     if(profile.ProfilePic) {
       formData.append("ProfilePic", profile.ProfilePic);
     }
-    
+
     if(profile.CoverPic) {
       formData.append("CoverPic", profile.CoverPic);
     }
@@ -73,7 +73,7 @@ export class ProfileService {
 
   UpdateProfile(profile:Partial<ProfileRequest>){
     const formData = new FormData();
-    
+
     // Only append BirthDate if it exists
     if (profile.BirthDate) {
       const birthDate = new Date(profile.BirthDate).toISOString().split('T')[0];

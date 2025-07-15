@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
-import { environment } from '../../enviroment/enviroment';
+import { environment } from '../../environment/environment';
 import { LoginRequest } from '../Interfaces/Auth/LoginRequest';
 import { LoginResponse } from '../Interfaces/Auth/LoginResponse';
 import { RegisterRequest } from '../Interfaces/Auth/RegisterRequest';
@@ -60,7 +60,7 @@ export class AuthService {
       })
     );
   }
-  
+
   verify(): Observable<{id : string}> {
     const url = environment.apiBaseUrl + 'auth/verify';
     return this.http.get<{id : string}>(url).pipe(
