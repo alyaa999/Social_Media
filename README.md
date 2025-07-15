@@ -1,59 +1,146 @@
-# SocialMedia
+# Thryve – Frontend
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.6.
+![cover](./screenshots/Thryvedark.png)
 
-## Development server
+**Thryve** is a modern, twitter-like front-end web application designed for a microservices-based platform. Built using **Angular**, it delivers a dynamic and responsive user experience across core social functionalities including posts, real-time chat, notifications, profile management, and more.
 
-To start a local development server, run:
+This application is part of the **Integrated Software Development & Architecture** graduation project at the [Information Technology Institute (ITI)](https://iti.gov.eg/home), developed by the same team behind the Thryve backend.
 
-```bash
-ng serve
-```
+---
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## 👥 Team
 
-## Code scaffolding
+* [@MahmoudRKeshk](https://github.com/MahmoudRKeshk)
+* [@abdelrahmanramadan12](https://github.com/abdelrahmanramadan12)
+* [@Emanabdallah92](https://github.com/Emanabdallah92)
+* [@alyaa999](https://github.com/alyaa999)
+* [@HadyAbdelhady](https://github.com/HadyAbdelhady)
+* [@miinamaaher1](https://github.com/miinamaaher1)
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+---
 
-```bash
-ng generate component component-name
-```
+## 🧰 Tech Stack
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+| Tech        | Description                                                              |
+|-------------|--------------------------------------------------------------------------|
+| **Angular** | SPA framework using Signals, RxJS, component-based architecture          |
+| **SignalR** | Real-time communication for chat and notifications                       |
+| **JWT**     | Secure token-based authentication and session management                 |
+| **Tailwind**| Utility-first CSS framework for fast and modern styling                  |
+| **NgRx**    | (Optional) State management if used                                       |
 
-```bash
-ng generate --help
-```
+---
 
-## Building
+Start your journey with Thryve through a welcoming and visually engaging entry point. The platform is designed to provide a seamless and modern user experience from the very first interaction.
 
-To build the project run:
+![landing](./screenshots/tf00%20landing.png)
 
-```bash
-ng build
-```
+## ✨ Features
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+### 📝 Quick Registration
 
-## Running unit tests
+![signup](./screenshots/tf01%20signnup.png)
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+* Register with only **email and password**
+* Token stored securely in local storage
+* Redirected to profile completion flow
 
-```bash
-ng test
-```
+### 🧾 Multi-Step Profile Completion
 
-## Running end-to-end tests
+![complete ypur profile](./screenshots/tf02%20complete.png)
 
-For end-to-end (e2e) testing, run:
+* A flexible onboarding flow guiding the user through:
+  * Name and username
+  * Bio and interests
+  * Profile picture upload
+* Steps are optional and skippable, promoting early engagement
 
-```bash
-ng e2e
-```
+### 🔐 Token-Based Auth & Route Guards
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+![signin](./screenshots/tf03%20signin.png)
 
-## Additional Resources
+* JWT token validation on each request
+* Guards to restrict access to:
+  * Feed
+  * Chat
+  * Profile
+  * Post creation
+* Auto-redirect to login if session expires
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+### 📰 Feed Page + SignalR Notifications
+
+![feed](./screenshots/tf04%20home.png)
+
+* Personalized feed of posts from followed users
+* **Real-time notifications** for:
+  * New followers
+  * New comments
+  * Post reactions
+* WebSocket fallback using SignalR
+
+### 👤 Profile Page
+
+![profile](./screenshots/tf05%20profile.png)
+
+* View and edit personal profile
+* Public/private profile settings
+* Dynamic content based on logged-in user vs external view
+
+### ✍️ Write Post + AI Rewriting
+
+![post](./screenshots/tf06%20post%20+%20ai.png)
+
+* Create a post with:
+  * Text
+  * Media (image/video)
+* **AI Rewriting** option:
+  * Enhance or rephrase text before publishing using integrated AI
+
+### 💬 Chat Page with SignalR
+
+![chat](./screenshots/tf07%20chat%20+%20signalr.png)
+
+* Real-time 1-on-1 messaging
+* Message delivery and seen status
+* Auto-scroll and typing indicators
+* Built with SignalR and connected to backend chat service
+
+---
+
+## 🚀 Setup Instructions
+
+1. **Clone the Repository**
+
+   ```sh
+   git clone https://github.com/YOUR_USERNAME/thryve-frontend
+   cd thryve-frontend
+   ```
+
+2. **Install Dependencies**
+
+   ```sh
+   npm install
+   ```
+
+3. **Environment Configuration**
+
+   Create or edit `src/environments/environment.ts`:
+
+   ```ts
+   export const environment = {
+    production: false,
+    apiBaseUrl: 'http://localhost:7094/api/public/',
+    aiUrl: 'https://api.groq.com/openai/v1/chat/completions',
+    aiKey: 'your ai key',
+    model: 'meta-llama/llama-4-scout-17b-16e-instruct',
+    token: "Bearer your-auth-token",
+    };
+   ```
+
+4. **Run the App**
+
+   ```sh
+   ng serve
+   ```
+
+   Open `http://localhost:4200` in your browser.
