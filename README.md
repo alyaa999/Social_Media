@@ -27,7 +27,6 @@ This application is part of the **Integrated Software Development & Architecture
 | **SignalR** | Real-time communication for chat and notifications                       |
 | **JWT**     | Secure token-based authentication and session management                 |
 | **Tailwind**| Utility-first CSS framework for fast and modern styling                  |
-| **NgRx**    | (Optional) State management if used                                       |
 
 ---
 
