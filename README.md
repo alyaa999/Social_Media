@@ -111,7 +111,7 @@ Start your journey with Thryve through a welcoming and visually engaging entry p
 1. **Clone the Repository**
 
    ```sh
-   git clone https://github.com/YOUR_USERNAME/thryve-frontend
+   git clone https://github.com/miinamaaher1/thryve-frontend
    cd thryve-frontend
    ```
 
