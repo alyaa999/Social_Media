@@ -123,7 +123,7 @@ Start your journey with Thryve through a welcoming and visually engaging entry p
 
 3. **Environment Configuration**
 
-   Create or edit `src/environments/environment.ts`:
+   Create or edit `src/environment/environment.ts`:
 
    ```ts
    export const environment = {
